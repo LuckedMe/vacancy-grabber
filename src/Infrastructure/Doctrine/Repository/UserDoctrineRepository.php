@@ -39,6 +39,15 @@ class UserDoctrineRepository extends ServiceEntityRepository implements UserRepo
         }
     }
 
+    public function findAllAwaitingTelegramLink(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.telegramUsername IS NOT NULL')
+            ->andWhere('u.telegramChatId IS NULL')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findAllByIds(array $ids = []): array
     {
         $qb = $this->createQueryBuilder('u');

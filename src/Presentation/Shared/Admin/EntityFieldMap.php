@@ -112,6 +112,8 @@ final class EntityFieldMap
                 'firstName'                  => static fn (User $u, ?string $value) => $u->rename($value, $u->getLastName()),
                 'lastName'                   => static fn (User $u, ?string $value) => $u->rename($u->getFirstName(), $value),
                 'active'                     => static fn (User $u, mixed $value) => $u->changeActive((bool) $value),
+                'telegramUsername'           => static fn (User $u, ?string $value) => $u->changeTelegramUsername($value),
+                'telegramChatId'             => static fn (User $u, ?string $value) => $u->changeTelegramChatId($value),
                 'googleAuthenticatorEnabled' => static fn (User $u, mixed $value) => $u->changeGoogleAuthenticatorEnabled((bool) $value),
                 'googleAuthenticatorToken'   => static fn (User $u, ?string $value) => $value ? $u->pairGoogleAuthenticator($value) : $u->resetGoogleAuthenticator(),
                 'roles'                      => static fn (User $u, mixed $value) => $u->changeRoles((array) $value),

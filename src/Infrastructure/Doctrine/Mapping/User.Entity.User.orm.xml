@@ -46,6 +46,9 @@
 
         <field name="googleAuthenticatorToken" column="google_authenticator_token" type="string" nullable="true"/>
 
+        <field name="telegramUsername" column="telegram_username" type="string" nullable="true"/>
+        <field name="telegramChatId" column="telegram_chat_id" type="string" nullable="true"/>
+
         <field name="firstName" column="first_name" type="string" nullable="true"/>
         <field name="lastName" column="last_name" type="string" nullable="true"/>
 

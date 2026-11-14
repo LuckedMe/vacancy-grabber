@@ -22,5 +22,12 @@ interface UserRepository extends FindOneById, FindOneByIdentifier
     /**
      * @return array<int, User>
      */
+    /**
+     * Users who have a Telegram username but no chat ID yet.
+     *
+     * @return array<int, User>
+     */
+    public function findAllAwaitingTelegramLink(): array;
+
     public function findAllByIds(array $ids = []): array;
 }

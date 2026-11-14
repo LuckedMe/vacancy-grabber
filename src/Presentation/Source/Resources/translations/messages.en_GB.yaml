@@ -1,2 +1,8 @@
 SOURCE:
     HEADER_TITLE: 'Sources'
+    GRAB_REPORT:
+        TELEGRAM: |-
+            Vacancy Grabber report
+            Vacancies created: %created%
+            Vacancies updated: %updated%
+            %link%

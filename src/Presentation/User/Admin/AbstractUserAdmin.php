@@ -262,6 +262,20 @@ abstract class AbstractUserAdmin extends AbstractAdmin
 
         $this->configureFormFieldText(
             $form,
+            'telegramUsername',
+            'USER_ENTITY.LABEL.TELEGRAM_USERNAME',
+            'USER_ENTITY.HELP.TELEGRAM_USERNAME'
+        );
+
+        $this->configureFormFieldText(
+            $form,
+            'telegramChatId',
+            'USER_ENTITY.LABEL.TELEGRAM_CHAT_ID',
+            'USER_ENTITY.HELP.TELEGRAM_CHAT_ID'
+        );
+
+        $this->configureFormFieldText(
+            $form,
             'firstName',
             'USER_ENTITY.LABEL.FIRST_NAME',
             'USER_ENTITY.HELP.FIRST_NAME'

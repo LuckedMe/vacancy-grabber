@@ -13,6 +13,9 @@ use function array_unique;
 use function array_values;
 use function implode;
 use function in_array;
+use function ltrim;
+use function preg_replace;
+use function strtolower;
 use function trim;
 
 class User extends AbstractEntity
@@ -33,6 +36,10 @@ class User extends AbstractEntity
     private bool $googleAuthenticatorEnabled = false;
 
     private ?string $googleAuthenticatorToken = null;
+
+    private ?string $telegramUsername = null;
+
+    private ?string $telegramChatId = null;
 
     /**
      * @param list<UserRole|string> $roles
@@ -157,6 +164,46 @@ class User extends AbstractEntity
     public function isGoogleAuthenticatorEnabled(): bool
     {
         return $this->googleAuthenticatorEnabled;
+    }
+
+    public function getTelegramChatId(): ?string
+    {
+        return $this->telegramChatId;
+    }
+
+    public function changeTelegramChatId(?string $telegramChatId): void
+    {
+        $telegramChatId       = $telegramChatId !== null ? trim($telegramChatId) : '';
+        $this->telegramChatId = $telegramChatId !== '' ? $telegramChatId : null;
+    }
+
+    /**
+     * As entered: "@username", "username" or "https://t.me/username".
+     */
+    public function getTelegramUsername(): ?string
+    {
+        return $this->telegramUsername;
+    }
+
+    public function changeTelegramUsername(?string $telegramUsername): void
+    {
+        $telegramUsername       = $telegramUsername !== null ? trim($telegramUsername) : '';
+        $this->telegramUsername = $telegramUsername !== '' ? $telegramUsername : null;
+    }
+
+    /**
+     * The username without "@" or the t.me link, lower case; this is how Telegram reports it.
+     */
+    public function resolveTelegramUsername(): ?string
+    {
+        if ($this->telegramUsername === null) {
+            return null;
+        }
+
+        $username = preg_replace('~^(?:https?://)?(?:www\.)?(?:t|telegram)\.me/~i', '', $this->telegramUsername) ?? '';
+        $username = ltrim(trim($username, '/'), '@');
+
+        return $username !== '' ? strtolower($username) : null;
     }
 
     public function getGoogleAuthenticatorToken(): ?string
