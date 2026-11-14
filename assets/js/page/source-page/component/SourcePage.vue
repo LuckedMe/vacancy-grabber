@@ -17,16 +17,16 @@
             </v-expansion-panels>
         </v-col>
 
-        <!--        <v-col cols="1">-->
-        <!--            <v-btn-->
-        <!--                text="Create"-->
-        <!--                :loading="loading"-->
-        <!--                :disabled="loading"-->
-        <!--                color="primary"-->
-        <!--                class="ml-5 text-right"-->
-        <!--                @click="handleDialogActivator('create', null)"-->
-        <!--            />-->
-        <!--        </v-col>-->
+        <v-col cols="1">
+            <v-btn
+                text="Create"
+                :loading="loading"
+                :disabled="loading"
+                color="primary"
+                class="ml-5 text-right"
+                @click="handleDialogActivator('create', null)"
+            />
+        </v-col>
     </v-row>
 
     <v-divider class="mt-5"/>
@@ -189,7 +189,7 @@
 
         {title: 'Last Grabbed At', key: 'last_grabbed_at', sortable: false, width: '100px'},
         {title: 'Created At', key: 'created_at', sortable: sourcePageStore.hasSortBy('created_at'), width: '100px'},
-        // {title: 'Actions', key: 'actions', sortable: false, width: '150px'},
+        {title: 'Actions', key: 'actions', sortable: false, width: '150px'},
     ]);
 
     const item = ref(null as SourceInfo | null);

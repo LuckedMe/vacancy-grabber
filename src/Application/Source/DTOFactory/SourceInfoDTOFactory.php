@@ -17,7 +17,7 @@ final readonly class SourceInfoDTOFactory
             name: $entity->getName(),
             url: $entity->getUrl()?->toString(),
             active: $entity->isActive(),
-            lastGrabbedAt: $entity->getGrabLogs()->last()->getCreatedAt(),
+            lastGrabbedAt: $entity->getGrabLogs()->last() ? $entity->getGrabLogs()->last()->getCreatedAt() : null,
             createdAt: $entity->getCreatedAt(),
         );
     }

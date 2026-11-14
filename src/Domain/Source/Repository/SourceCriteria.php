@@ -19,6 +19,8 @@ final readonly class SourceCriteria
         public ?bool $active = null,
         public ?CarbonImmutable $startDay = null,
         public ?CarbonImmutable $endDay = null,
+        public ?bool $hasUser = null,
+        public ?bool $hasUrl = null,
     ) {
     }
 }

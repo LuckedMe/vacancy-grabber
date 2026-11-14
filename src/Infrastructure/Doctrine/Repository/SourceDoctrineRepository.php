@@ -41,6 +41,14 @@ class SourceDoctrineRepository extends ServiceEntityRepository implements Source
             ->getResult();
     }
 
+    public function findAllReadyToGrab(): array
+    {
+        return $this
+            ->createBaseQuery(new SourceCriteria(active: true, hasUser: true, hasUrl: true))
+            ->getQuery()
+            ->getResult();
+    }
+
     private function createBaseQuery(SourceCriteria $criteria): QueryBuilder
     {
         [$orderBy, $orderDirection, $orderTable] = $criteria->orderBy
@@ -81,6 +89,14 @@ class SourceDoctrineRepository extends ServiceEntityRepository implements Source
             $qb
                 ->andWhere('q.active = :active')
                 ->setParameter('active', $criteria->active);
+        }
+
+        if ($criteria->hasUser !== null) {
+            $qb->andWhere($qb->expr()->isNotNull('q.user'));
+        }
+
+        if ($criteria->hasUrl !== null) {
+            $qb->andWhere($qb->expr()->isNotNull('q.url'));
         }
 
         if ($criteria->startDay !== null) {

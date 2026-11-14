@@ -52,12 +52,12 @@ class DjinniSourceGrabber extends AbstractSourceGrabber
         $crawler  = new Crawler($response->getContent());
         $maxPage  = $this->resolveMaxPage($crawler);
         $result   = [];
-        sleep(1);
+        sleep(self::GRAB_DELAY);
 
         // grab each page
         for ($page = 1; $page <= $maxPage; $page++) {
             $result = [...$result, ...$this->grabPage($url, $page)];
-            sleep(1);
+            sleep(self::GRAB_DELAY);
         }
 
         return $result;

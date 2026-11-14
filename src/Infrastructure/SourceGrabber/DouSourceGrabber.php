@@ -20,6 +20,7 @@ use function end;
 use function explode;
 use function json_decode;
 use function parse_url;
+use function preg_match;
 use function sleep;
 
 use const JSON_THROW_ON_ERROR;
@@ -64,7 +65,7 @@ class DouSourceGrabber extends AbstractSourceGrabber
         $crawler   = new Crawler($response->getContent());
         $csrfToken = $this->resolveCsrfToken($crawler);
         $cookies   = $response->getHeaders()['set-cookie'] ?? null;
-        sleep(1);
+        sleep(self::GRAB_DELAY);
 
         // grab
         $result  = $crawler->filter('#vacancyListId li.l-vacancy')->each(fn ($node) => $this->parseVacancy($node));
@@ -107,7 +108,7 @@ class DouSourceGrabber extends AbstractSourceGrabber
         $result  = $crawler->filter('li.l-vacancy')->each(fn (Crawler $node) => $this->parseVacancy($node));
         $last    = ($data['last'] ?? null) ?: false;
         $count += ($data['num'] ?? 0);
-        sleep(1);
+        sleep(self::GRAB_DELAY);
 
         if (!$last
             && ($more = $this->grabMore($url, $csrfToken, $cookies, $count))

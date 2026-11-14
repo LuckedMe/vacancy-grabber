@@ -15,7 +15,8 @@ use function trim;
 
 abstract class AbstractSourceGrabber implements Grabber
 {
-    public const SourceGrabber GRABBER = SourceGrabber::Dou;
+    public const int           GRAB_DELAY = 3;
+    public const SourceGrabber GRABBER    = SourceGrabber::Dou;
 
     public function getGrabber(): SourceGrabber
     {

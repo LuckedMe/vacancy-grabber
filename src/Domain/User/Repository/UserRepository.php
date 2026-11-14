@@ -18,4 +18,9 @@ interface UserRepository extends FindOneById, FindOneByIdentifier
     public function save(User $user): void;
 
     public function remove(User $user): void;
+
+    /**
+     * @return array<int, User>
+     */
+    public function findAllByIds(array $ids = []): array;
 }

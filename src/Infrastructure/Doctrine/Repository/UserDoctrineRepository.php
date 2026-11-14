@@ -11,6 +11,9 @@ use App\Infrastructure\Doctrine\Repository\Trait\SaveRemoveRepositoryTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Uid\Uuid;
+
+use function array_map;
 
 class UserDoctrineRepository extends ServiceEntityRepository implements UserRepository
 {
@@ -34,5 +37,18 @@ class UserDoctrineRepository extends ServiceEntityRepository implements UserRepo
         } catch (NonUniqueResultException) {
             return null;
         }
+    }
+
+    public function findAllByIds(array $ids = []): array
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        $qb
+            ->where($qb->expr()->in('u.id', ':userIds'))
+            ->setParameter('userIds', array_map(static fn (Uuid $uuid) => $uuid->toBinary(), $ids));
+
+        return $qb
+            ->getQuery()
+            ->getResult();
     }
 }

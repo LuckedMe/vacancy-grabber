@@ -29,4 +29,9 @@ interface SourceRepository extends FindOneById, FindOneByIdAndUserId
      * @return array<int, Source>
      */
     public function findAllSortByName(?Uuid $userId = null): array;
+
+    /**
+     * @return array<int, Source>
+     */
+    public function findAllReadyToGrab(): array;
 }

@@ -77,33 +77,24 @@ class SourceVoter extends Voter
         }
 
         return match ($attribute) {
-            self::LIST => true,
+            self::LIST,
+            self::CREATE => true,
 
-            self::VIEW,
-            self::UPDATE,
             self::GRAB => ($user->hasRole(UserRole::Supervisor->value) || $user->hasRole(UserRole::Admin->value))
                 || ($subject instanceof Source
                     && $this->sourceRepository->findOneByIdAndUserId($subject->getId(), $user->getId()) !== null
                     && $user->getId() && $user->getId()->equals($subject->getUser()->getId())
                     && $subject->isActive()
                 ),
+            self::VIEW,
+            self::UPDATE,
+            self::DELETE => ($user->hasRole(UserRole::Supervisor->value) || $user->hasRole(UserRole::Admin->value))
+                || ($subject instanceof Source
+                    && $this->sourceRepository->findOneByIdAndUserId($subject->getId(), $user->getId()) !== null
+                    && $user->getId() && $user->getId()->equals($subject->getUser()->getId())
+                ),
+
             default => false,
         };
-
-        //        return match ($attribute) {
-        //            self::LIST,
-        //            self::CREATE => true,
-        //
-        //            self::GRAB,
-        //            self::VIEW,
-        //            self::UPDATE,
-        //            self::DELETE => ($user->hasRole(UserRole::Supervisor->value) || $user->hasRole(UserRole::Admin->value))
-        //                || ($subject instanceof Source
-        //                && $this->sourceRepository->findOneByIdAndUserId($subject->getId(), $user->getId()) !== null
-        //                && $user->getId() && $user->getId()->equals($subject->getUser()->getId())
-        //                ),
-        //
-        //            default => false,
-        //        };
     }
 }
