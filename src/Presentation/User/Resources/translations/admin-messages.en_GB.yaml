@@ -49,7 +49,7 @@ USER_ENTITY:
         FIRST_NAME: ''
         LAST_NAME: ''
         TELEGRAM_USERNAME: '@username or https://t.me/username; used by app:telegram:link-users to find the chat ID'
-        TELEGRAM_CHAT_ID: 'Notifications are sent to this chat. Filled in by app:telegram:link-users or manually'
+        TELEGRAM_CHAT_ID: 'Notifications are sent to this chat. Filled automatically or manually'
         ROLES: ''
         GOOGLE_AUTHENTICATOR_ENABLED: 'Set "Yes" to enable Two-Step Authentication. Set "No" to disable Two-Step Authentication.'
         GOOGLE_AUTHENTICATOR_TOKEN_IS_SET: 'Leave blank to reset the token and it will be saved after the next successful login into the admin area.'

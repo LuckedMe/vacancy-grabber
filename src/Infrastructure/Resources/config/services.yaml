@@ -14,6 +14,9 @@ services:
     App\Domain\Note\Repository\NoteRepository:
         class: App\Infrastructure\Doctrine\Repository\NoteDoctrineRepository
 
+    App\Domain\User\TelegramChatResolver:
+        class: App\Infrastructure\Telegram\TelegramBotChatResolver
+
     App\Domain\User\Repository\UserRepository:
         class: App\Infrastructure\Doctrine\Repository\UserDoctrineRepository
 

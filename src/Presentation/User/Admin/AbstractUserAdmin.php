@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Presentation\User\Admin;
 
+use App\Application\User\Message\Command\LinkTelegramUserCommand;
 use App\Domain\User\Entity\User;
 use App\Domain\User\Entity\UserRole;
 use App\Domain\User\PasswordHasher;
 use App\Domain\User\Repository\UserRepository;
+use App\Infrastructure\Messenger\MessageBusHandler;
 use App\Presentation\Shared\Admin\AbstractAdmin;
 use App\Presentation\Shared\AdminTrait\ConfigureAdminFullTrait;
 use Doctrine\ORM\QueryBuilder;
@@ -45,6 +47,15 @@ abstract class AbstractUserAdmin extends AbstractAdmin
     use ConfigureAdminFullTrait;
     // use ConfigureFilterAutocompleteUsersTrait;
     // use ConfigureFormAutocompleteUsersTrait;
+
+    protected MessageBusHandler $messageBusHandler;
+
+    #[Required]
+    public function initMessageBusHandler(
+        MessageBusHandler $messageBusHandler,
+    ): void {
+        $this->messageBusHandler = $messageBusHandler;
+    }
 
     public const bool MULTIPLE_ROLES           = false;
     public const bool USE_GOOGLE_AUTHENTICATOR = false;
@@ -449,6 +460,25 @@ abstract class AbstractUserAdmin extends AbstractAdmin
             && in_array($role, $this->getRolesChoices(), true)
         ) {
             $user->changeRoles([$role]);
+        }
+    }
+
+    protected function postPersist(object $object): void
+    {
+        /** @var User $object */
+        $this->LinkTelegramUser($object);
+    }
+
+    protected function postUpdate(object $object): void
+    {
+        /** @var User $object */
+        $this->LinkTelegramUser($object);
+    }
+
+    private function LinkTelegramUser(User $object): void
+    {
+        if ($object->getTelegramUsername() && !$object->getTelegramChatId()) {
+            $this->messageBusHandler->handleCommand(new LinkTelegramUserCommand($object->getId()));
         }
     }
 }
