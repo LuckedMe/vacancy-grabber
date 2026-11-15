@@ -25,7 +25,7 @@ class HeaderNavigationExtension extends AbstractNavigationExtension
                 ['key'       => 'web.vacancy',
                     'route'  => 'web.vacancy',
                     'title'  => 'NAVIGATION.ITEM.VACANCY',
-                    'params' => [], //['viewed' => '0'],
+                    'params' => [], // ['viewed' => '0'],
                 ],
             ],
         ],

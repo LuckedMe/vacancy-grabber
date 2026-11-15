@@ -452,6 +452,9 @@
             "webpack.config.js"
         ]
     },
+    "vtsot/cms-admin-client-bundle": {
+        "version": "dev-main"
+    },
     "zenstruck/foundry": {
         "version": "2.14",
         "recipe": {

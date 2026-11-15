@@ -7,6 +7,7 @@ namespace App\Presentation\Shared\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Vtsot\CmsAdminClientBundle\Service\PageService;
 
 class DefaultController extends AbstractController
 {
@@ -16,8 +17,17 @@ class DefaultController extends AbstractController
         options: ['expose' => true],
         methods: ['GET'],
     )]
-    public function index(): Response
+    public function index(PageService $pageService): Response
     {
-        return $this->redirectToRoute('web.dashboard');
+        if ($this->getUser()) {
+            return $this->redirectToRoute('web.dashboard');
+        }
+
+        $page = $pageService->getPage('homepage');
+
+        return $this->render('@general_templates/web/homepage.html.twig', [
+            'page'         => $page,
+            'header_title' => $page?->title,
+        ]);
     }
 }

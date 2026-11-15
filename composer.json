@@ -4,6 +4,12 @@
     "license": "proprietary",
     "minimum-stability": "stable",
     "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/vtsot/cms-admin-client-bundle"
+        }
+    ],
     "require": {
         "php": ">=8.4",
         "ext-ctype": "*",
@@ -36,7 +42,8 @@
         "symfony/runtime": "*",
         "symfony/uid": "*",
         "symfony/webpack-encore-bundle": "^2.4.2",
-        "symfony/yaml": "*"
+        "symfony/yaml": "8.1.*",
+        "vtsot/cms-admin-client-bundle": "dev-main"
     },
     "require-dev": {
         "codeception/module-asserts": "^3.3",

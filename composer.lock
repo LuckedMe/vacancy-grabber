@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8eb3c882aaa0a00d69b4e4053923d1ce",
+    "content-hash": "7861ae6aff32842a826440d5f572811c",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -9201,16 +9201,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v8.1.6",
+            "version": "v8.1.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "0b4aa53a67f9fece88c665f1a1dadcfd25d93fe5"
+                "reference": "e8266f55160f674f290a5f567cb55e11e21f921b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/0b4aa53a67f9fece88c665f1a1dadcfd25d93fe5",
-                "reference": "0b4aa53a67f9fece88c665f1a1dadcfd25d93fe5",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/e8266f55160f674f290a5f567cb55e11e21f921b",
+                "reference": "e8266f55160f674f290a5f567cb55e11e21f921b",
                 "shasum": ""
             },
             "require": {
@@ -9253,7 +9253,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/v8.1.6"
+                "source": "https://github.com/symfony/yaml/tree/v8.1.11"
             },
             "funding": [
                 {
@@ -9273,7 +9273,8 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-08-30T01:03:44+00:00"
+            "time": "2026-11-04T08:39:20+00:00",
+            "published-time": "2026-11-04T11:31:03+00:00"
         },
         {
             "name": "twig/string-extra",
@@ -9421,6 +9422,49 @@
                 }
             ],
             "time": "2026-07-03T20:44:34+00:00"
+        },
+        {
+            "name": "vtsot/cms-admin-client-bundle",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vtsot/cms-admin-client-bundle.git",
+                "reference": "c5805e4b3eb3194061a21404304e00a88e54494e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vtsot/cms-admin-client-bundle/zipball/c5805e4b3eb3194061a21404304e00a88e54494e",
+                "reference": "c5805e4b3eb3194061a21404304e00a88e54494e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.4",
+                "symfony/framework-bundle": "^8.1",
+                "symfony/http-client": "^8.1",
+                "symfony/twig-bundle": "^8.1",
+                "symfony/yaml": "^8.1"
+            },
+            "default-branch": true,
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Vtsot\\CmsAdminClientBundle\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Vtsot\\CmsAdminClientBundle\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Symfony bundle: client for the CMS admin API",
+            "support": {
+                "source": "https://github.com/vtsot/cms-admin-client-bundle/tree/main",
+                "issues": "https://github.com/vtsot/cms-admin-client-bundle/issues"
+            },
+            "time": "2026-11-15T15:26:35+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -14932,7 +14976,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "vtsot/cms-admin-client-bundle": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
@@ -14941,5 +14987,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.11.0"
 }

@@ -1,6 +1,6 @@
 <template>
     <div
-        v-html="nl2br(html)"
+        v-html="htmlContent"
         :style="style"
     />
 </template>
@@ -11,6 +11,7 @@
 
     const props = defineProps({
         html: {type: [String, null], required: false, default: null},
+        noNl2br: {type: [Boolean], required: false, default: false},
         maxWidth: {type: [String, Number, null], default: '600px'},
         maxHeight: {type: [String, Number, null], default: '300px'},
     });
@@ -24,4 +25,11 @@
             'white-space': 'normal',
         };
     });
+
+    const htmlContent = computed(() => {
+        return props.noNl2br
+            ? props.html
+            : nl2br(props.html);
+    });
+
 </script>

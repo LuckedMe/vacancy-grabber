@@ -10,6 +10,7 @@ services:
         extra_hosts:
             - "vacancy-grabber.local:host-gateway"
             - "host.docker.internal:host-gateway"
+            - "api.cms-admin.local:host-gateway"
         volumes:
             - ./:/var/www/html:rw
         networks:

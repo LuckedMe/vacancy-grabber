@@ -1,0 +1,15 @@
+{% extends 'web/layout.main.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('js/page/homepage-page') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('js/page/homepage-page') }}
+{% endblock %}
+
+{% block content %}
+    <homepage-page :page="{{ page|json_encode(constant('JSON_UNESCAPED_UNICODE')) }}"></homepage-page>
+{% endblock %}

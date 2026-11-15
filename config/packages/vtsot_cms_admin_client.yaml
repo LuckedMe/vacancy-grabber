@@ -1,0 +1,12 @@
+vtsot_cms_admin_client:
+    api_auth_url: '%env(resolve:CMS_ADMIN_API_AUTH_URL)%'
+    api_content_url: '%env(resolve:CMS_ADMIN_API_CONTENT_URL)%'
+    locale: '%env(resolve:CMS_ADMIN_LOCALE)%'
+    site_id: '%env(resolve:CMS_ADMIN_SITE_ID)%'
+    site_token: '%env(resolve:CMS_ADMIN_SITE_TOKEN)%'
+    client_username: '%env(CMS_ADMIN_CLIENT_USERNAME)%'
+    client_password: '%env(CMS_ADMIN_CLIENT_PASSWORD)%'
+    caching: '%env(bool:CMS_ADMIN_CACHING)%'
+    cache_default_lifetime: '%env(int:CMS_ADMIN_CACHE_DEFAULT_LIFETIME)%'
+    cache_banner_lifetime: '%env(int:CMS_ADMIN_CACHE_BANNER_LIFETIME)%'
+    cache_clear_pools: ['site.image.cache']
