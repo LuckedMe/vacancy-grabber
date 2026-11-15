@@ -62,6 +62,9 @@ migrate: ## Run Doctrine migrations (dev and test environments)
 	$(PHP) ./bin/console doctrine:migrations:migrate --no-interaction
 	$(PHP) ./bin/console doctrine:migrations:migrate --env=test --no-interaction
 
+install-editor: ## Install PHP dependencies via Composer
+	$(PHP) composer install-editor
+
 fixtures: ## Load database fixtures
 	$(PHP) ./bin/console doctrine:fixtures:load --no-interaction
 
@@ -164,8 +167,14 @@ prod-console: ## [prod] Open a shell in the production php-fpm container
 help: ## Show this help message
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-16s\033[0m %s\n", $$1, $$2}'
 
-.PHONY: test-acceptance test-coverage-html test-web-api test-web-api-coverage docker-build docker-up docker-stop docker-down docker-restart docker-ps docker-logs \
-	php-console node-console install update migrate fixtures cache-clear routes-dump jwt-keys \
-	test test-api yarn-install yarn-dev yarn-watch yarn-build help \
-	prod-assets prod-build prod-up prod-down prod-migrate prod-jwt-keys prod-logs prod-ps prod-console
-
+.PHONY: cache-clear \
+	docker-build docker-down docker-logs docker-ps docker-restart docker-stop docker-up \
+	fixtures help \
+	install-editor install \
+	jwt-keys \
+	migrate \
+	node-console php-console \
+	prod-assets prod-build prod-console prod-down prod-jwt-keys prod-logs prod-migrate prod-ps prod-up \
+	test-api test-coverage-html test-coverage test test-unit test-web \
+	update \
+	yarn-build yarn-dev yarn-install yarn-watch
