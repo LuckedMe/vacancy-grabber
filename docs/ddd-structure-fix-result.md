@@ -1,6 +1,6 @@
 # DDD structure check result
 
-Date: 2026-11-12 · Branch: main · Commit: 4861895, uncommitted changes
+Date: 2026-11-15 · Branch: main · Commit: f92e4f4, uncommitted changes
 Command: `bash .claude/skills/ddd-structure-fix/scripts/check.sh` · Exit code: 0
 
 ## Summary
@@ -30,7 +30,6 @@ None.
 
 ## Recommendations
 
-1. Nothing to fix. The structure follows the layer rules.
-2. The script only greps imports, so it cannot see fully-qualified class names used without a `use`, dependencies injected via service config (`services.yaml`), or behavioural coupling between layers. Worth a manual look when adding new cross-layer code.
-3. The newest code is in Presentation (`ApiRequestLimiterSubscriber`, `LocaleSubscriber`, `ApiRequestDetector`, `ApiSiteLoginRateLimiter`). Presentation may use all layers, so these are fine, and nothing inner imports them.
-4. Re-run this check after moving code between layers.
+1. The structure is clean; nothing to fix.
+2. The script greps imports only. It cannot see fully-qualified class names used inline without `use`, runtime service lookups, or logic that belongs in another layer. Review these by hand.
+3. The uncommitted changes (CMS admin client config, `DefaultController`, homepage template) are in Presentation/config and were scanned with the rest of `src/`.
