@@ -22,17 +22,17 @@ See `docs/telegram-notifications.md` for what the Telegram report needs (bot tok
 
 ## Crontab entries
 
-The job itself is the script `config/crontab/source-grab-all.sh` (in the repository, so it is updated by
+The job itself is the script `bin/source-grab-all.sh` (in the repository, so it is updated by
 `git pull`). The crontab only starts it:
 
 ```cron
 CRON_TZ=Europe/Kyiv
 
 # vacancy-grabber: grab all sources every hour, 08:00 ... 20:00 (13 runs a day)
-0 8-20 * * * /home/dad/workspace/www/vacancy-grabber/config/crontab/source-grab-all.sh
+0 8-20 * * * /home/dad/workspace/www/vacancy-grabber/bin/source-grab-all.sh
 ```
 
-What the script does (`config/crontab/source-grab-all.sh`):
+What the script does (`bin/source-grab-all.sh`):
 
 1. Finds the project folder from its own location, so it works from cron's empty environment and from any
    directory.
@@ -59,7 +59,7 @@ Why the crontab line looks like this:
 Run the job by hand, exactly as cron does:
 
 ```bash
-/home/dad/workspace/www/vacancy-grabber/config/crontab/source-grab-all.sh
+/home/dad/workspace/www/vacancy-grabber/bin/source-grab-all.sh
 ls -lt /home/dad/workspace/www/vacancy-grabber/var/log/crontab | head -3
 ```
 
@@ -68,7 +68,7 @@ ls -lt /home/dad/workspace/www/vacancy-grabber/var/log/crontab | head -3
 On the server (`ssh dad@100.91.57.78`):
 
 ```bash
-chmod +x /home/dad/workspace/www/vacancy-grabber/config/crontab/source-grab-all.sh   # if git did not keep the flag
+chmod +x /home/dad/workspace/www/vacancy-grabber/bin/source-grab-all.sh   # if git did not keep the flag
 
 crontab -l                  # see what is there already: the 03:00 backup entry must stay
 crontab -e                  # add the entries above at the end, save
@@ -84,9 +84,9 @@ Do not use `crontab -r` or paste a whole new crontab over the old one: that dele
 |---|---|
 | Nothing in the log, no `CRON` line in syslog | Entry not saved, or the cron service is stopped: `systemctl status cron` |
 | `the input device is not a TTY` | `-T` is missing in `docker compose exec` in the script |
-| `Permission denied` for the script | `chmod +x config/crontab/source-grab-all.sh` |
+| `Permission denied` for the script | `chmod +x bin/source-grab-all.sh` |
 | Old logs are not deleted | Only `grab-all-*.log` older than 7 days are removed, by the script itself; check `ls -lt var/log/crontab` |
-| `no configuration file provided` / `.env.prod.local not found` | The script is not inside the project folder (it uses `../..` from its own location) |
+| `no configuration file provided` / `.env.prod.local not found` | The script is not inside the project folder (it uses `..` from its own location) |
 | `service "php-fpm" is not running` | The stack is down: `make prod-up` |
 | `permission denied ... docker.sock` | The crontab user is not in the `docker` group (VPS guide step 8) |
 | Runs at the wrong hour | Timezone: see `CRON_TZ` above and `timedatectl` |

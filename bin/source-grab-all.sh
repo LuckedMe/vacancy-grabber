@@ -3,14 +3,14 @@
 # Cron job: grab all sources (app:source:grab-all) in the production php-fpm container.
 # Runs on the HOST, started from the crontab of the server user, see docs/crontab.md:
 #
-#   0 8-20 * * * /home/dad/workspace/www/vacancy-grabber/config/crontab/source-grab-all.sh
+#   0 8-20 * * * /home/dad/workspace/www/vacancy-grabber/bin/source-grab-all.sh
 #
 # Every run writes its own log file var/log/crontab/grab-all-YYYY-MM-DD_HHMM.log;
 # the log files older than LOG_KEEP_DAYS days are deleted before the grab.
 
 set -u
 
-APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LOG_DIR="${APP_DIR}/var/log/crontab"
 LOG_KEEP_DAYS=7
 LOCK_FILE=/tmp/vacancy-grabber-grab-all.lock
