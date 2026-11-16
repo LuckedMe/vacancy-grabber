@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cc2fd5c3e1d97d204eeea812cba9a96d",
+    "content-hash": "d24a2e927e1410ce693840da581f5c66",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -2017,12 +2017,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/LuckedMe/cms-client-bundle.git",
-                "reference": "8f73cff1a16ec2dce7c2117a2f7ff74308e36bc8"
+                "reference": "fb94242d2eb501df6c3938c884cf8a97c26de056"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LuckedMe/cms-client-bundle/zipball/8f73cff1a16ec2dce7c2117a2f7ff74308e36bc8",
-                "reference": "8f73cff1a16ec2dce7c2117a2f7ff74308e36bc8",
+                "url": "https://api.github.com/repos/LuckedMe/cms-client-bundle/zipball/fb94242d2eb501df6c3938c884cf8a97c26de056",
+                "reference": "fb94242d2eb501df6c3938c884cf8a97c26de056",
                 "shasum": ""
             },
             "require": {
@@ -2030,6 +2030,7 @@
                 "symfony/framework-bundle": "^8.1",
                 "symfony/http-client": "^8.1",
                 "symfony/process": "^8.1",
+                "symfony/string": "8.1.*",
                 "symfony/twig-bundle": "^8.1",
                 "symfony/yaml": "^8.1"
             },
@@ -2053,7 +2054,7 @@
                 "source": "https://github.com/LuckedMe/cms-client-bundle/tree/main",
                 "issues": "https://github.com/LuckedMe/cms-client-bundle/issues"
             },
-            "time": "2026-11-16T13:26:40+00:00"
+            "time": "2026-11-16T17:55:16+00:00"
         },
         {
             "name": "monolog/monolog",

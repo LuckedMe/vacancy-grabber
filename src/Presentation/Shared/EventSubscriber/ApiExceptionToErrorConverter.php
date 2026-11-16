@@ -11,6 +11,7 @@ use App\Application\Shared\DTO\ErrorDTO;
 use App\Domain\Shared\Exception\DomainException;
 use App\Domain\Shared\Exception\EntityNotFoundException;
 use App\Presentation\Shared\Exception\UnprocessableEntityException;
+use App\Presentation\Shared\Service\Request\ApiRequestDetector;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,10 +28,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 use function array_key_exists;
 use function get_class;
-use function in_array;
-use function str_contains;
 
-final class ApiExceptionToErrorConverter implements EventSubscriberInterface
+final readonly class ApiExceptionToErrorConverter implements EventSubscriberInterface
 {
     private const array EXCEPTIONS_TO_CATCH = [
         BadRequestHttpException::class      => Response::HTTP_BAD_REQUEST,
@@ -50,7 +49,8 @@ final class ApiExceptionToErrorConverter implements EventSubscriberInterface
     ];
 
     public function __construct(
-        private readonly SerializerInterface $serializer,
+        private SerializerInterface $serializer,
+        private ApiRequestDetector $apiRequestDetector,
     ) {
     }
 
@@ -58,10 +58,7 @@ final class ApiExceptionToErrorConverter implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        if (!($request->getContentTypeFormat() === 'json'
-            || in_array('application/json', $request->getAcceptableContentTypes(), true)
-            || str_contains($request->getPathInfo(), '/api/'))
-        ) {
+        if (!$this->apiRequestDetector->isApiRequest($request)) {
             return;
         }
 
