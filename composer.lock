@@ -9429,12 +9429,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/vtsot/cms-admin-client-bundle.git",
-                "reference": "c5805e4b3eb3194061a21404304e00a88e54494e"
+                "reference": "ee680c961989f7d8d6fad48d2a7619cf4c2d61db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vtsot/cms-admin-client-bundle/zipball/c5805e4b3eb3194061a21404304e00a88e54494e",
-                "reference": "c5805e4b3eb3194061a21404304e00a88e54494e",
+                "url": "https://api.github.com/repos/vtsot/cms-admin-client-bundle/zipball/ee680c961989f7d8d6fad48d2a7619cf4c2d61db",
+                "reference": "ee680c961989f7d8d6fad48d2a7619cf4c2d61db",
                 "shasum": ""
             },
             "require": {
@@ -9464,7 +9464,7 @@
                 "source": "https://github.com/vtsot/cms-admin-client-bundle/tree/main",
                 "issues": "https://github.com/vtsot/cms-admin-client-bundle/issues"
             },
-            "time": "2026-11-15T15:26:35+00:00"
+            "time": "2026-11-15T23:39:19+00:00"
         },
         {
             "name": "webmozart/assert",
