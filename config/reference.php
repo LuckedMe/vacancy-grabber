@@ -2080,8 +2080,8 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     client_password?: scalar|Param|null,
  *     caching?: bool|Param, // Default: true
  *     cache_clear_pools?: list<scalar|Param|null>,
- *     cache_default_lifetime?: int|Param, // Default: 1800
- *     cache_banner_lifetime?: int|Param, // Default: 300
+ *     cache_default_lifetime?: int|Param, // Default: 86400
+ *     cache_banner_lifetime?: int|Param, // Default: 3600
  * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
