@@ -26,5 +26,5 @@ return [
     Gesdinet\JWTRefreshTokenBundle\GesdinetJWTRefreshTokenBundle::class => ['all' => true],
     Zenstruck\Foundry\ZenstruckFoundryBundle::class => ['dev' => true, 'test' => true],
     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
-    Vtsot\CmsAdminClientBundle\VtsotCmsAdminClientBundle::class => ['all' => true],
+    LuckedMe\CmsClientBundle\LuckedMeCmsClientBundle::class => ['all' => true],
 ];

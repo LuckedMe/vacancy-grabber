@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Presentation\Shared\Controller;
 
+use LuckedMe\CmsClientBundle\Service\PageService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Vtsot\CmsAdminClientBundle\Service\PageService;
 
 class DefaultController extends AbstractController
 {

@@ -1,0 +1,12 @@
+lucked_me_cms_client:
+    api_auth_url: '%env(resolve:LUCKED_ME_CMS_CLIENT_API_AUTH_URL)%'
+    api_content_url: '%env(resolve:LUCKED_ME_CMS_CLIENT_API_CONTENT_URL)%'
+    locale: '%env(resolve:LUCKED_ME_CMS_CLIENT_LOCALE)%'
+    site_id: '%env(resolve:LUCKED_ME_CMS_CLIENT_SITE_ID)%'
+    site_token: '%env(resolve:LUCKED_ME_CMS_CLIENT_SITE_TOKEN)%'
+    client_username: '%env(LUCKED_ME_CMS_CLIENT_CLIENT_USERNAME)%'
+    client_password: '%env(LUCKED_ME_CMS_CLIENT_CLIENT_PASSWORD)%'
+    caching: '%env(bool:LUCKED_ME_CMS_CLIENT_CACHING)%'
+    cache_default_lifetime: '%env(int:LUCKED_ME_CMS_CLIENT_CACHE_DEFAULT_LIFETIME)%'
+    cache_banner_lifetime: '%env(int:LUCKED_ME_CMS_CLIENT_CACHE_BANNER_LIFETIME)%'
+    cache_clear_pools: ['site.image.cache']

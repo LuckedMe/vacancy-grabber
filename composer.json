@@ -7,7 +7,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/vtsot/cms-admin-client-bundle"
+            "url": "https://github.com/LuckedMe/cms-client-bundle"
         }
     ],
     "require": {
@@ -21,6 +21,7 @@
         "friendsofsymfony/jsrouting-bundle": "^3.6",
         "gesdinet/jwt-refresh-token-bundle": "^3.0",
         "lexik/jwt-authentication-bundle": "^3.2",
+        "lucked-me/cms-client-bundle": "dev-main",
         "nelmio/api-doc-bundle": "^5.12",
         "nelmio/cors-bundle": "^2.6",
         "nesbot/carbon": "^3.14",
@@ -42,8 +43,7 @@
         "symfony/runtime": "*",
         "symfony/uid": "*",
         "symfony/webpack-encore-bundle": "^2.4.2",
-        "symfony/yaml": "8.1.*",
-        "vtsot/cms-admin-client-bundle": "dev-main"
+        "symfony/yaml": "8.1.*"
     },
     "require-dev": {
         "codeception/module-asserts": "^3.3",
