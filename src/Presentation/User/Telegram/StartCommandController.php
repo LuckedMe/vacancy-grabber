@@ -32,12 +32,14 @@ final class StartCommandController extends TelegramCommand
     public const string ICO_CANCEL   = '🚫';
     public const string ICO_ENABLED  = '🟢';
     public const string ICO_DISABLED = '🔴';
+    public const string ICO_GRAB     = '🔍';
 
     private const string BUTTON_START                 = self::ICO_START . ' Start';
     private const string BUTTON_STATUS                = self::ICO_STATUS . ' Status';
     private const string BUTTON_CANCEL                = self::ICO_CANCEL . ' Cancel';
     private const string BUTTON_ENABLE_NOTIFICATIONS  = self::ICO_DISABLED . ' Enable notifications';
     private const string BUTTON_DISABLE_NOTIFICATIONS = self::ICO_ENABLED . ' Disable notifications';
+    public const string BUTTON_GRAB                   = self::ICO_GRAB . ' Get Updates';
 
     private const array BUTTONS = [
         self::BUTTON_START,
@@ -87,6 +89,7 @@ final class StartCommandController extends TelegramCommand
         $buttonCancel  = new Type\KeyboardButton(text: self::BUTTON_CANCEL);
         $buttonEnable  = new Type\KeyboardButton(text: self::BUTTON_ENABLE_NOTIFICATIONS);
         $buttonDisable = new Type\KeyboardButton(text: self::BUTTON_DISABLE_NOTIFICATIONS);
+        $buttonGrab    = new Type\KeyboardButton(text: self::BUTTON_GRAB);
 
         $keyboard   = [];
         $keyboard[] = [$buttonStart, $buttonStatus];
@@ -103,9 +106,11 @@ final class StartCommandController extends TelegramCommand
             $keyboard[] = $user->isTelegramNotificationsEnabled()
                 ? [$buttonDisable, $buttonContactShare]
                 : [$buttonEnable, $buttonContactShare];
-        }
 
-        $keyboard[] = [$buttonCancel];
+            $keyboard[] = [$buttonGrab, $buttonCancel];
+        } else {
+            $keyboard[] = [$buttonCancel];
+        }
 
         return new Type\ReplyKeyboardMarkup(
             keyboard: $keyboard,
