@@ -91,5 +91,6 @@ make prod-migrate   # DB migrations + messenger transports
 
 ### Update
 ```bash
-git pull && make prod-up && make prod-migrate
+bin/deploy.sh --remote      # from your machine (or `bin/deploy.sh` on the server, `make prod-deploy`)
 ```
+It pulls, rebuilds, migrates and registers the Telegram webhook; options and the manual steps: [docs/deploy.md](docs/deploy.md).
