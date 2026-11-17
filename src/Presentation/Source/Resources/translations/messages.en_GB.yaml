@@ -6,3 +6,9 @@ SOURCE:
             Vacancies created: %created%
             Vacancies updated: %updated%
             %link%
+    GRAB_FINISHED:
+        TELEGRAM: |-
+            Grab finished: %source%
+            Vacancies created: %created%
+            Vacancies updated: %updated%
+            %link%
