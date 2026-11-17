@@ -35,9 +35,9 @@ final class StartCommandController extends TelegramCommand
 
     private const string BUTTON_START                 = self::ICO_START . ' Start';
     private const string BUTTON_STATUS                = self::ICO_STATUS . ' Status';
+    private const string BUTTON_CANCEL                = self::ICO_CANCEL . ' Cancel';
     private const string BUTTON_ENABLE_NOTIFICATIONS  = self::ICO_DISABLED . ' Enable notifications';
     private const string BUTTON_DISABLE_NOTIFICATIONS = self::ICO_ENABLED . ' Disable notifications';
-    private const string BUTTON_CANCEL                = self::ICO_CANCEL . ' Cancel';
 
     private const array BUTTONS = [
         self::BUTTON_START,
@@ -82,24 +82,30 @@ final class StartCommandController extends TelegramCommand
      */
     public function buildKeyboard(?User $user): Type\ReplyKeyboardMarkup
     {
+        $buttonStart   = new Type\KeyboardButton(text: self::BUTTON_START);
+        $buttonStatus  = new Type\KeyboardButton(text: self::BUTTON_STATUS);
+        $buttonCancel  = new Type\KeyboardButton(text: self::BUTTON_CANCEL);
+        $buttonEnable  = new Type\KeyboardButton(text: self::BUTTON_ENABLE_NOTIFICATIONS);
+        $buttonDisable = new Type\KeyboardButton(text: self::BUTTON_DISABLE_NOTIFICATIONS);
+
         $keyboard   = [];
-        $keyboard[] = [new Type\KeyboardButton(text: self::BUTTON_START), new Type\KeyboardButton(text: self::BUTTON_STATUS)];
+        $keyboard[] = [$buttonStart, $buttonStatus];
 
         if ($user !== null) {
-            $keyboard[] = $user->isTelegramNotificationsEnabled()
-                ? [new Type\KeyboardButton(text: self::BUTTON_DISABLE_NOTIFICATIONS), new Type\KeyboardButton(text: self::BUTTON_CANCEL)]
-                : [new Type\KeyboardButton(text: self::BUTTON_ENABLE_NOTIFICATIONS), new Type\KeyboardButton(text: self::BUTTON_CANCEL)];
-        }
-
-        // a request_contact button: one tap shares the phone number (or a new one), see ContactCommandController
-        if ($user !== null) {
-            $keyboard[] = [new Type\KeyboardButton(
+            // a request_contact button: one tap shares the phone number (or a new one), see ContactCommandController
+            $buttonContactShare = new Type\KeyboardButton(
                 text: $user->getTelegramPhone() === null
-                    ? ContactCommandController::BUTTON_SHARE
-                    : ContactCommandController::BUTTON_SHARE_NEW,
+                          ? ContactCommandController::BUTTON_SHARE
+                          : ContactCommandController::BUTTON_SHARE_NEW,
                 requestContact: true,
-            )];
+            );
+
+            $keyboard[] = $user->isTelegramNotificationsEnabled()
+                ? [$buttonDisable, $buttonContactShare]
+                : [$buttonEnable, $buttonContactShare];
         }
+
+        $keyboard[] = [$buttonCancel];
 
         return new Type\ReplyKeyboardMarkup(
             keyboard: $keyboard,
