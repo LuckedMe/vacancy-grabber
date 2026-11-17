@@ -71,6 +71,11 @@ bin/console telegram:polling:start    # alternative, no public URL needed
    as **Telegram phone**, editable). The bot confirms it and, in the same message, replaces the one-time keyboard with
    the `/start` menu (`StartCommandController::buildKeyboard()`), so the user lands in the main menu.
 
+Changing the number: sharing again overwrites it. `/contact` with a saved number shows it and a button
+**Update my phone**; the `/start` menu has the same one-tap `request_contact` button (**Share my phone** while the
+number is empty, **Update my phone** afterwards). The reply says whether the number was saved, updated
+("updated: new (was old)") or was the same ("already saved, nothing changed").
+
 The chat must be linked first: the user is found by `telegram_chat_id` (`UserRepository::findOneByTelegramChatId`).
 Messages without a contact are passed on (`continue()`), so other handlers still run.
 Apply the migration: `bin/console doctrine:migrations:migrate`.
