@@ -70,6 +70,7 @@ main() {
     APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
     cd "${APP_DIR}"
 
+    DEPLOYED_FILE="${APP_DIR}/var/.last-deployed-commit"
     COMPOSE=(docker compose -f docker-compose.prod.yaml --env-file .env.prod.local)
     PHP=("${COMPOSE[@]}" exec -T php-fpm php bin/console)
 
@@ -104,19 +105,34 @@ main() {
     step "Fetch origin/${BRANCH}"
     git fetch --quiet origin "${BRANCH}"
     REMOTE_REF="origin/${BRANCH}"
-    PREVIOUS="$(git rev-parse --short HEAD)"
+    HEAD_SHA="$(git rev-parse HEAD)"
     TARGET="$(git rev-parse --short "${REMOTE_REF}")"
     CURRENT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
-    info "running now: ${PREVIOUS} (${CURRENT_BRANCH}); deploying: ${TARGET} (${BRANCH})  <- rollback point: ${PREVIOUS}"
 
-    if [[ "$(git rev-parse HEAD)" == "$(git rev-parse "${REMOTE_REF}")" && "${CURRENT_BRANCH}" == "${BRANCH}" && ${FORCE} -eq 0 ]]; then
-        info "already up to date, nothing to deploy (use --force to rebuild anyway)"
-        "${COMPOSE[@]}" ps
-        return 0
+    # The code on disk is not what runs: the images are baked from the code of the last deploy, and somebody may
+    # have pulled by hand without rebuilding. So the commit of the last finished deploy is kept in a marker file
+    # and everything is compared with IT (no marker, e.g. the first run: the checked-out commit is assumed).
+    LAST="$(cat "${DEPLOYED_FILE}" 2>/dev/null || true)"
+    if [[ -n "${LAST}" ]] && ! git cat-file -e "${LAST}^{commit}" 2>/dev/null; then
+        LAST=""
+    fi
+    BASE="${LAST:-${HEAD_SHA}}"
+    LAST_LABEL="unknown"
+    [[ -z "${LAST}" ]] || LAST_LABEL="$(git rev-parse --short "${LAST}")"
+    PREVIOUS="$(git rev-parse --short "${BASE}")"
+    info "checked out: $(git rev-parse --short HEAD) (${CURRENT_BRANCH}); last deploy: ${LAST_LABEL}; deploying: ${TARGET} (${BRANCH})  <- rollback point: ${PREVIOUS}"
+
+    if [[ "${HEAD_SHA}" == "$(git rev-parse "${REMOTE_REF}")" && "${CURRENT_BRANCH}" == "${BRANCH}" && ${FORCE} -eq 0 ]]; then
+        if [[ "${LAST}" == "${HEAD_SHA}" ]]; then
+            info "already up to date, nothing to deploy (use --force to rebuild anyway)"
+            "${COMPOSE[@]}" ps
+            return 0
+        fi
+        warn "the code is up to date, but the running images were not built from it (last deploy: ${LAST_LABEL}): rebuilding"
     fi
 
-    git log --oneline --no-decorate "HEAD..${REMOTE_REF}" | sed 's/^/   + /' || true
-    CHANGED="$(git diff --name-only "HEAD..${REMOTE_REF}")"
+    git log --oneline --no-decorate "${BASE}..${REMOTE_REF}" | sed 's/^/   + /' || true
+    CHANGED="$(git diff --name-only "${BASE}..${REMOTE_REF}")"
     MIGRATIONS="$(grep -c '^migrations/' <<<"${CHANGED}" || true)"
     [[ "${MIGRATIONS}" -gt 0 ]] && info "migrations in this release: ${MIGRATIONS} file(s) changed"
     grep -qE '^(composer\.(json|lock)|package\.json|yarn\.lock)$' <<<"${CHANGED}" \
@@ -178,6 +194,11 @@ main() {
             *)           warn "${APP_URL} -> HTTP ${CODE:-none}: look at 'make prod-logs'; rollback: git checkout ${PREVIOUS} && make prod-up" ;;
         esac
         docker image prune -f >/dev/null && info "old images pruned"
+    fi
+
+    if [[ ${DRY_RUN} -eq 0 ]]; then
+        mkdir -p "$(dirname "${DEPLOYED_FILE}")"
+        git rev-parse HEAD > "${DEPLOYED_FILE}"
     fi
 
     step "Done: ${PREVIOUS} -> ${TARGET}"

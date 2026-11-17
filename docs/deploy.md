@@ -41,8 +41,12 @@ What it does, in order:
 
 1. **Checks**: docker/git present, `docker-compose.prod.yaml` and `.env.prod.local` exist, no other deploy is running,
    no tracked file was edited by hand on the server.
-2. **Fetches** `origin/main`, prints the commits that are coming and the rollback point (the commit that runs now).
-   Nothing new -> "already up to date", exit 0 (`--force` rebuilds anyway, e.g. after a change of `.env.prod.local`).
+2. **Fetches** `origin/main`, prints the commits that are coming and the rollback point (the commit of the last
+   deploy). The commit of every finished deploy is kept in `var/.last-deployed-commit` and the comparison is made with
+   it, not with the checked-out code: the images are baked from the code of the last deploy, so a `git pull` made by
+   hand (without `make prod-up`) leaves the old code running. Nothing new and the last deploy is the checked-out
+   commit -> "already up to date", exit 0. The code is current but the marker is missing or older (first run, manual
+   pull) -> it warns and rebuilds. `--force` rebuilds anyway, e.g. after a change of `.env.prod.local`.
 3. **Compares `.env.prod.dist` with `.env.prod.local`** and stops, **before** anything is changed, when a variable
    is missing (it lists the names; add them and run again).
 4. **Backs up the database** with `BACKUP_SCRIPT`, only when the release contains files in `migrations/`

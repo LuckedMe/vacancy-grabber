@@ -15,6 +15,7 @@
 /var/cache/storage/*
 /var/cache/translations/*
 /var/log/*
+/var/.last-deployed-commit
 /var/session/*
 /var/share/*
 /var/storage/*
