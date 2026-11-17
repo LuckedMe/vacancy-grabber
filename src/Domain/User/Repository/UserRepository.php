@@ -19,9 +19,8 @@ interface UserRepository extends FindOneById, FindOneByIdentifier
 
     public function remove(User $user): void;
 
-    /**
-     * @return array<int, User>
-     */
+    public function refresh(User $user): void;
+
     /**
      * Users who have a Telegram username but no chat ID yet.
      *
@@ -29,5 +28,12 @@ interface UserRepository extends FindOneById, FindOneByIdentifier
      */
     public function findAllAwaitingTelegramLink(): array;
 
+    public function findOneByTelegramUsername(string $telegramUsername): ?User;
+
+    public function findOneByTelegramChatId(string $telegramChatId): ?User;
+
+    /**
+     * @return array<int, User>
+     */
     public function findAllByIds(array $ids = []): array;
 }

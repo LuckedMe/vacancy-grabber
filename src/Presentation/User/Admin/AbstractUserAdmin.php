@@ -186,6 +186,10 @@ abstract class AbstractUserAdmin extends AbstractAdmin
             );
         }
 
+        $this->configureFilterFieldText($filter, 'telegramUsername', 'USER_ENTITY.LABEL.TELEGRAM_USERNAME');
+        $this->configureFilterFieldText($filter, 'telegramChatId', 'USER_ENTITY.LABEL.TELEGRAM_CHAT_ID');
+        $this->configureFilterFieldText($filter, 'telegramPhone', 'USER_ENTITY.LABEL.TELEGRAM_PHONE');
+
         $this->configureFilterFieldActive($filter);
         $this->configureFilterFieldCreatedAtDateRange($filter);
         $this->configureFilterFieldUpdatedAtDateRange($filter);
@@ -253,7 +257,14 @@ abstract class AbstractUserAdmin extends AbstractAdmin
 
     protected function configureFormFields(FormMapper $form): void
     {
-        $form->with($this->trans('USER_ENTITY.SECTION.MAIN'));
+        $this->configureFormSectionMain($form);
+        $this->configureFormSectionTelegram($form);
+    }
+
+    protected function configureFormSectionMain(FormMapper $form): void
+    {
+        $title = $this->trans('USER_ENTITY.SECTION.MAIN');
+        $form->with($title, ['label' => $title, 'class' => 'col-md-9']);
 
         $form->add(
             'email',
@@ -269,20 +280,6 @@ abstract class AbstractUserAdmin extends AbstractAdmin
                 ],
                 'translation_domain' => $this->getTranslationDomain(),
             ]
-        );
-
-        $this->configureFormFieldText(
-            $form,
-            'telegramUsername',
-            'USER_ENTITY.LABEL.TELEGRAM_USERNAME',
-            'USER_ENTITY.HELP.TELEGRAM_USERNAME'
-        );
-
-        $this->configureFormFieldText(
-            $form,
-            'telegramChatId',
-            'USER_ENTITY.LABEL.TELEGRAM_CHAT_ID',
-            'USER_ENTITY.HELP.TELEGRAM_CHAT_ID'
         );
 
         $this->configureFormFieldText(
@@ -373,6 +370,47 @@ abstract class AbstractUserAdmin extends AbstractAdmin
         $form->end();
     }
 
+    protected function configureFormSectionTelegram(FormMapper $form): void
+    {
+        $title = $this->trans('USER_ENTITY.SECTION.TELEGRAM');
+        $form->with($title, ['label' => $title, 'class' => 'col-md-3']);
+
+        $form->add(
+            'telegramUsername',
+            TextType::class,
+            [
+                'required'           => false,
+                'label'              => 'USER_ENTITY.LABEL.TELEGRAM_USERNAME',
+                'help'               => 'USER_ENTITY.HELP.TELEGRAM_USERNAME',
+                'constraints'        => [new Callback([$this, 'validateFormFieldUserTelegramUsername'])],
+                'translation_domain' => $this->getTranslationDomain(),
+            ]
+        );
+
+        $this->configureFormFieldText(
+            $form,
+            'telegramChatId',
+            'USER_ENTITY.LABEL.TELEGRAM_CHAT_ID',
+            'USER_ENTITY.HELP.TELEGRAM_CHAT_ID'
+        );
+
+        $this->configureFormFieldText(
+            $form,
+            'telegramPhone',
+            'USER_ENTITY.LABEL.TELEGRAM_PHONE',
+            'USER_ENTITY.HELP.TELEGRAM_PHONE'
+        );
+
+        $this->configureFormFieldYesNo(
+            $form,
+            'telegramNotificationsEnabled',
+            'USER_ENTITY.LABEL.TELEGRAM_NOTIFICATIONS_ENABLED',
+            'USER_ENTITY.HELP.TELEGRAM_NOTIFICATIONS_ENABLED'
+        );
+
+        $form->end();
+    }
+
     public function validateFormFieldUserEmail(?string $value, ExecutionContextInterface $context): void
     {
         if ($value === null) {
@@ -390,6 +428,26 @@ abstract class AbstractUserAdmin extends AbstractAdmin
                 ->setParameter('%EMAIL%', $value)
                 ->setTranslationDomain($this->getTranslationDomain())
                 ->atPath('email')->addViolation();
+        }
+    }
+
+    public function validateFormFieldUserTelegramUsername(?string $value, ExecutionContextInterface $context): void
+    {
+        if ($value === null) {
+            return;
+        }
+
+        $entity = $this->userRepository->findOneByTelegramUsername($value);
+
+        if ($entity !== null
+            && $this->getSubject() !== null
+            && $entity->getId() !== $this->getSubject()->getId()
+        ) {
+            $context
+                ->buildViolation('USER_ENTITY.ERROR.TELEGRAM_USERNAME_TAKEN')
+                ->setParameter('%TELEGRAM-USERNAME%', $value)
+                ->setTranslationDomain($this->getTranslationDomain())
+                ->atPath('telegramUsername')->addViolation();
         }
     }
 

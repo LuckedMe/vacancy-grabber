@@ -3,7 +3,7 @@
 `bin/console app:source:grab-all` sends each user a short report (vacancies created / updated and a link to
 unviewed vacancies) to their Telegram chat. This needs a bot token and a chat ID per user.
 
-## 1. Get TELEGRAM_BOT_TOKEN
+## 1. Get TELEGRAM_API_TOKEN
 
 1. Open Telegram and start a chat with [@BotFather](https://t.me/BotFather) (check the official verified account).
 2. Send `/newbot`.
@@ -18,7 +18,7 @@ Lost or leaked token: send `/mybots` to BotFather, choose the bot, then `API Tok
 Put the token in `.env.local` (dev) or in the environment of the production container. Never commit it.
 
 ```dotenv
-TELEGRAM_BOT_TOKEN=123456789:AAH...
+TELEGRAM_API_TOKEN=123456789:AAH...
 ```
 
 When the variable is empty, the command skips Telegram notifications and prints a note.
@@ -27,7 +27,7 @@ When the variable is empty, the command skips Telegram notifications and prints 
 
 1. The user opens the bot in Telegram and presses **Start** (a bot cannot message a user who has not written to it first).
 2. The user sends any message to the bot.
-3. Open `https://api.telegram.org/bot<TELEGRAM_BOT_TOKEN>/getUpdates` in a browser (or use `curl`).
+3. Open `https://api.telegram.org/bot<TELEGRAM_API_TOKEN>/getUpdates` in a browser (or use `curl`).
 4. Find `message.chat.id` in the JSON response. This number is the chat ID.
    Alternatively, the user can message [@userinfobot](https://t.me/userinfobot), which replies with their ID.
 5. In the admin panel, edit the user and fill in **Telegram chat ID**.
@@ -57,7 +57,7 @@ The user needs a public Telegram username (Settings -> Username).
 ## 4. Check
 
 ```bash
-curl "https://api.telegram.org/bot<TELEGRAM_BOT_TOKEN>/sendMessage" -d chat_id=<CHAT_ID> -d text=test
+curl "https://api.telegram.org/bot<TELEGRAM_API_TOKEN>/sendMessage" -d chat_id=<CHAT_ID> -d text=test
 bin/console app:source:grab-all
 ```
 
@@ -65,3 +65,16 @@ bin/console app:source:grab-all
 
 The username is stored in `users.telegram_username` and the chat ID in `users.telegram_chat_id`; apply the migration with
 `bin/console doctrine:migrations:migrate`.
+
+## Switching notifications off for a user
+
+`users.telegram_notifications_enabled` (admin user form, Telegram section: **Allow Telegram notifications**, default
+**No**) controls whether the user gets the report. Only with **Yes** `app:source:grab-all` sends it; with **No** the
+user is skipped even if a chat ID is set, so enable it for each user who should be notified. Apply the migration with `bin/console doctrine:migrations:migrate`.
+
+## Unique Telegram username
+
+`users.telegram_username` has a unique index (migration `Version20261118120000`, which fails if two users already
+share a username: fix the duplicates first). The admin form shows a validation error for a taken username. The
+comparison is on the value as entered and is case-insensitive in MySQL, so `@Name` and `name` are different values
+for the database even though `/start` treats them as the same user.

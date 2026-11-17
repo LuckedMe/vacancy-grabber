@@ -7,6 +7,7 @@ namespace App\Domain\Vacancy\Repository;
 use App\Domain\Shared\Repository\FindOneById;
 use App\Domain\Shared\Repository\FindOneByIdAndUserId;
 use App\Domain\Shared\Repository\PaginatedResult;
+use App\Domain\Source\Entity\Source;
 use App\Domain\Vacancy\Entity\Vacancy;
 use Symfony\Component\Uid\Uuid;
 
@@ -19,6 +20,8 @@ interface VacancyRepository extends FindOneById, FindOneByIdAndUserId
     public function save(Vacancy $vacancy): void;
 
     public function remove(Vacancy $vacancy): void;
+
+    public function refresh(Source $source): void;
 
     /**
      * @return PaginatedResult<Vacancy>

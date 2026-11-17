@@ -1,0 +1,5 @@
+telegram_bot:
+    api_token: '%env(resolve:TELEGRAM_API_TOKEN)%'
+    webhook:
+        url: '%env(default::TELEGRAM_WEBHOOK_URL)%'
+        secret_token: '%env(default::TELEGRAM_WEBHOOK_SECRET)%'

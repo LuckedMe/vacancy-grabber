@@ -9,6 +9,7 @@ use App\Domain\Shared\Repository\FindAllForUserId;
 use App\Domain\Shared\Repository\FindOneById;
 use App\Domain\Shared\Repository\FindOneByIdAndUserId;
 use App\Domain\Shared\Repository\PaginatedResult;
+use App\Domain\Source\Entity\Source;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -20,6 +21,8 @@ interface CompanyRepository extends FindOneById, FindOneByIdAndUserId, FindAllFo
     public function save(Company $company): void;
 
     public function remove(Company $company): void;
+
+    public function refresh(Source $source): void;
 
     /**
      * @return PaginatedResult<Company>

@@ -48,6 +48,16 @@ class UserDoctrineRepository extends ServiceEntityRepository implements UserRepo
             ->getResult();
     }
 
+    public function findOneByTelegramUsername(string $telegramUsername): ?User
+    {
+        return $this->findOneBy(['telegramUsername' => $telegramUsername]);
+    }
+
+    public function findOneByTelegramChatId(string $telegramChatId): ?User
+    {
+        return $this->findOneBy(['telegramChatId' => $telegramChatId]);
+    }
+
     public function findAllByIds(array $ids = []): array
     {
         $qb = $this->createQueryBuilder('u');

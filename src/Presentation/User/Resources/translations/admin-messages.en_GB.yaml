@@ -28,14 +28,17 @@ TWO_STEP_AUTH_PAGE:
 USER_ENTITY:
     SECTION:
         MAIN: 'Main'
+        TELEGRAM: 'Telegram'
     LABEL:
         USER: 'User'
         EMAIL: 'E-mail'
         EMAIL_CONFIRMED: 'Email confirmed'
         FIRST_NAME: 'First Name'
         LAST_NAME: 'Last Name'
-        TELEGRAM_USERNAME: 'Telegram username'
-        TELEGRAM_CHAT_ID: 'Telegram chat ID'
+        TELEGRAM_USERNAME: 'Telegram Username'
+        TELEGRAM_CHAT_ID: 'Telegram Chat ID'
+        TELEGRAM_PHONE: 'Telegram Phone'
+        TELEGRAM_NOTIFICATIONS_ENABLED: 'Allow Telegram notifications'
         PASSWORD: 'Password'
         PASSWORD_REPEAT: 'Password repeat'
         ROLES: 'Role'
@@ -48,8 +51,10 @@ USER_ENTITY:
         EMAIL_CONFIRMED: ''
         FIRST_NAME: ''
         LAST_NAME: ''
-        TELEGRAM_USERNAME: '@username or https://t.me/username; used by app:telegram:link-users to find the chat ID'
+        TELEGRAM_USERNAME: '@username or https://t.me/username; used to find the chat ID'
         TELEGRAM_CHAT_ID: 'Notifications are sent to this chat. Filled automatically or manually'
+        TELEGRAM_PHONE: 'Shared by the user through a Telegram bot'
+        TELEGRAM_NOTIFICATIONS_ENABLED: 'Set "No" to stop sending vacancy reports to the Telegram chat of this user.'
         ROLES: ''
         GOOGLE_AUTHENTICATOR_ENABLED: 'Set "Yes" to enable Two-Step Authentication. Set "No" to disable Two-Step Authentication.'
         GOOGLE_AUTHENTICATOR_TOKEN_IS_SET: 'Leave blank to reset the token and it will be saved after the next successful login into the admin area.'
@@ -57,6 +62,7 @@ USER_ENTITY:
     ERROR:
         EMAIL_TAKEN: 'E-mail "%EMAIL%" already registered'
         PASSWORD_MISMATCH: 'Password not confirmed'
+        TELEGRAM_USERNAME_TAKEN: 'Telegram Username "%TELEGRAM-USERNAME%" already registered'
     ROLE:
         ROLE_SUPERVISOR: 'Supervisor'
         ROLE_ADMIN: 'Admin'

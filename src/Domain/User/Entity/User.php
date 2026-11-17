@@ -41,6 +41,10 @@ class User extends AbstractEntity
 
     private ?string $telegramChatId = null;
 
+    private ?string $telegramPhone = null;
+
+    private bool $telegramNotificationsEnabled = false;
+
     /**
      * @param list<UserRole|string> $roles
      */
@@ -175,6 +179,30 @@ class User extends AbstractEntity
     {
         $telegramChatId       = $telegramChatId !== null ? trim($telegramChatId) : '';
         $this->telegramChatId = $telegramChatId !== '' ? $telegramChatId : null;
+    }
+
+    public function isTelegramNotificationsEnabled(): bool
+    {
+        return $this->telegramNotificationsEnabled;
+    }
+
+    public function changeTelegramNotificationsEnabled(bool $telegramNotificationsEnabled): void
+    {
+        $this->telegramNotificationsEnabled = $telegramNotificationsEnabled;
+    }
+
+    public function getTelegramPhone(): ?string
+    {
+        return $this->telegramPhone;
+    }
+
+    /**
+     * The phone number the user shared with the bot (the "Share my phone" button).
+     */
+    public function changeTelegramPhone(?string $telegramPhone): void
+    {
+        $telegramPhone       = $telegramPhone !== null ? trim($telegramPhone) : '';
+        $this->telegramPhone = $telegramPhone !== '' ? $telegramPhone : null;
     }
 
     /**

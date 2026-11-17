@@ -20,6 +20,8 @@ interface SourceRepository extends FindOneById, FindOneByIdAndUserId
 
     public function remove(Source $source): void;
 
+    public function refresh(Source $source): void;
+
     /**
      * @return PaginatedResult<Source>
      */

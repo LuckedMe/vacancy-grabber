@@ -116,6 +116,18 @@
     "lucked-me/cms-client-bundle": {
         "version": "dev-main"
     },
+    "luzrain/telegram-bot-bundle": {
+        "version": "2.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "2.1",
+            "ref": "890538c3e818619e5c0ab76fa833a39268c8ab36"
+        },
+        "files": [
+            "config/packages/telegram_bot.yaml"
+        ]
+    },
     "nelmio/api-doc-bundle": {
         "version": "5.12",
         "recipe": {
@@ -139,6 +151,18 @@
         },
         "files": [
             "config/packages/nelmio_cors.yaml"
+        ]
+    },
+    "nyholm/psr7": {
+        "version": "1.8",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "4a8c0345442dcca1d8a2c65633dcf0285dd5a5a2"
+        },
+        "files": [
+            "config/packages/nyholm_psr7.yaml"
         ]
     },
     "phpunit/phpunit": {

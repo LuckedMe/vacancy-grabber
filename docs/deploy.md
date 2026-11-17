@@ -155,16 +155,47 @@ cd /home/dad/workspace/www/vacancy-grabber && git pull && make prod-up && make p
 | A new CLI command to run on a schedule | add it to the crontab, see `docs/crontab.md` |
 | `.docker/mysql/config/mysqld.cnf` | `make prod-up`, then `docker compose ... restart mysql` |
 
-## Release notes: Telegram notifications
+## Release notes: Telegram bot (notifications, webhook, menu)
 
-The first deploy that includes the Telegram notifications needs, besides the standard steps:
+The release that adds the Telegram bot (`luzrain/telegram-bot-bundle`, docs: `docs/telegram-notifications.md`,
+`docs/telegram-webhook.md`) needs, besides the standard steps:
 
-1. `TELEGRAM_BOT_TOKEN=...` in `.env.prod.local` **before** `make prod-up` (see `docs/telegram-notifications.md`;
-   the variable is in `.env.prod.dist`).
-2. `make prod-migrate`: adds `users.telegram_chat_id` and `users.telegram_username`.
-3. The cron entries from `docs/crontab.md` (`app:source:grab-all`, `app:telegram:link-users`) and the folder
-   `var/log/crontab`.
-4. The users' Telegram username or chat ID in the admin.
+1. **New variables in `.env.prod.local`**, before `make prod-up` (they are in `.env.prod.dist`):
+
+   | Variable | Value |
+   |---|---|
+   | `TELEGRAM_API_TOKEN` | the token from @BotFather (renamed from `TELEGRAM_BOT_TOKEN`: rename it if it is already set, the old name is no longer read) |
+   | `TELEGRAM_WEBHOOK_URL` | `https://vacancy-grabber.lucked.me/telegram/webhook` (public HTTPS) |
+   | `TELEGRAM_WEBHOOK_SECRET` | `openssl rand -hex 32` (only `A-Z a-z 0-9 _ -`) |
+
+2. **Before the backup/migration, check the data**: the migrations add a unique index on `users.telegram_username`,
+   which fails if two users already have the same username:
+
+   ```bash
+   docker compose -f docker-compose.prod.yaml --env-file .env.prod.local exec -T php-fpm php bin/console dbal:run-sql \
+     "SELECT telegram_username, COUNT(*) c FROM users WHERE telegram_username IS NOT NULL GROUP BY 1 HAVING c > 1"
+   ```
+
+3. `make prod-migrate` adds to `users`: `telegram_chat_id`, `telegram_username` (unique), `telegram_phone`,
+   `telegram_notifications_enabled`. **The notifications flag defaults to No for everybody**, so nobody gets the
+   report until you switch **Allow Telegram notifications** to Yes on the user in the admin (or the user presses
+   the enable button in the bot).
+4. **Register the webhook** after `make prod-up` (the containers must run the new code) and after every change of
+   the token, URL or secret:
+
+   ```bash
+   docker compose -f docker-compose.prod.yaml --env-file .env.prod.local exec -T php-fpm php bin/console telegram:webhook:update
+   docker compose -f docker-compose.prod.yaml --env-file .env.prod.local exec -T php-fpm php bin/console telegram:webhook:info
+   docker compose -f docker-compose.prod.yaml --env-file .env.prod.local exec -T php-fpm php bin/console telegram:button:update   # bot menu commands
+   ```
+
+   `telegram:webhook:info` must show the URL and no `last_error_message`.
+5. The cron entry for `app:source:grab-all` from `docs/crontab.md` and the folder `var/log/crontab`.
+   `app:telegram:link-users` (reads `getUpdates`) cannot work while a webhook is set: users are linked by
+   `/start` in the bot instead (their Telegram username must be filled in in the admin).
+6. Check in Telegram: send `/start` to the bot (the menu appears, the chat is linked), then **Status**.
+
+Without the webhook variables the bot only sends notifications; it just does not answer messages.
 
 ## Rollback
 
@@ -178,7 +209,7 @@ make prod-up
 ```
 
 Migrations are not rolled back automatically. Code that is older than the schema usually keeps working when the
-migration only **added** columns or tables (as the Telegram one does). When a migration changed or dropped
+migration only **added** columns or tables (as the Telegram ones do). When a migration changed or dropped
 something, restore the database from the backup of step 2 (restore commands: `vps-setup/docs/vps-setup.md`,
 step 17, "Restore"), or roll one migration back:
 
@@ -202,6 +233,7 @@ return to it: `git checkout main && git pull && make prod-up && make prod-migrat
 | `yarn install` fails with a network timeout | Run `make prod-up` again, the yarn cache is kept between builds |
 | 500 after deploy, log mentions an unknown column | `make prod-migrate` was not run |
 | 500, log mentions an environment variable not found | New variable missing in `.env.prod.local`, add it and `make prod-up` |
+| The bot does not answer in Telegram | `telegram:webhook:info`: wrong `url`, `last_error_message`, or pending updates. Check `TELEGRAM_WEBHOOK_URL` / `_SECRET` in `.env.prod.local`, `make prod-up`, then `telegram:webhook:update`. A 401/403 on `/telegram/webhook` means the secret differs from the one set in Telegram |
 | Changed `.env.prod.local` but nothing changed | Containers were not recreated: `make prod-up` |
 | `worker` keeps restarting | `docker compose ... logs worker`; usually the same cause as the 500s above |
 | Frontend broken (404 on `/assets/...`) | `make prod-assets` to see the build error; clear a broken cache with `docker builder prune -f` and `make prod-up` |

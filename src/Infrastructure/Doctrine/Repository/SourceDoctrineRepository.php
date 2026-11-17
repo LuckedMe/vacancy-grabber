@@ -45,6 +45,7 @@ class SourceDoctrineRepository extends ServiceEntityRepository implements Source
     {
         return $this
             ->createBaseQuery(new SourceCriteria(active: true, hasUser: true, hasUrl: true))
+            ->join('q.user', 'u')
             ->getQuery()
             ->getResult();
     }

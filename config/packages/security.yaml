@@ -120,6 +120,7 @@ security:
     access_control:
         - { path: '^/(css|js|images|assets|favicon\.ico)', roles: PUBLIC_ACCESS }
         - { path: '^/lucked-me-cms-client/cache-clear', roles: PUBLIC_ACCESS, methods: [ POST ] }
+        - { path: '^/telegram/webhook', roles: PUBLIC_ACCESS, methods: [ POST ] }
         - { path: '^/admin/login', roles: PUBLIC_ACCESS }
         - { path: '^/admin', roles: ROLE_ADMIN }
         - { path: '^/api/doc', roles: ROLE_API_DOC }
