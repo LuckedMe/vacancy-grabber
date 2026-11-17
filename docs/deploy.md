@@ -27,7 +27,52 @@ stack.
   restart is not enough for a new value to be applied.
 - Data survives a deploy: the database is in the `mysql-data` volume, JWT keys in the `jwt` volume.
 
-## Standard deploy
+## Deploy script (recommended)
+
+`bin/deploy.sh` does the whole standard deploy below in one go and stops at the first failing step:
+
+```bash
+bin/deploy.sh --remote          # from your machine (needs the tailnet), runs the server's copy over ssh
+# or on the server:
+cd /home/dad/workspace/www/vacancy-grabber && bin/deploy.sh     # same as: make prod-deploy
+```
+
+What it does, in order:
+
+1. **Checks**: docker/git present, `docker-compose.prod.yaml` and `.env.prod.local` exist, no other deploy is running,
+   no tracked file was edited by hand on the server.
+2. **Fetches** `origin/main`, prints the commits that are coming and the rollback point (the commit that runs now).
+   Nothing new -> "already up to date", exit 0 (`--force` rebuilds anyway, e.g. after a change of `.env.prod.local`).
+3. **Compares `.env.prod.dist` with `.env.prod.local`** and stops, **before** anything is changed, when a variable
+   is missing (it lists the names; add them and run again).
+4. **Backs up the database** with `BACKUP_SCRIPT`, only when the release contains files in `migrations/`
+   (`--no-backup` skips it).
+5. `git pull --ff-only`, then `docker compose up -d --build --remove-orphans`.
+6. **Migrations**: `doctrine:migrations:migrate` and `messenger:setup-transports` (the same as `make prod-migrate`).
+7. **Telegram webhook**: `telegram:webhook:update` and `telegram:button:update` when `TELEGRAM_API_TOKEN` and
+   `TELEGRAM_WEBHOOK_URL` are set; a failure there is only a warning.
+8. **Check**: `docker compose ps`, an HTTP request to the site (a warning when it is not 200/301/302) and
+   `docker image prune -f`.
+
+| Option | |
+|---|---|
+| `--branch NAME` | deploy another branch (default `main`), e.g. to try a release before the merge |
+| `--no-backup` | skip the database backup |
+| `--force` | rebuild and restart even when there is nothing new to pull |
+| `--dry-run` | print the commands, change nothing (`git fetch` still runs): read it before the first real run |
+| `--remote` | run on the server over ssh; the other options are passed on |
+
+Environment: `DEPLOY_HOST` (default `dad@100.91.57.78`), `DEPLOY_DIR` (default
+`/home/dad/workspace/www/vacancy-grabber`), `BACKUP_SCRIPT` (default
+`/home/dad/workspace/backups/backup-vacancy-grabber.sh`), `APP_URL` (default `https://vacancy-grabber.lucked.me/`).
+
+The script never edits `.env.prod.local`: new variables are added by hand, see the release notes below. It does
+not roll back by itself; on a failure read the message, the rollback point is in the output (see "Rollback").
+The first run on the server needs the file executable (`chmod +x bin/deploy.sh`, it is committed with the mode).
+
+## Standard deploy (manual steps)
+
+The steps `bin/deploy.sh` runs, for when you want to do or debug them one by one.
 
 ```bash
 ssh dad@100.91.57.78
@@ -133,7 +178,7 @@ docker image prune -f          # dangling images from the previous builds
 
 ## One-liner
 
-When the release is routine (backup is automatic at 03:00 and you accept that):
+The script above replaces it. By hand, when the release is routine (the backup is automatic at 03:00 and you accept that):
 
 ```bash
 cd /home/dad/workspace/www/vacancy-grabber && git pull && make prod-up && make prod-migrate && make prod-ps
@@ -180,7 +225,7 @@ The release that adds the Telegram bot (`luzrain/telegram-bot-bundle`, docs: `do
    `telegram_notifications_enabled`. **The notifications flag defaults to No for everybody**, so nobody gets the
    report until you switch **Allow Telegram notifications** to Yes on the user in the admin (or the user presses
    the enable button in the bot).
-4. **Register the webhook** after `make prod-up` (the containers must run the new code) and after every change of
+4. **Register the webhook** (`bin/deploy.sh` does it when both variables are set; by hand otherwise) after `make prod-up` (the containers must run the new code) and after every change of
    the token, URL or secret:
 
    ```bash

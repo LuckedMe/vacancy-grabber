@@ -21,6 +21,9 @@ use function sprintf;
  */
 final class ContactCommandController extends TelegramCommand
 {
+    public const string BUTTON_SHARE     = 'Share my phone';
+    public const string BUTTON_SHARE_NEW = 'Update my phone';
+
     public function __construct(
         private readonly UserRepository $userRepository,
         private readonly StartCommandController $startCommand,
@@ -34,21 +37,30 @@ final class ContactCommandController extends TelegramCommand
             return $this->reply('Please write to me in a private chat.');
         }
 
-        if ($this->userRepository->findOneByTelegramChatId((string) $message->chat->id) === null) {
+        $user = $this->userRepository->findOneByTelegramChatId((string) $message->chat->id);
+
+        if ($user === null) {
             return $this->reply('This chat is not linked to an account yet. Send /start first.');
         }
 
+        $phone = $user->getTelegramPhone();
+
         return $this->reply(
-            'Press the button below to share your phone number.',
+            $phone === null
+                ? 'Press the button below to share your phone number.'
+                : sprintf('Your phone number is %s. To change it, press the button below and share the new one.', $phone),
             replyMarkup: new Type\ReplyKeyboardMarkup(
-                keyboard: [[new Type\KeyboardButton(text: 'Share my phone', requestContact: true)]],
+                keyboard: [[new Type\KeyboardButton(
+                    text: $phone === null ? self::BUTTON_SHARE : self::BUTTON_SHARE_NEW,
+                    requestContact: true,
+                )]],
                 resizeKeyboard: true,
                 oneTimeKeyboard: true,
             ),
         );
     }
 
-    #[OnEvent(Event\TextMessage::class)]
+    #[OnEvent(Event\Message::class)]
     public function receive(Type\Message $message): Method|EventCallbackReturn
     {
         $contact = $message->contact;
@@ -68,11 +80,19 @@ final class ContactCommandController extends TelegramCommand
             return $this->reply('This chat is not linked to an account yet. Send /start first.', replyMarkup: new Type\ReplyKeyboardRemove());
         }
 
+        $previous = $user->getTelegramPhone();
+
         $user->changeTelegramPhone($contact->phoneNumber);
         $this->userRepository->save($user);
 
+        $text = match (true) {
+            $previous === null                      => sprintf('Thanks! Your phone number %s is saved.', $contact->phoneNumber),
+            $previous === $user->getTelegramPhone() => sprintf('Your phone number %s is already saved, nothing changed.', $contact->phoneNumber),
+            default                                 => sprintf('Done! Your phone number is updated: %s (was %s).', $contact->phoneNumber, $previous),
+        };
+
         return $this->reply(
-            sprintf("Thanks! Your phone number %s is saved.\n\nChoose an action using the buttons below the input field:", $contact->phoneNumber),
+            $text . "\n\nChoose an action using the buttons below the input field:",
             // the "Share my phone" keyboard is replaced by the /start menu
             replyMarkup: $this->startCommand->buildKeyboard($user),
         );

@@ -7,7 +7,7 @@ namespace App\Presentation\User\Telegram;
 use App\Domain\User\Entity\User;
 use App\Domain\User\Repository\UserRepository;
 use Luzrain\TelegramBotApi\BotApi;
-use Luzrain\TelegramBotApi\Event\TextMessage;
+use Luzrain\TelegramBotApi\Event;
 use Luzrain\TelegramBotApi\EventCallbackReturn;
 use Luzrain\TelegramBotApi\Exception\TelegramApiException;
 use Luzrain\TelegramBotApi\Exception\TelegramApiServerException;
@@ -29,8 +29,8 @@ final class StartCommandController extends TelegramCommand
 {
     private const string BUTTON_START                 = 'Start';
     private const string BUTTON_STATUS                = 'Status';
-    private const string BUTTON_ENABLE_NOTIFICATIONS  = 'Enable notifications about new vacancies';
-    private const string BUTTON_DISABLE_NOTIFICATIONS = 'Disable notifications about new vacancies';
+    private const string BUTTON_ENABLE_NOTIFICATIONS  = '(Disabled) Enable notifications about new vacancies';
+    private const string BUTTON_DISABLE_NOTIFICATIONS = '(Enabled) Disable notifications about new vacancies';
     private const string BUTTON_CANCEL                = 'Cancel';
 
     private const array BUTTONS = [
@@ -85,6 +85,16 @@ final class StartCommandController extends TelegramCommand
                 : [new Type\KeyboardButton(text: self::BUTTON_ENABLE_NOTIFICATIONS), new Type\KeyboardButton(text: self::BUTTON_CANCEL)];
         }
 
+        // a request_contact button: one tap shares the phone number (or a new one), see ContactCommandController
+        if ($user !== null) {
+            $keyboard[] = [new Type\KeyboardButton(
+                text: $user->getTelegramPhone() === null
+                    ? ContactCommandController::BUTTON_SHARE
+                    : ContactCommandController::BUTTON_SHARE_NEW,
+                requestContact: true,
+            )];
+        }
+
         return new Type\ReplyKeyboardMarkup(
             keyboard: $keyboard,
             // false: the keyboard can be hidden and opened again with the keyboard icon
@@ -103,7 +113,7 @@ final class StartCommandController extends TelegramCommand
         }
     }
 
-    #[OnEvent(TextMessage::class)]
+    #[OnEvent(Event\Message::class)]
     public function pressed(Type\Message $message): Method|EventCallbackReturn
     {
         if ($message->text === null || !in_array($message->text, self::BUTTONS, true)) {

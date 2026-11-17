@@ -140,6 +140,9 @@ prod-build: ## [prod] Build production images
 prod-assets: ## [prod] Run only yarn install && yarn build (Dockerfile "assets" stage) to check the frontend build
 	DOCKER_BUILDKIT=1 docker build --target assets --progress=plain -t vacancy-grabber-prod-assets .
 
+prod-deploy: ## [prod] Run the whole deploy (run it ON THE SERVER): pull, build, migrate, Telegram webhook
+	bin/deploy.sh
+
 prod-up: ## [prod] Build and (re)start the production stack
 	$(PROD) up -d --build --remove-orphans
 
@@ -174,7 +177,7 @@ help: ## Show this help message
 	jwt-keys \
 	migrate \
 	node-console php-console \
-	prod-assets prod-build prod-console prod-down prod-jwt-keys prod-logs prod-migrate prod-ps prod-up \
+	prod-assets prod-build prod-console prod-deploy prod-down prod-jwt-keys prod-logs prod-migrate prod-ps prod-up \
 	test-api test-coverage-html test-coverage test test-unit test-web \
 	update \
 	yarn-build yarn-dev yarn-install yarn-watch
