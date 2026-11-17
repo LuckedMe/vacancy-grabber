@@ -76,6 +76,10 @@ Changing the number: sharing again overwrites it. `/contact` with a saved number
 number is empty, **Update my phone** afterwards). The reply says whether the number was saved, updated
 ("updated: new (was old)") or was the same ("already saved, nothing changed").
 
+Name: the name on the shared Telegram contact (`first_name`, `last_name`) fills the user's **First name** / **Last name**
+only where they are empty (each field on its own, an entered name is never overwritten); the reply then adds
+"Your name is filled in from Telegram: ...".
+
 The chat must be linked first: the user is found by `telegram_chat_id` (`UserRepository::findOneByTelegramChatId`).
 Messages without a contact are passed on (`continue()`), so other handlers still run.
 Apply the migration: `bin/console doctrine:migrations:migrate`.

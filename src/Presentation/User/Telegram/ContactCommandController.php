@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\User\Telegram;
 
+use App\Domain\User\Entity\User;
 use App\Domain\User\Repository\UserRepository;
 use Luzrain\TelegramBotApi\Event;
 use Luzrain\TelegramBotApi\EventCallbackReturn;
@@ -83,6 +84,10 @@ final class ContactCommandController extends TelegramCommand
         $previous = $user->getTelegramPhone();
 
         $user->changeTelegramPhone($contact->phoneNumber);
+
+        // the name of the Telegram contact fills only the name fields that are empty, an entered name is kept
+        $nameFilled = $this->fillEmptyName($user, $contact);
+
         $this->userRepository->save($user);
 
         $text = match (true) {
@@ -91,10 +96,33 @@ final class ContactCommandController extends TelegramCommand
             default                                 => sprintf('Done! Your phone number is updated: %s (was %s).', $contact->phoneNumber, $previous),
         };
 
+        if ($nameFilled) {
+            $text .= sprintf("\nYour name is filled in from Telegram: %s.", $user->getFullName());
+        }
+
         return $this->reply(
             $text . "\n\nChoose an action using the buttons below the input field:",
             // the "Share my phone" keyboard is replaced by the /start menu
             replyMarkup: $this->startCommand->buildKeyboard($user),
         );
+    }
+
+    /**
+     * @return bool whether the first or the last name was empty and has been filled in
+     */
+    private function fillEmptyName(User $user, Type\Contact $contact): bool
+    {
+        $firstName = trim($user->getFirstName() ?? '');
+        $lastName  = trim($user->getLastName() ?? '');
+        $newFirst  = $firstName === '' ? trim($contact->firstName) : $firstName;
+        $newLast   = $lastName === '' ? trim($contact->lastName ?? '') : $lastName;
+
+        if ($newFirst === $firstName && $newLast === $lastName) {
+            return false;
+        }
+
+        $user->rename($newFirst !== '' ? $newFirst : null, $newLast !== '' ? $newLast : null);
+
+        return true;
     }
 }
