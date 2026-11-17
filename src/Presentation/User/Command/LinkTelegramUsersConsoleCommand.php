@@ -37,7 +37,7 @@ final class LinkTelegramUsersConsoleCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         if (!$this->telegramNotifier->isEnabled()) {
-            $io->error('TELEGRAM_BOT_TOKEN is not set.');
+            $io->error('TELEGRAM_API_TOKEN is not set.');
 
             return Command::FAILURE;
         }

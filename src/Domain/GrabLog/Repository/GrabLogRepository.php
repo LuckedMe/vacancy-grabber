@@ -8,6 +8,7 @@ use App\Domain\GrabLog\Entity\GrabLog;
 use App\Domain\Shared\Repository\FindOneById;
 use App\Domain\Shared\Repository\FindOneByIdAndUserId;
 use App\Domain\Shared\Repository\PaginatedResult;
+use App\Domain\Source\Entity\Source;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -19,6 +20,8 @@ interface GrabLogRepository extends FindOneById, FindOneByIdAndUserId
     public function save(GrabLog $grabLog): void;
 
     public function remove(GrabLog $grabLog): void;
+
+    public function refresh(Source $source): void;
 
     /**
      * @return PaginatedResult<GrabLog>

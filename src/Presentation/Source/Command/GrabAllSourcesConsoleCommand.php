@@ -60,12 +60,15 @@ final class GrabAllSourcesConsoleCommand extends Command
                     new GrabSourceCommand(userId: $owner->getId(), sourceId: $source->getId())
                 );
 
-                // update user notification storage
-                if ($result->vacanciesCreated > 0 || $result->vacanciesUpdated > 0) {
-                    // user notification storage
+                // collect user to send notifications
+                if (($result->vacanciesCreated > 0 || $result->vacanciesUpdated > 0)
+                    && $owner->isTelegramNotificationsEnabled()
+                ) {
+                    // create user notification storage
                     if (!array_key_exists($userId, $notify)) {
                         $notify[$userId] = ['created' => $result->vacanciesCreated, 'updated' => $result->vacanciesUpdated];
                     } else {
+                        // update user notification storage
                         $notify[$userId]['created'] += $result->vacanciesCreated;
                         $notify[$userId]['updated'] += $result->vacanciesUpdated;
                     }
@@ -98,7 +101,7 @@ final class GrabAllSourcesConsoleCommand extends Command
 
     private function notifyUsers(SymfonyStyle $io, array $notify): void
     {
-        if (!$this->telegramNotifier->isEnabled()) {
+        if (!$notify || !$this->telegramNotifier->isEnabled()) {
             return;
         }
 

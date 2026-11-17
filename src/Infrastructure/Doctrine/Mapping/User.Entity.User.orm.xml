@@ -16,6 +16,7 @@
         <unique-constraints>
             <unique-constraint name="uniq_id" columns="id"/>
             <unique-constraint name="uniq_email" columns="email"/>
+            <unique-constraint name="uniq_telegram_username" columns="telegram_username"/>
         </unique-constraints>
 
         <id name="id" type="uuid">
@@ -46,8 +47,14 @@
 
         <field name="googleAuthenticatorToken" column="google_authenticator_token" type="string" nullable="true"/>
 
-        <field name="telegramUsername" column="telegram_username" type="string" nullable="true"/>
+        <field name="telegramUsername" column="telegram_username" type="string" unique="true" nullable="true"/>
         <field name="telegramChatId" column="telegram_chat_id" type="string" nullable="true"/>
+        <field name="telegramPhone" column="telegram_phone" type="string" nullable="true"/>
+        <field name="telegramNotificationsEnabled" column="telegram_notifications_enabled" type="boolean" nullable="false">
+            <options>
+                <option name="default">0</option>
+            </options>
+        </field>
 
         <field name="firstName" column="first_name" type="string" nullable="true"/>
         <field name="lastName" column="last_name" type="string" nullable="true"/>

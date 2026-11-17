@@ -1,0 +1,4 @@
+telegram_webhook:
+    path: /telegram/webhook
+    methods: [POST]
+    controller: telegram_bot.webhook_controller

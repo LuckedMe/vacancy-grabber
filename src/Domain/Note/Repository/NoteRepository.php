@@ -8,6 +8,7 @@ use App\Domain\Note\Entity\Note;
 use App\Domain\Shared\Repository\FindOneById;
 use App\Domain\Shared\Repository\FindOneByIdAndUserId;
 use App\Domain\Shared\Repository\PaginatedResult;
+use App\Domain\Source\Entity\Source;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -19,6 +20,8 @@ interface NoteRepository extends FindOneById, FindOneByIdAndUserId
     public function save(Note $note): void;
 
     public function remove(Note $note): void;
+
+    public function refresh(Source $source): void;
 
     /**
      * @return PaginatedResult<Note>

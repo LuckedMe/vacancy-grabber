@@ -90,4 +90,4 @@ Do not use `crontab -r` or paste a whole new crontab over the old one: that dele
 | `service "php-fpm" is not running` | The stack is down: `make prod-up` |
 | `permission denied ... docker.sock` | The crontab user is not in the `docker` group (VPS guide step 8) |
 | Runs at the wrong hour | Timezone: see `CRON_TZ` above and `timedatectl` |
-| Log says `TELEGRAM_BOT_TOKEN is not set` | Set it in `.env.prod.local` and recreate the container (`make prod-up`) |
+| Log says `TELEGRAM_API_TOKEN is not set` | Set it in `.env.prod.local` and recreate the container (`make prod-up`) |

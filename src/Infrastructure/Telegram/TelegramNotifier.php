@@ -14,7 +14,7 @@ final readonly class TelegramNotifier
 {
     public function __construct(
         private HttpClientInterface $httpClient,
-        #[Autowire('%env(string:TELEGRAM_BOT_TOKEN)%')]
+        #[Autowire('%env(string:TELEGRAM_API_TOKEN)%')]
         private string $botToken,
     ) {
     }
