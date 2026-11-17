@@ -22,8 +22,9 @@ use function sprintf;
  */
 final class ContactCommandController extends TelegramCommand
 {
-    public const string BUTTON_SHARE     = 'Share my phone';
-    public const string BUTTON_SHARE_NEW = 'Update my phone';
+    public const string ICO_SHARE        = '📱';
+    public const string BUTTON_SHARE     = self::ICO_SHARE . ' Share my phone';
+    public const string BUTTON_SHARE_NEW = self::ICO_SHARE . ' Update my phone';
 
     public function __construct(
         private readonly UserRepository $userRepository,

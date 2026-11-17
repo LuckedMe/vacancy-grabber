@@ -27,11 +27,17 @@ use function strtolower;
  */
 final class StartCommandController extends TelegramCommand
 {
-    private const string BUTTON_START                 = 'Start';
-    private const string BUTTON_STATUS                = 'Status';
-    private const string BUTTON_ENABLE_NOTIFICATIONS  = '(Disabled) Enable notifications about new vacancies';
-    private const string BUTTON_DISABLE_NOTIFICATIONS = '(Enabled) Disable notifications about new vacancies';
-    private const string BUTTON_CANCEL                = 'Cancel';
+    public const string ICO_START    = '▶️';
+    public const string ICO_STATUS   = '⚙️';
+    public const string ICO_CANCEL   = '🚫';
+    public const string ICO_ENABLED  = '🟢';
+    public const string ICO_DISABLED = '🔴';
+
+    private const string BUTTON_START                 = self::ICO_START . ' Start';
+    private const string BUTTON_STATUS                = self::ICO_STATUS . ' Status';
+    private const string BUTTON_ENABLE_NOTIFICATIONS  = self::ICO_DISABLED . ' Enable notifications';
+    private const string BUTTON_DISABLE_NOTIFICATIONS = self::ICO_ENABLED . ' Disable notifications';
+    private const string BUTTON_CANCEL                = self::ICO_CANCEL . ' Cancel';
 
     private const array BUTTONS = [
         self::BUTTON_START,
@@ -142,8 +148,8 @@ final class StartCommandController extends TelegramCommand
             // the keyboard is sent again so that it shows the opposite button
             return $this->reply(
                 $enabled
-                    ? 'Notifications about new vacancies are enabled.'
-                    : 'Notifications about new vacancies are disabled.',
+                    ? self::ICO_ENABLED . ' Notifications Enabled.'
+                    : self::ICO_DISABLED . ' Notifications Disabled.',
                 replyMarkup: $this->buildKeyboard($user),
             );
         }
@@ -162,7 +168,7 @@ final class StartCommandController extends TelegramCommand
                 sprintf(
                     "Account: %s\nNotifications about new vacancies: %s\nPhone: %s",
                     $user,
-                    $user->isTelegramNotificationsEnabled() ? 'enabled' : 'disabled',
+                    $user->isTelegramNotificationsEnabled() ? self::ICO_ENABLED . ' enabled' : self::ICO_DISABLED . ' disabled',
                     $user->getTelegramPhone() ?? 'not shared (send /contact)',
                 ),
                 replyMarkup: $this->buildKeyboard($user),
