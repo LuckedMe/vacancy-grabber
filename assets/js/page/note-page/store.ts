@@ -1,11 +1,11 @@
 import {defineStore} from 'pinia';
-import Paginator from "../../model/transport-response/Paginator";
-import HttpClient from "../../module/HttpClient";
-import SuccessResponse from "../../model/transport-response/SuccessResponse";
-import NoteInfoFilters from "../../model/note/NoteInfoFilters";
-import ErrorValidation from "../../model/transport-response/ErrorValidation";
-import {computed, ref} from "vue";
-import NoteInfo from "../../model/note/NoteInfo";
+import Paginator from '../../model/transport-response/Paginator';
+import HttpClient from '../../module/HttpClient';
+import SuccessResponse from '../../model/transport-response/SuccessResponse';
+import NoteInfoFilters from '../../model/note/NoteInfoFilters';
+import ErrorValidation from '../../model/transport-response/ErrorValidation';
+import {computed, ref} from 'vue';
+import NoteInfo from '../../model/note/NoteInfo';
 
 export const useNotePageStore = defineStore('note-page-store', () => {
     // State

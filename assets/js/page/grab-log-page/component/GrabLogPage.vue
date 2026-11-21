@@ -1,16 +1,17 @@
 <template>
-
     <v-row>
         <v-col cols="10">
             <v-expansion-panels :loading="loading">
                 <v-expansion-panel :loading="loading">
-                    <template #title><h3>Filters</h3></template>
+                    <template #title>
+                        <h3>Filters</h3>
+                    </template>
                     <template #text>
                         <grab-log-page-filters
                             @filters:reset="onFiltersReset"
                             @filters:update="onFiltersUpdate"
                             @filters:submit="onFiltersSubmit"
-                        />
+                        ></grab-log-page-filters>
                     </template>
                 </v-expansion-panel>
             </v-expansion-panels>
@@ -23,12 +24,11 @@
                 color="primary"
                 variant="tonal"
                 :href="RouteGenerator.generate('web.vacancy', filterUrlParams({viewed: 0}))"
-            />
+            ></v-btn>
         </v-col>
-
     </v-row>
 
-    <v-divider class="mt-5"/>
+    <v-divider class="mt-5"></v-divider>
 
     <v-data-table-server
         v-model:page="grabLogPageStore.filters.page as number"
@@ -75,33 +75,31 @@
                     color="primary"
                     variant="tonal"
                     :href="RouteGenerator.generate('web.vacancy', filterUrlParams({startDay: formatDateUrl(item.createdAt), endDay: formatDateUrl(item.createdAt), viewed: 0}))"
-                />
+                ></v-btn>
             </v-card-actions>
         </template>
-
     </v-data-table-server>
-
 </template>
 
 <script setup lang="ts">
 
-    import {computed, onMounted, ref, watch} from "vue";
-    import {useGrabLogPageStore} from "../store";
-    import {itemsPerPageOptions} from "../../../utils/itemsPerPageOptions";
-    import grabLogPageFilters from "./GrabLogPageFilters.vue";
-    import GrabLogInfo from "../../../model/grab-log/GrabLogInfo";
+    import {computed, onMounted, ref, watch} from 'vue';
+    import {useGrabLogPageStore} from '../store';
+    import {itemsPerPageOptions} from '../../../utils/itemsPerPageOptions';
+    import grabLogPageFilters from './GrabLogPageFilters.vue';
+    import GrabLogInfo from '../../../model/grab-log/GrabLogInfo';
     import _cloneDeep from 'lodash/cloneDeep';
     import _debounce from 'lodash/debounce';
-    import BaseCollectionTableOptions, {SortByInterface} from "../../../types/BaseCollectionTableOptions";
-    import RouteGenerator from "../../../module/RouteGenerator";
-    import {formatDateTime, formatDateUrl} from "../../../utils/DateUtils";
-    import {filterUrlParams} from "../../../utils/UrlUtils";
-    import {useFlashStore} from "../../../component/general/app-flash/store";
-    import {clearFormErrors, processApiResponse} from "../../../module/HandleApiResponse";
-    import ErrorResponse from "../../../model/transport-response/ErrorResponse";
-    import GrabLogInfoCollectionFactory from "../../../model-factory/grab-log/GrabLogInfoCollectionFactory";
-    import GrabLogInfoCollection from "../../../model/grab-log/GrabLogInfoCollection";
-    import {scrollToDataTable} from "../../../utils/ScrollUtils";
+    import BaseCollectionTableOptions, {SortByInterface} from '../../../types/BaseCollectionTableOptions';
+    import RouteGenerator from '../../../module/RouteGenerator';
+    import {formatDateTime, formatDateUrl} from '../../../utils/DateUtils';
+    import {filterUrlParams} from '../../../utils/UrlUtils';
+    import {useFlashStore} from '../../../component/general/app-flash/store';
+    import {clearFormErrors, processApiResponse} from '../../../module/HandleApiResponse';
+    import ErrorResponse from '../../../model/transport-response/ErrorResponse';
+    import GrabLogInfoCollectionFactory from '../../../model-factory/grab-log/GrabLogInfoCollectionFactory';
+    import GrabLogInfoCollection from '../../../model/grab-log/GrabLogInfoCollection';
+    import {scrollToDataTable} from '../../../utils/ScrollUtils';
 
     const grabLogPageStore = useGrabLogPageStore();
     const loading = computed(() => grabLogPageStore.loading);
@@ -126,7 +124,7 @@
         await processApiResponse(grabLogPageStore.loadCollection(), grabLogPageStore.errors, new GrabLogInfoCollectionFactory())
             .then((data: GrabLogInfoCollection) => {
                 // update the originally loaded items
-                grabLogPageStore.items = data.items
+                grabLogPageStore.items = data.items;
                 grabLogPageStore.paginator = data.paginator;
                 grabLogPageStore.availableSortBy = data.filters?.availableSortBy || [];
                 grabLogPageStore.availableFilters = {...grabLogPageStore.availableFilters.value, ...data.filters?.availableFilters ?? {}};
@@ -141,12 +139,12 @@
     watch(
         () => grabLogPageStore.items,
         () => items.value = cloneItems(),
-        {deep: true}
+        {deep: true},
     );
 
     const onFiltersReset = (): void => {
         onFiltersSubmit();
-    }
+    };
 
     const onFiltersUpdate = (): void => {
         grabLogPageStore.filters.pushUrlParams();

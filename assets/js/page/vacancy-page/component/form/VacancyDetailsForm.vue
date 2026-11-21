@@ -1,13 +1,11 @@
 <template>
-
     <v-card-text v-if="formErrors.message">
-        <form-global-error :errors="[formErrors.message as string]"/>
+        <form-global-error :errors="[formErrors.message as string]"></form-global-error>
     </v-card-text>
 
-    <v-progress-linear indeterminate v-if="loading"></v-progress-linear>
+    <v-progress-linear v-if="loading" indeterminate></v-progress-linear>
 
     <v-card-text v-if="formView">
-
         <div class="v-col-md-12 v-col-lg-9 v-col-xl-8 v-col-xxl-6">
             <v-form
                 ref="form"
@@ -15,7 +13,6 @@
                 :disabled="loading"
                 @submit.prevent="onSubmit"
             >
-
                 <v-row>
                     <v-col cols="6">
                         Viewed:
@@ -28,7 +25,7 @@
                             :false-icon="mdiClose"
                             color="success"
                             size="x-large"
-                        />
+                        ></v-switch>
                     </v-col>
 
                     <v-col cols="6">
@@ -41,7 +38,7 @@
                             type="date"
                             label="Dead Line At"
                             @update:modelValue="onDeadLineAtUpdated"
-                        />
+                        ></v-text-field>
                     </v-col>
                 </v-row>
 
@@ -55,7 +52,7 @@
                             clearable
                             label="Status"
                             @update:modelValue="onStatusUpdated"
-                        />
+                        ></v-select>
                     </v-col>
 
                     <v-col cols="6">
@@ -68,7 +65,7 @@
                             type="date"
                             label="Resume Sent At"
                             @update:modelValue="onResumeSentAtUpdated"
-                        />
+                        ></v-text-field>
                         <!-- <a @click.prevent="onResumeSentAtToday" href="javascript:void(0)">Today</a>-->
                     </v-col>
                 </v-row>
@@ -84,15 +81,16 @@
                             type="date"
                             label="Noted At"
                             @update:modelValue="onNotedAtUpdated"
-                        />
+                        ></v-text-field>
                     </v-col>
                 </v-row>
 
                 <v-row>
                     <v-col>
                         <template v-for="(item, index) in noteTemplates" :key="item.key">
-                            <a @click.prevent="onNoteAddTemplate(item.title)"
-                               href="javascript:void(0)"
+                            <a
+                                href="javascript:void(0)"
+                                @click.prevent="onNoteAddTemplate(item.title)"
                             >
                                 {{ item.title }}
                             </a>
@@ -106,44 +104,42 @@
                             label="Note"
                             type="text"
                             @update:modelValue="onNoteUpdated"
-                        />
+                        ></v-textarea>
                     </v-col>
                 </v-row>
-
             </v-form>
         </div>
     </v-card-text>
-
 </template>
 
 <script setup lang="ts">
-    import {computed, onMounted, ref, useTemplateRef} from "vue";
-    import {useVacancyPageStore} from "../../store";
+    import {computed, onMounted, ref, useTemplateRef} from 'vue';
+    import {useVacancyPageStore} from '../../store';
     import handleApiResponse, {
         clearFormErrors,
         normalizeFormToRequest,
-        processApiResponse
-    } from "../../../../module/HandleApiResponse";
-    import FormGlobalError from "../../../../component/general/FormGlobalError.vue";
-    import VacancyDetailsFactory from "../../../../model-factory/vacancy/VacancyDetailsFactory";
-    import VacancyDetails from "../../../../model/vacancy/VacancyDetails";
-    import ErrorResponse from "../../../../model/transport-response/ErrorResponse";
-    import {formatDate, formatDateUrl} from "../../../../utils/DateUtils";
-    import {itemsIsResumeStatusOptions} from "../types/itemsIsResumeStatusOptions";
-    import {useSourcePageStore} from "../../../source-page/store";
-    import {useCompanyPageStore} from "../../../company-page/store";
-    import {scrollToFormFieldError} from "../../../../utils/ScrollUtils";
-    import {mdiCheck, mdiClose} from "@mdi/js";
-    import dayjs from "dayjs";
+        processApiResponse,
+    } from '../../../../module/HandleApiResponse';
+    import FormGlobalError from '../../../../component/general/FormGlobalError.vue';
+    import VacancyDetailsFactory from '../../../../model-factory/vacancy/VacancyDetailsFactory';
+    import VacancyDetails from '../../../../model/vacancy/VacancyDetails';
+    import ErrorResponse from '../../../../model/transport-response/ErrorResponse';
+    import {formatDate, formatDateUrl} from '../../../../utils/DateUtils';
+    import {itemsIsResumeStatusOptions} from '../types/itemsIsResumeStatusOptions';
+    import {useSourcePageStore} from '../../../source-page/store';
+    import {useCompanyPageStore} from '../../../company-page/store';
+    import {scrollToFormFieldError} from '../../../../utils/ScrollUtils';
+    import {mdiCheck, mdiClose} from '@mdi/js';
+    import dayjs from 'dayjs';
 
     const vacancyPageStore = useVacancyPageStore();
     const sourcePageStore = useSourcePageStore();
     const companyPageStore = useCompanyPageStore();
-    const emit = defineEmits(['form:done', 'form:unable-load'])
+    const emit = defineEmits(['form:done', 'form:unable-load']);
     const loading = ref(false);
 
     const props = defineProps({
-        id: {type: String, required: true}
+        id: {type: String, required: true},
     });
 
     const form = useTemplateRef('form');
@@ -165,7 +161,7 @@
             deadLineAt: null,
             notedAt: null,
             note: null,
-        }
+        },
     });
     const formRules = computed(() => ({
         viewed: [() => formErrors.value.fields.viewed ?? null],
@@ -174,7 +170,7 @@
         deadLineAt: [() => formErrors.value.fields.deadLineAt ?? null],
         notedAt: [() => formErrors.value.fields.notedAt ?? null],
         note: [() => formErrors.value.fields.note ?? null],
-    }))
+    }));
 
     const noteTemplates = computed(() => [
         {key: 'DOU', title: 'Отправил заявку на DOU'},
@@ -205,24 +201,24 @@
 
     const onStatusUpdated = () => {
         formData.value.viewed = true;
-    }
+    };
 
     const onResumeSentAtToday = () => {
         formData.value.resumeSentAt = formatDateUrl(dayjs());
         onResumeSentAtUpdated();
-    }
+    };
 
     const onResumeSentAtUpdated = () => {
         formData.value.viewed = true;
-    }
+    };
 
     const onDeadLineAtUpdated = () => {
         formData.value.viewed = true;
-    }
+    };
 
     const onNotedAtUpdated = () => {
         formData.value.viewed = true;
-    }
+    };
 
     const onNoteAddTemplate = (value: string) => {
 
@@ -238,9 +234,9 @@
             formData.value.note = '';
         }
 
-        formData.value.note = formData.value.note + value + "\n";
+        formData.value.note = formData.value.note + value + '\n';
         onNoteUpdated(formData.value.note as string);
-    }
+    };
 
     const onNoteUpdated = (value: string) => {
         formData.value.viewed = true;
@@ -257,7 +253,7 @@
             const today = dayjs();
             formData.value.notedAt = formatDateUrl(today);
         }
-    }
+    };
 
     const onSubmit = async () => {
         loading.value = true;

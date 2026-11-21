@@ -1,10 +1,10 @@
-import {InferType as YupInferType, array as YupArray, object as YupObject} from "yup";
-import FactoryInterface from "../../types/FactoryInterface";
-import SourceSummaryCollection from "../../model/source/SourceSummaryCollection";
-import Paginator from "../../model/transport-response/Paginator";
-import SourceSummaryFactory, {SourceSummarySchema} from "./SourceSummaryFactory";
-import * as Yup from "yup";
-import SourceSummary from "../../model/source/SourceInfo";
+import {InferType as YupInferType, array as YupArray, object as YupObject} from 'yup';
+import FactoryInterface from '../../types/FactoryInterface';
+import SourceSummaryCollection from '../../model/source/SourceSummaryCollection';
+import Paginator from '../../model/transport-response/Paginator';
+import SourceSummaryFactory, {SourceSummarySchema} from './SourceSummaryFactory';
+import * as Yup from 'yup';
+import SourceSummary from '../../model/source/SourceInfo';
 
 export const SourceSummaryCollectionSchema = YupObject({
     items: YupArray(SourceSummarySchema.required()).required(),

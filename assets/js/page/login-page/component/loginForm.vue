@@ -1,22 +1,19 @@
 <template>
-
     <v-card-text v-if="formErrors.message">
-        <form-global-error :errors="[formErrors.message as string]" />
+        <form-global-error :errors="[formErrors.message as string]"></form-global-error>
     </v-card-text>
 
-    <v-progress-linear indeterminate v-if="loading"></v-progress-linear>
+    <v-progress-linear v-if="loading" indeterminate></v-progress-linear>
 
     <v-card-text v-if="formView">
-
         <div class="v-col-md-12 v-col-lg-9 v-col-xl-8 v-col-xxl-6">
             <v-form
                 ref="form"
                 validate-on="submit"
                 :disabled="loading"
-                @submit.prevent="onSubmit"
                 name="login-form"
+                @submit.prevent="onSubmit"
             >
-
                 <v-row>
                     <v-col>
                         <v-text-field
@@ -28,7 +25,7 @@
                             name="username"
                             label="Username"
                             type="text"
-                        />
+                        ></v-text-field>
                     </v-col>
                 </v-row>
 
@@ -42,7 +39,7 @@
                             name="password"
                             label="Password"
                             type="password"
-                        />
+                        ></v-text-field>
                     </v-col>
                 </v-row>
 
@@ -58,24 +55,23 @@
                             class="px-4"
                             variant="tonal"
                             @click="onSubmit"
-                        />
+                        ></v-btn>
                     </v-col>
                 </v-row>
             </v-form>
         </div>
     </v-card-text>
-
 </template>
 
 <script setup lang="ts">
-    import {computed, ref, useTemplateRef} from "vue";
-    import {useLoginPageStore} from "../store";
-    import {clearFormErrors} from "../../../module/HandleApiResponse";
-    import FormGlobalError from "../../../component/general/FormGlobalError.vue";
-    import {mdiLoginVariant} from "@mdi/js";
+    import {computed, ref, useTemplateRef} from 'vue';
+    import {useLoginPageStore} from '../store';
+    import {clearFormErrors} from '../../../module/HandleApiResponse';
+    import FormGlobalError from '../../../component/general/FormGlobalError.vue';
+    import {mdiLoginVariant} from '@mdi/js';
 
     const loginPageStore = useLoginPageStore();
-    const emit = defineEmits(['form:done', 'form:unable-load'])
+    const emit = defineEmits(['form:done', 'form:unable-load']);
     const loading = ref(false);
 
     const form = useTemplateRef('form');
@@ -89,12 +85,12 @@
         fields: {
             username: null,
             password: null,
-        }
+        },
     });
     const formRules = computed(() => ({
         username: [() => formErrors.value.fields.username ?? null],
         password: [() => formErrors.value.fields.password ?? null],
-    }))
+    }));
 
     const onSubmit = async () => {
         loading.value = true;

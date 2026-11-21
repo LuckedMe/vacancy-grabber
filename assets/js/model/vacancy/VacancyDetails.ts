@@ -1,5 +1,5 @@
-import VacancyInfo from "./VacancyInfo";
-import {Dayjs} from "dayjs";
+import VacancyInfo from './VacancyInfo';
+import {Dayjs} from 'dayjs';
 
 export default class VacancyDetails extends VacancyInfo {
     constructor(

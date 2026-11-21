@@ -10,23 +10,20 @@
         :headers="headers"
         :items="items"
         :items-per-page-options="itemsPerPageOptions"
-        @update:options="onTableOptionsUpdated"
         class="hide-items-per-page-options"
+        @update:options="onTableOptionsUpdated"
     >
-
         <template #item.notedAt="{ item }">
             {{ formatDateTime(item.notedAt) }}
         </template>
 
         <template #item.description="{ item }">
-
             <v-confirm-edit
                 v-if="item.edit"
                 v-model="item.description"
                 hide-actions
             >
-                <template v-slot:default="{ model: proxyModel, save, cancel, isPristine }">
-
+                <template #default="{ model: proxyModel, save, cancel, isPristine }">
                     <v-textarea
                         v-model="proxyModel.value"
                         :loading="loading"
@@ -34,31 +31,29 @@
                         :autofocus="true"
                         label="Note"
                         type="text"
-                    />
+                    ></v-textarea>
 
                     <v-card-actions>
                         <v-btn
                             color="error"
-                            @click="cancel; item.edit=false;"
                             text="Cancel"
-                        />
+                            @click="cancel; item.edit=false;"
+                        ></v-btn>
                         <v-spacer></v-spacer>
 
                         <v-btn
                             color="primary"
                             :disabled="isPristine"
-                            @click="onClickSaveNote(item, proxyModel.value)"
                             text="Ok"
-                        />
+                            @click="onClickSaveNote(item, proxyModel.value)"
+                        ></v-btn>
                     </v-card-actions>
-
                 </template>
             </v-confirm-edit>
 
             <v-row v-else>
-                <app-html :html="item.description"/>
+                <app-html :html="item.description"></app-html>
             </v-row>
-
         </template>
 
         <template #item.actions="{ item, index }">
@@ -69,7 +64,7 @@
                     :disabled="item.edit"
                     :prepend-icon="mdiPencil"
                     @click.prevent="item.edit=true"
-                />
+                ></v-btn>
 
                 <v-btn
                     class="ml-3"
@@ -77,41 +72,39 @@
                     color="error"
                     :prepend-icon="mdiDelete"
                     @click.prevent="handleConfirmDelete(item)"
-                />
+                ></v-btn>
             </v-card-actions>
         </template>
-
     </v-data-table-server>
-
 </template>
 
 <script setup lang="ts">
-    import {computed, onMounted, PropType, ref, watch} from "vue";
-    import VacancyInfo from "../../../../model/vacancy/VacancyInfo";
-    import VacancyNote from "../../../../model/vacancy/VacancyNote";
-    import VacancyNoteFilters from "../../../../model/vacancy/VacancyNoteFilters";
-    import VacancyNoteCollectionFactory from "../../../../model-factory/vacancy/VacancyNoteCollectionFactory";
-    import ErrorResponse from "../../../../model/transport-response/ErrorResponse";
-    import ErrorValidation from "../../../../model/transport-response/ErrorValidation";
-    import handleApiResponse, {clearFormErrors, processApiResponse} from "../../../../module/HandleApiResponse";
-    import {useVacancyPageStore} from "../../store";
-    import {useFlashStore} from "../../../../component/general/app-flash/store";
-    import {formatDateTime} from "../../../../utils/DateUtils";
-    import {nl2br} from "../../../../utils/HtmlUtils";
-    import _cloneDeep from "lodash/cloneDeep";
-    import Paginator from "../../../../model/transport-response/Paginator";
-    import _debounce from "lodash/debounce";
-    import VacancyInfoCollection from "../../../../model/vacancy/VacancyInfoCollection";
-    import {itemsPerPageOptions} from "../../../../utils/itemsPerPageOptions";
-    import {mdiDelete, mdiPencil} from "@mdi/js";
-    import BaseCollectionTableOptions, {SortByInterface} from "../../../../types/BaseCollectionTableOptions";
-    import {scrollToDialogText} from "../../../../utils/ScrollUtils";
-    import {useNotePageStore} from "../../../note-page/store";
-    import NoteInfo from "../../../../model/note/NoteInfo";
-    import NoteInfoFilters from "../../../../model/note/NoteInfoFilters";
-    import NoteInfoCollectionFactory from "../../../../model-factory/note/NoteInfoCollectionFactory";
-    import NoteInfoCollection from "../../../../model/note/NoteInfoCollection";
-    import AppHtml from "../../../../component/general/AppHtml.vue";
+    import {computed, onMounted, PropType, ref, watch} from 'vue';
+    import VacancyInfo from '../../../../model/vacancy/VacancyInfo';
+    import VacancyNote from '../../../../model/vacancy/VacancyNote';
+    import VacancyNoteFilters from '../../../../model/vacancy/VacancyNoteFilters';
+    import VacancyNoteCollectionFactory from '../../../../model-factory/vacancy/VacancyNoteCollectionFactory';
+    import ErrorResponse from '../../../../model/transport-response/ErrorResponse';
+    import ErrorValidation from '../../../../model/transport-response/ErrorValidation';
+    import handleApiResponse, {clearFormErrors, processApiResponse} from '../../../../module/HandleApiResponse';
+    import {useVacancyPageStore} from '../../store';
+    import {useFlashStore} from '../../../../component/general/app-flash/store';
+    import {formatDateTime} from '../../../../utils/DateUtils';
+    import {nl2br} from '../../../../utils/HtmlUtils';
+    import _cloneDeep from 'lodash/cloneDeep';
+    import Paginator from '../../../../model/transport-response/Paginator';
+    import _debounce from 'lodash/debounce';
+    import VacancyInfoCollection from '../../../../model/vacancy/VacancyInfoCollection';
+    import {itemsPerPageOptions} from '../../../../utils/itemsPerPageOptions';
+    import {mdiDelete, mdiPencil} from '@mdi/js';
+    import BaseCollectionTableOptions, {SortByInterface} from '../../../../types/BaseCollectionTableOptions';
+    import {scrollToDialogText} from '../../../../utils/ScrollUtils';
+    import {useNotePageStore} from '../../../note-page/store';
+    import NoteInfo from '../../../../model/note/NoteInfo';
+    import NoteInfoFilters from '../../../../model/note/NoteInfoFilters';
+    import NoteInfoCollectionFactory from '../../../../model-factory/note/NoteInfoCollectionFactory';
+    import NoteInfoCollection from '../../../../model/note/NoteInfoCollection';
+    import AppHtml from '../../../../component/general/AppHtml.vue';
 
     const props = defineProps({
         item: {
@@ -147,7 +140,7 @@
         await processApiResponse(notePageStore.loadCollection(filters.value), errors.value, new NoteInfoCollectionFactory())
             .then((data: NoteInfoCollection) => {
                 // update the originally loaded items
-                itemsLoaded.value = data.items
+                itemsLoaded.value = data.items;
                 paginator.value = data.paginator;
                 availableSortBy.value = data.filters?.availableSortBy || [];
                 availableFilters.value = {...notePageStore.availableFilters, ...data.filters?.availableFilters ?? {}};
@@ -159,7 +152,7 @@
     watch(
         () => itemsLoaded.value,
         () => items.value = cloneItems(),
-        {deep: true}
+        {deep: true},
     );
 
     onMounted(async () => {
@@ -182,7 +175,7 @@
     ]);
 
     const handleConfirmDelete = async (item: VacancyNote) => {
-        if (window.confirm("Do you really want to delete the note?")) {
+        if (window.confirm('Do you really want to delete the note?')) {
             clearFormErrors(errors.value);
             const result = await handleApiResponse(vacancyPageStore.deleteNote(props.item?.id as string, item.id), errors.value);
 
@@ -200,7 +193,7 @@
     const onClickSaveNote = async (item, description: string | null) => {
         clearFormErrors(errors.value);
         const data = {properties: ['description'], description: description};
-        const result = await handleApiResponse(vacancyPageStore.patchNote(props.item?.id as string, item.id as string, data), errors.value)
+        const result = await handleApiResponse(vacancyPageStore.patchNote(props.item?.id as string, item.id as string, data), errors.value);
 
         if (!result || errors.value.message) {
             flashStore.addError({text: errors.value.message ?? 'Unable to update vacancy note '});

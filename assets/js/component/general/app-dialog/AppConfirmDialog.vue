@@ -25,18 +25,17 @@
                 <slot v-if="$slots.subtitle || subtitle" name="subtitle">
                     {{ subtitle }}
                 </slot>
-                <v-divider class="mt-2"/>
+                <v-divider class="mt-2"></v-divider>
             </template>
 
             <template #text>
                 <slot v-if="$slots.text || text" name="text">
                     {{ text }}
                 </slot>
-                <v-progress-linear indeterminate v-if="loading"></v-progress-linear>
+                <v-progress-linear v-if="loading" indeterminate></v-progress-linear>
             </template>
 
             <template #actions>
-
                 <slot v-if="$slots.actions || props.actions" name="actions">
                     <div class="mb-2 d-flex ga-4">
                         <v-btn
@@ -46,10 +45,10 @@
                             :loading="loading"
                             :disabled="loading"
                             :color="btnCancelColor"
-                            @click="onCanceled()"
                             class="px-4"
                             variant="tonal"
-                        />
+                            @click="onCanceled()"
+                        ></v-btn>
                         <v-btn
                             v-if="btnConfirmActive"
                             :text="btnConfirmLabel"
@@ -57,10 +56,10 @@
                             :color="btnConfirmColor"
                             :loading="loading"
                             :disabled="loading"
-                            @click="onConfirmed"
                             class="px-4"
                             variant="tonal"
-                        />
+                            @click="onConfirmed"
+                        ></v-btn>
                     </div>
                 </slot>
             </template>
@@ -69,7 +68,7 @@
 </template>
 
 <script setup>
-    import {computed} from 'vue'
+    import {computed} from 'vue';
     import {mdiAlertCircleOutline, mdiCancel, mdiCheckCircleOutline, mdiDelete} from '@mdi/js';
 
     const props = defineProps({
@@ -93,8 +92,8 @@
         titleConfirm: {type: [String, null], default: 'Confirm action'},
 
         text: {type: [String, null], default: null},
-        textConfirm: {type: [String, null], default: 'Are you sure you want to continue the current action?',},
-        textDelete: {type: [String, null], default: 'Are you sure you want to delete?',},
+        textConfirm: {type: [String, null], default: 'Are you sure you want to continue the current action?'},
+        textDelete: {type: [String, null], default: 'Are you sure you want to delete?'},
 
         opacity: {type: [Number, null], default: 0.5},
 
@@ -122,7 +121,7 @@
     const btnConfirmIcon = computed(() => props.delete ? mdiDelete : mdiCheckCircleOutline);
     const btnConfirmColor = computed(() => props.delete ? props.btnDeleteColor : props.btnConfirmColor);
 
-    const emit = defineEmits(['confirmed', 'canceled'])
+    const emit = defineEmits(['confirmed', 'canceled']);
     const dialog = defineModel('dialog', {type: Boolean, default: false});
 
     const onConfirmed = () => {

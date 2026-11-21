@@ -1,4 +1,4 @@
-import AppliedFilters from "../transport-response/AppliedFilters";
+import AppliedFilters from '../transport-response/AppliedFilters';
 
 export default class GrabLogInfoFilters extends AppliedFilters {
     constructor(

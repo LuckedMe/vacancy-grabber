@@ -1,6 +1,6 @@
 import RouteGenerator from '../../../vendor/friendsofsymfony/jsrouting-bundle/Resources';
 import {EventBus, events as EVENTS} from './EventBus';
-import RouteParams from "../types/RouteParams";
+import RouteParams from '../types/RouteParams';
 
 const defaultLocale = document.querySelector('html')?.getAttribute('data-default-locale') as string;
 EventBus.on(EVENTS.LOCALE_CHANGE, function (locale) {

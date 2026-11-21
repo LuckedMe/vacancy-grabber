@@ -1,5 +1,4 @@
 <template>
-
     <v-sheet
         v-if="page?.content"
         class="pa-4 text-center mx-auto"
@@ -13,15 +12,13 @@
             no-nl2br
             :max-width="null"
             :max-height="null"
-        />
-
+        ></app-html>
     </v-sheet>
-
 </template>
 
 <script setup lang="ts">
-    import Page from "../../model/page/Page";
-    import AppHtml from "../../component/general/AppHtml.vue";
+    import Page from '../../model/page/Page';
+    import AppHtml from '../../component/general/AppHtml.vue';
 
     const props = defineProps({
         page: {

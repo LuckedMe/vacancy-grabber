@@ -1,17 +1,18 @@
 <template>
-
     <v-row>
         <v-col cols="11">
             <v-expansion-panels :loading="loading">
                 <v-expansion-panel :loading="loading">
-                    <template #title><h3>Filters</h3></template>
+                    <template #title>
+                        <h3>Filters</h3>
+                    </template>
                     <template #text>
                         <source-page-filters
                             @filters:reset="onFiltersReset"
                             @filters:update="onFiltersUpdate"
                             @filters:submit="onFiltersSubmit"
                             @create:button="handleDialogActivator('create', null)"
-                        />
+                        ></source-page-filters>
                     </template>
                 </v-expansion-panel>
             </v-expansion-panels>
@@ -25,11 +26,11 @@
                 color="primary"
                 class="ml-5 text-right"
                 @click="handleDialogActivator('create', null)"
-            />
+            ></v-btn>
         </v-col>
     </v-row>
 
-    <v-divider class="mt-5"/>
+    <v-divider class="mt-5"></v-divider>
 
     <v-data-table-server
         v-model:page="sourcePageStore.filters.page as number"
@@ -44,7 +45,6 @@
         :items-per-page-options="itemsPerPageOptions"
         @update:options="onTableOptionsUpdated"
     >
-
         <template #item.name="{ item }">
             {{ item.name }}
         </template>
@@ -64,7 +64,7 @@
                 color="success"
                 size="x-large"
                 @update:model-value="handleDialogActivator('active', sourcePageStore.items[index])"
-            />
+            ></v-switch>
         </template>
 
         <template #item.action-grab="{ item, index }">
@@ -76,7 +76,7 @@
                     color="secondary"
                     variant="tonal"
                     @click.prevent="handleDialogActivator('grab', sourcePageStore.items[index])"
-                />
+                ></v-btn>
             </v-card-actions>
         </template>
 
@@ -96,7 +96,7 @@
                     color="primary"
                     variant="tonal"
                     @click.prevent="handleDialogActivator('edit', sourcePageStore.items[index])"
-                />
+                ></v-btn>
 
                 <v-btn
                     text="Delete"
@@ -105,10 +105,9 @@
                     variant="tonal"
                     :prepend-icon="mdiDelete"
                     @click.prevent="handleDialogActivator('delete', item)"
-                />
+                ></v-btn>
             </v-card-actions>
         </template>
-
     </v-data-table-server>
 
     <source-item-active-dialog
@@ -117,7 +116,7 @@
         :item="item as SourceInfo"
         @confirmed="handleDialogDeActivator('active', true)"
         @canceled="handleDialogDeActivator('active', false)"
-    />
+    ></source-item-active-dialog>
 
     <source-item-grab-dialog
         v-if="dialogs.grab.model"
@@ -125,7 +124,7 @@
         :item="item as SourceInfo"
         @confirmed="handleDialogDeActivator('grab', true)"
         @canceled="handleDialogDeActivator('grab', false)"
-    />
+    ></source-item-grab-dialog>
 
     <source-item-create-dialog
         v-if="dialogs.create.model"
@@ -133,7 +132,7 @@
         :item="item as SourceInfo"
         @confirmed="handleDialogDeActivator('create', true)"
         @canceled="handleDialogDeActivator('create', false)"
-    />
+    ></source-item-create-dialog>
 
     <source-item-edit-dialog
         v-if="dialogs.edit.model"
@@ -141,7 +140,7 @@
         :item="item as SourceInfo"
         @confirmed="handleDialogDeActivator('edit', true)"
         @canceled="handleDialogDeActivator('edit', false)"
-    />
+    ></source-item-edit-dialog>
 
     <source-item-delete-dialog
         v-if="dialogs.delete.model"
@@ -149,33 +148,32 @@
         :item="item as SourceInfo"
         @confirmed="handleDialogDeActivator('delete', true)"
         @canceled="handleDialogDeActivator('delete', false)"
-    />
-
+    ></source-item-delete-dialog>
 </template>
 
 <script setup lang="ts">
 
-    import {computed, onMounted, ref, watch} from "vue";
-    import {useSourcePageStore} from "../store";
-    import {itemsPerPageOptions} from "../../../utils/itemsPerPageOptions";
-    import SourcePageFilters from "./SourcePageFilters.vue";
-    import SourceItemActiveDialog from "./dialog/SourceItemActiveDialog.vue";
-    import SourceInfo from "../../../model/source/SourceInfo";
+    import {computed, onMounted, ref, watch} from 'vue';
+    import {useSourcePageStore} from '../store';
+    import {itemsPerPageOptions} from '../../../utils/itemsPerPageOptions';
+    import SourcePageFilters from './SourcePageFilters.vue';
+    import SourceItemActiveDialog from './dialog/SourceItemActiveDialog.vue';
+    import SourceInfo from '../../../model/source/SourceInfo';
     import _cloneDeep from 'lodash/cloneDeep';
     import _debounce from 'lodash/debounce';
-    import SourceItemGrabDialog from "./dialog/SourceItemGrabDialog.vue";
-    import SourceItemEditDialog from "./dialog/SourceItemEditDialog.vue";
-    import SourceItemDeleteDialog from "./dialog/SourceItemDeleteDialog.vue";
-    import SourceItemCreateDialog from "./dialog/SourceItemCreateDialog.vue";
-    import BaseCollectionTableOptions, {SortByInterface} from "../../../types/BaseCollectionTableOptions";
-    import {useFlashStore} from "../../../component/general/app-flash/store";
-    import {clearFormErrors, processApiResponse} from "../../../module/HandleApiResponse";
-    import ErrorResponse from "../../../model/transport-response/ErrorResponse";
-    import SourceInfoCollection from "../../../model/source/SourceInfoCollection";
-    import SourceInfoCollectionFactory from "../../../model-factory/source/SourceInfoCollectionFactory";
-    import {mdiCheck, mdiClose, mdiDelete} from "@mdi/js";
-    import {formatDateTime} from "../../../utils/DateUtils";
-    import {scrollToDataTable} from "../../../utils/ScrollUtils";
+    import SourceItemGrabDialog from './dialog/SourceItemGrabDialog.vue';
+    import SourceItemEditDialog from './dialog/SourceItemEditDialog.vue';
+    import SourceItemDeleteDialog from './dialog/SourceItemDeleteDialog.vue';
+    import SourceItemCreateDialog from './dialog/SourceItemCreateDialog.vue';
+    import BaseCollectionTableOptions, {SortByInterface} from '../../../types/BaseCollectionTableOptions';
+    import {useFlashStore} from '../../../component/general/app-flash/store';
+    import {clearFormErrors, processApiResponse} from '../../../module/HandleApiResponse';
+    import ErrorResponse from '../../../model/transport-response/ErrorResponse';
+    import SourceInfoCollection from '../../../model/source/SourceInfoCollection';
+    import SourceInfoCollectionFactory from '../../../model-factory/source/SourceInfoCollectionFactory';
+    import {mdiCheck, mdiClose, mdiDelete} from '@mdi/js';
+    import {formatDateTime} from '../../../utils/DateUtils';
+    import {scrollToDataTable} from '../../../utils/ScrollUtils';
 
     const sourcePageStore = useSourcePageStore();
     const loading = computed(() => sourcePageStore.loading);
@@ -201,7 +199,7 @@
         await processApiResponse(sourcePageStore.loadCollection(), sourcePageStore.errors, new SourceInfoCollectionFactory())
             .then((data: SourceInfoCollection) => {
                 // update the originally loaded items
-                sourcePageStore.items = data.items
+                sourcePageStore.items = data.items;
                 sourcePageStore.paginator = data.paginator;
                 sourcePageStore.availableSortBy = data.filters?.availableSortBy || [];
                 sourcePageStore.availableFilters = {...sourcePageStore.availableFilters, ...data.filters?.availableFilters ?? {}};
@@ -216,12 +214,12 @@
     watch(
         () => sourcePageStore.items,
         () => items.value = cloneItems(),
-        {deep: true}
+        {deep: true},
     );
 
     const onFiltersReset = (): void => {
         onFiltersSubmit();
-    }
+    };
 
     const onFiltersUpdate = (): void => {
         sourcePageStore.filters.pushUrlParams();

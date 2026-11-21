@@ -1,5 +1,4 @@
 <template>
-
     <v-snackbar-queue
         ref="flash-message-queue"
         v-model="flashStore.items"
@@ -8,10 +7,10 @@
         :total-visible="props.totalVisible"
         transition="bouncy-slide-auto"
     >
-        <template v-slot:text="{ item, props}">
+        <template #text="{ item, props}">
             <div v-html="nl2br(item.text)"></div>
         </template>
-        <template v-slot:actions="{ item, props }">
+        <template #actions="{ item, props }">
             <v-icon-btn
                 v-if="!item.vertical"
                 aria-label="Close"
@@ -26,32 +25,31 @@
                 variant="text"
                 v-bind="props"
             ></v-btn>
-
         </template>
     </v-snackbar-queue>
 
     <v-card-text v-if="props.example" class="mt-5">
-        <v-divider class="my-2"/>
+        <v-divider class="my-2"></v-divider>
 
         <div>Flash:</div>
-        <v-btn text="Clear" @click="flashStore.clear()"/>
-        <v-btn color="default" text="add" @click="flashStore.add({title: 'title', text: 'text'})"/>
-        <v-btn color="info" text="add Info" @click="flashStore.addInfo({title: 'title', text: 'text'})"/>
-        <v-btn color="success" text="add Success" @click="flashStore.addSuccess({title: 'title', text: 'text'})"/>
-        <v-btn color="warning" text="add Warning" @click="flashStore.addWarning({title: 'title', text: 'text'})"/>
-        <v-btn color="error" text="add Error" @click="flashStore.addError({title: 'title', text: 'text'})"/>
+        <v-btn text="Clear" @click="flashStore.clear()"></v-btn>
+        <v-btn color="default" text="add" @click="flashStore.add({title: 'title', text: 'text'})"></v-btn>
+        <v-btn color="info" text="add Info" @click="flashStore.addInfo({title: 'title', text: 'text'})"></v-btn>
+        <v-btn color="success" text="add Success" @click="flashStore.addSuccess({title: 'title', text: 'text'})"></v-btn>
+        <v-btn color="warning" text="add Warning" @click="flashStore.addWarning({title: 'title', text: 'text'})"></v-btn>
+        <v-btn color="error" text="add Error" @click="flashStore.addError({title: 'title', text: 'text'})"></v-btn>
 
-        <v-divider class="my-2"/>
+        <v-divider class="my-2"></v-divider>
 
         items: {{ flashStore.items }}
-        <v-divider class="my-2"/>
+        <v-divider class="my-2"></v-divider>
     </v-card-text>
 </template>
 
 <script setup lang="ts">
 
-    import {FLASH_TIMEOUT, useFlashStore} from "./store";
-    import {nl2br} from "../../../utils/HtmlUtils";
+    import {FLASH_TIMEOUT, useFlashStore} from './store';
+    import {nl2br} from '../../../utils/HtmlUtils';
 
     const props = defineProps({
         example: {type: Boolean, default: false},

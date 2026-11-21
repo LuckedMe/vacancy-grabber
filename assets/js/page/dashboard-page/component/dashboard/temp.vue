@@ -10,13 +10,13 @@
 </template>
 
 <script setup lang="ts">
-    import VueApexCharts from 'vue3-apexcharts'
-    import {useDashboardPageStore} from "../../store";
-    import {computed, onMounted, ref} from "vue";
-    import ErrorValidation from "../../../../model/transport-response/ErrorValidation";
-    import {processApiResponse} from "../../../../module/HandleApiResponse";
-    import VacancyStatusDashboardFactory from "../../../../model-factory/dashboard/VacancyStatusDashboardFactory";
-    import VacancyStatusDashboard from "../../../../model/dashboard/VacancyStatusDashboard";
+    import VueApexCharts from 'vue3-apexcharts';
+    import {useDashboardPageStore} from '../../store';
+    import {computed, onMounted, ref} from 'vue';
+    import ErrorValidation from '../../../../model/transport-response/ErrorValidation';
+    import {processApiResponse} from '../../../../module/HandleApiResponse';
+    import VacancyStatusDashboardFactory from '../../../../model-factory/dashboard/VacancyStatusDashboardFactory';
+    import VacancyStatusDashboard from '../../../../model/dashboard/VacancyStatusDashboard';
 
     const dashboardPageStore = useDashboardPageStore();
     const loading = computed(() => dashboardPageStore.loading);
@@ -60,7 +60,7 @@
                     },
                 },
             },
-        }
+        };
     });
 
     const series = computed(() => [

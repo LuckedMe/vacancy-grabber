@@ -1,12 +1,12 @@
 import * as Yup from 'yup';
-import {InferType as YupInferType, array as YupArray, object as YupObject} from "yup";
-import FactoryInterface from "../../types/FactoryInterface";
-import ResumeSentDashboardInfoCollection from "../../model/dashboard/ResumeSentDashboardInfoCollection";
-import PaginatorFactory, {PaginatorSchema} from "../transport-response/PaginatorFactory";
-import FiltersFactory, {FiltersSchema} from "../transport-response/FiltersFactory";
-import ResumeSentDashboardInfoFactory, {ResumeSentDashboardInfoSchema} from "./ResumeSentDashboardInfoFactory";
-import ResumeSentDashboardInfo from "../../model/dashboard/ResumeSentDashboardInfo";
-import Paginator from "../../model/transport-response/Paginator";
+import {InferType as YupInferType, array as YupArray, object as YupObject} from 'yup';
+import FactoryInterface from '../../types/FactoryInterface';
+import ResumeSentDashboardInfoCollection from '../../model/dashboard/ResumeSentDashboardInfoCollection';
+import PaginatorFactory, {PaginatorSchema} from '../transport-response/PaginatorFactory';
+import FiltersFactory, {FiltersSchema} from '../transport-response/FiltersFactory';
+import ResumeSentDashboardInfoFactory, {ResumeSentDashboardInfoSchema} from './ResumeSentDashboardInfoFactory';
+import ResumeSentDashboardInfo from '../../model/dashboard/ResumeSentDashboardInfo';
+import Paginator from '../../model/transport-response/Paginator';
 
 export const ResumeSentDashboardInfoCollectionSchema = YupObject({
     items: YupArray().of(ResumeSentDashboardInfoSchema).required(),

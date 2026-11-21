@@ -10,9 +10,9 @@
 </template>
 
 <script setup lang="ts">
-    import VueApexCharts from 'vue3-apexcharts'
-    import {computed, PropType} from "vue";
-    import VacancyStatusDashboard from "../../../../model/dashboard/VacancyStatusDashboard";
+    import VueApexCharts from 'vue3-apexcharts';
+    import {computed, PropType} from 'vue';
+    import VacancyStatusDashboard from '../../../../model/dashboard/VacancyStatusDashboard';
 
     const props = defineProps({
         vacancyStatusDashboard: {
@@ -62,10 +62,10 @@
                         }
 
                         return label;
-                    }
+                    },
                 },
             },
-        }
+        };
     });
 
     const series = computed(() => [

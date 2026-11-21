@@ -1,18 +1,18 @@
-import GrabLogInfo from "./GrabLogInfo";
-import DataCollection from "../transport-response/DataCollection";
-import Paginator from "../transport-response/Paginator";
-import Filters from "../transport-response/Filters";
+import GrabLogInfo from './GrabLogInfo';
+import DataCollection from '../transport-response/DataCollection';
+import Paginator from '../transport-response/Paginator';
+import Filters from '../transport-response/Filters';
 
 export default class GrabLogInfoCollection extends DataCollection<GrabLogInfo> {
     constructor(
         items: GrabLogInfo[],
         paginator: Paginator,
-        filters: Filters | null
+        filters: Filters | null,
     ) {
         super(
             items,
             paginator,
-            filters
+            filters,
         );
     }
 

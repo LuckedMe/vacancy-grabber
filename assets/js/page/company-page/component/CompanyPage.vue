@@ -1,16 +1,17 @@
 <template>
-
     <v-row>
         <v-col cols="11">
             <v-expansion-panels :loading="loading">
                 <v-expansion-panel :loading="loading">
-                    <template #title><h3>Filters</h3></template>
+                    <template #title>
+                        <h3>Filters</h3>
+                    </template>
                     <template #text>
                         <company-page-filters
                             @filters:reset="onFiltersReset"
                             @filters:update="onFiltersUpdate"
                             @filters:submit="onFiltersSubmit"
-                        />
+                        ></company-page-filters>
                     </template>
                 </v-expansion-panel>
             </v-expansion-panels>
@@ -28,7 +29,7 @@
         <!--        </v-col>-->
     </v-row>
 
-    <v-divider class="mt-5"/>
+    <v-divider class="mt-5"></v-divider>
 
     <v-data-table-server
         v-model:page="companyPageStore.filters.page as number"
@@ -43,7 +44,6 @@
         :items-per-page-options="itemsPerPageOptions"
         @update:options="onTableOptionsUpdated"
     >
-
         <template #item.name="{ item }">
             {{ item.name }}
         </template>
@@ -66,40 +66,38 @@
                     color="primary"
                     variant="tonal"
                     :href="RouteGenerator.generate('web.vacancy', filterUrlParams({company: item.id}))"
-                />
+                ></v-btn>
                 <v-btn
                     text="Notes"
                     class="ml-1"
                     color="primary"
                     variant="tonal"
                     :href="RouteGenerator.generate('web.note', filterUrlParams({company: item.id}))"
-                />
+                ></v-btn>
             </v-card-actions>
         </template>
-
     </v-data-table-server>
-
 </template>
 
 <script setup lang="ts">
 
-    import {computed, onMounted, ref, watch} from "vue";
-    import {useCompanyPageStore} from "../store";
-    import {itemsPerPageOptions} from "../../../utils/itemsPerPageOptions";
-    import CompanyPageFilters from "./CompanyPageFilters.vue";
+    import {computed, onMounted, ref, watch} from 'vue';
+    import {useCompanyPageStore} from '../store';
+    import {itemsPerPageOptions} from '../../../utils/itemsPerPageOptions';
+    import CompanyPageFilters from './CompanyPageFilters.vue';
     import _cloneDeep from 'lodash/cloneDeep';
     import _debounce from 'lodash/debounce';
-    import BaseCollectionTableOptions, {SortByInterface} from "../../../types/BaseCollectionTableOptions";
-    import {useFlashStore} from "../../../component/general/app-flash/store";
-    import {clearFormErrors, processApiResponse} from "../../../module/HandleApiResponse";
-    import ErrorResponse from "../../../model/transport-response/ErrorResponse";
-    import {formatDateTime} from "../../../utils/DateUtils";
-    import CompanyInfo from "../../../model/company/CompanyInfo";
-    import CompanyInfoCollectionFactory from "../../../model-factory/company/CompanyInfoCollectionFactory";
-    import CompanyInfoCollection from "../../../model/company/CompanyInfoCollection";
-    import RouteGenerator from "../../../module/RouteGenerator";
-    import {filterUrlParams} from "../../../utils/UrlUtils";
-    import {scrollToDataTable} from "../../../utils/ScrollUtils";
+    import BaseCollectionTableOptions, {SortByInterface} from '../../../types/BaseCollectionTableOptions';
+    import {useFlashStore} from '../../../component/general/app-flash/store';
+    import {clearFormErrors, processApiResponse} from '../../../module/HandleApiResponse';
+    import ErrorResponse from '../../../model/transport-response/ErrorResponse';
+    import {formatDateTime} from '../../../utils/DateUtils';
+    import CompanyInfo from '../../../model/company/CompanyInfo';
+    import CompanyInfoCollectionFactory from '../../../model-factory/company/CompanyInfoCollectionFactory';
+    import CompanyInfoCollection from '../../../model/company/CompanyInfoCollection';
+    import RouteGenerator from '../../../module/RouteGenerator';
+    import {filterUrlParams} from '../../../utils/UrlUtils';
+    import {scrollToDataTable} from '../../../utils/ScrollUtils';
 
     const companyPageStore = useCompanyPageStore();
     const loading = computed(() => companyPageStore.loading);
@@ -122,7 +120,7 @@
         await processApiResponse(companyPageStore.loadCollection(), companyPageStore.errors, new CompanyInfoCollectionFactory())
             .then((data: CompanyInfoCollection) => {
                 // update the originally loaded items
-                companyPageStore.items = data.items
+                companyPageStore.items = data.items;
                 companyPageStore.paginator = data.paginator;
                 companyPageStore.availableSortBy = data.filters?.availableSortBy || [];
                 companyPageStore.availableFilters = {...companyPageStore.availableFilters, ...data.filters?.availableFilters ?? {}};
@@ -137,12 +135,12 @@
     watch(
         () => companyPageStore.items,
         () => items.value = cloneItems(),
-        {deep: true}
+        {deep: true},
     );
 
     const onFiltersReset = (): void => {
         onFiltersSubmit();
-    }
+    };
 
     const onFiltersUpdate = (): void => {
         companyPageStore.filters.pushUrlParams();

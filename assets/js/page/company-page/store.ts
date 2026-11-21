@@ -1,11 +1,11 @@
 import {defineStore} from 'pinia';
-import Paginator from "../../model/transport-response/Paginator";
-import HttpClient from "../../module/HttpClient";
-import SuccessResponse from "../../model/transport-response/SuccessResponse";
-import CompanyInfoFilters from "../../model/company/CompanyInfoFilters";
-import ErrorValidation from "../../model/transport-response/ErrorValidation";
-import {computed, ref} from "vue";
-import CompanyInfo from "../../model/company/CompanyInfo";
+import Paginator from '../../model/transport-response/Paginator';
+import HttpClient from '../../module/HttpClient';
+import SuccessResponse from '../../model/transport-response/SuccessResponse';
+import CompanyInfoFilters from '../../model/company/CompanyInfoFilters';
+import ErrorValidation from '../../model/transport-response/ErrorValidation';
+import {computed, ref} from 'vue';
+import CompanyInfo from '../../model/company/CompanyInfo';
 
 
 export const useCompanyPageStore = defineStore('company-page-store', () => {

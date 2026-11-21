@@ -1,12 +1,12 @@
 import {defineStore} from 'pinia';
-import HttpClient from "../../module/HttpClient";
-import SuccessResponse from "../../model/transport-response/SuccessResponse";
-import {computed, ref} from "vue";
-import {EventBus, events} from "../../module/EventBus";
-import {ClientValidationErrorInterface} from "../../types/ValidationErrorTypes";
-import RouteGenerator from "../../module/RouteGenerator";
-import {parseFormErrors} from "../../module/HandleApiResponse";
-import ErrorResponse from "../../model/transport-response/ErrorResponse";
+import HttpClient from '../../module/HttpClient';
+import SuccessResponse from '../../model/transport-response/SuccessResponse';
+import {computed, ref} from 'vue';
+import {EventBus, events} from '../../module/EventBus';
+import {ClientValidationErrorInterface} from '../../types/ValidationErrorTypes';
+import RouteGenerator from '../../module/RouteGenerator';
+import {parseFormErrors} from '../../module/HandleApiResponse';
+import ErrorResponse from '../../model/transport-response/ErrorResponse';
 
 export const useLoginPageStore = defineStore('login-page-store', () => {
     // State

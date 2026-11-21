@@ -9,14 +9,14 @@ import * as vuetifyDirectives from 'vuetify/directives';
 import {aliases, mdi} from 'vuetify/iconsets/mdi-svg';
 // app
 import {createPinia} from 'pinia';
-import HttpClient from "../module/HttpClient";
-import RouteGenerator from "../module/RouteGenerator";
+import HttpClient from '../module/HttpClient';
+import RouteGenerator from '../module/RouteGenerator';
 import {useGlobalStore} from '../component/global/store';
 import AppHeader from '../component/general/app-header/AppHeader.vue';
-import AppAlert from "../component/general/app-alert/AppAlert.vue";
-import AppFlash from "../component/general/app-flash/AppFlash.vue";
-import {EventBus, events} from "../module/EventBus";
-import {useHeaderStore} from "../component/general/app-header/store";
+import AppAlert from '../component/general/app-alert/AppAlert.vue';
+import AppFlash from '../component/general/app-flash/AppFlash.vue';
+import {EventBus, events} from '../module/EventBus';
+import {useHeaderStore} from '../component/general/app-header/store';
 
 export default function createApp(components: object = {}, mount = '#app') {
     const locale = document.querySelector('html')?.getAttribute('lang') as string;

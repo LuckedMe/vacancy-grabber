@@ -1,11 +1,11 @@
 import {defineStore} from 'pinia';
-import Paginator from "../../model/transport-response/Paginator";
-import HttpClient from "../../module/HttpClient";
-import SuccessResponse from "../../model/transport-response/SuccessResponse";
-import VacancyInfoFilters from "../../model/vacancy/VacancyInfoFilters";
-import ErrorValidation from "../../model/transport-response/ErrorValidation";
-import VacancyInfo from "../../model/vacancy/VacancyInfo";
-import {computed, ref} from "vue";
+import Paginator from '../../model/transport-response/Paginator';
+import HttpClient from '../../module/HttpClient';
+import SuccessResponse from '../../model/transport-response/SuccessResponse';
+import VacancyInfoFilters from '../../model/vacancy/VacancyInfoFilters';
+import ErrorValidation from '../../model/transport-response/ErrorValidation';
+import VacancyInfo from '../../model/vacancy/VacancyInfo';
+import {computed, ref} from 'vue';
 
 export const useVacancyPageStore = defineStore('vacancy-page-store', () => {
     // State

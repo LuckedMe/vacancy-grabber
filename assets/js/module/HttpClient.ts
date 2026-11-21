@@ -1,10 +1,10 @@
 import Axios, {AxiosRequestConfig} from 'axios';
 import {EventBus, events} from './EventBus';
 import RouteGenerator from './RouteGenerator';
-import RouteParams from "../types/RouteParams";
-import ErrorResponse from "../model/transport-response/ErrorResponse";
-import SuccessResponse from "../model/transport-response/SuccessResponse";
-import {ServerValidationErrorInterface} from "../types/ValidationErrorTypes";
+import RouteParams from '../types/RouteParams';
+import ErrorResponse from '../model/transport-response/ErrorResponse';
+import SuccessResponse from '../model/transport-response/SuccessResponse';
+import {ServerValidationErrorInterface} from '../types/ValidationErrorTypes';
 // import {throttleAdapterEnhancer} from 'axios-extensions';
 
 let currentLocale = 'en_GB';
@@ -59,7 +59,7 @@ HttpClient.interceptors.response.use(response => {
     throw new ErrorResponse(
         data.code || 400,
         data.message ?? 'Bad request',
-        data.errors
+        data.errors,
     );
 });
 

@@ -1,11 +1,11 @@
-import {InferType as YupInferType, array as YupArray, object as YupObject} from "yup";
-import FactoryInterface from "../../types/FactoryInterface";
-import NoteInfoCollection from "../../model/note/NoteInfoCollection";
-import PaginatorFactory, {PaginatorSchema} from "../transport-response/PaginatorFactory";
-import FiltersFactory, {FiltersSchema} from "../transport-response/FiltersFactory";
-import NoteInfoFactory, {NoteInfoSchema} from "./NoteInfoFactory";
-import * as Yup from "yup";
-import NoteInfo from "../../model/note/NoteInfo";
+import {InferType as YupInferType, array as YupArray, object as YupObject} from 'yup';
+import FactoryInterface from '../../types/FactoryInterface';
+import NoteInfoCollection from '../../model/note/NoteInfoCollection';
+import PaginatorFactory, {PaginatorSchema} from '../transport-response/PaginatorFactory';
+import FiltersFactory, {FiltersSchema} from '../transport-response/FiltersFactory';
+import NoteInfoFactory, {NoteInfoSchema} from './NoteInfoFactory';
+import * as Yup from 'yup';
+import NoteInfo from '../../model/note/NoteInfo';
 
 export const NoteInfoCollectionSchema = YupObject({
     items: YupArray(NoteInfoSchema.required()).required(),

@@ -1,8 +1,8 @@
-import {InferType as YupInferType, array as YupArray, object as YupObject} from "yup";
-import PaginatorFactory, {PaginatorSchema} from "./PaginatorFactory";
-import FiltersFactory, {FiltersSchema} from "./FiltersFactory";
-import FactoryInterface from "../../types/FactoryInterface";
-import DataCollection from "../../model/transport-response/DataCollection";
+import {InferType as YupInferType, array as YupArray, object as YupObject} from 'yup';
+import PaginatorFactory, {PaginatorSchema} from './PaginatorFactory';
+import FiltersFactory, {FiltersSchema} from './FiltersFactory';
+import FactoryInterface from '../../types/FactoryInterface';
+import DataCollection from '../../model/transport-response/DataCollection';
 
 export const DataCollectionValidator = {
     items: YupArray().of(YupObject()),

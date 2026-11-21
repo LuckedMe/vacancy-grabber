@@ -2,24 +2,24 @@
     <app-confirm-dialog
         v-if="dialog"
         v-model:dialog="dialog"
-        @confirmed="onConfirmed"
-        @canceled="onCanceled"
-        @keyup.esc="onCanceled"
-        @keyup.enter="onConfirmed"
         title="Delete the vacancy?"
         text="Are you sure you want to delete the vacancy?"
         leave-open
         delete
-    />
+        @confirmed="onConfirmed"
+        @canceled="onCanceled"
+        @keyup.esc="onCanceled"
+        @keyup.enter="onConfirmed"
+    ></app-confirm-dialog>
 </template>
 
 <script setup lang="ts">
-    import {useVacancyPageStore} from "../../store";
-    import AppConfirmDialog from "../../../../component/general/app-dialog/AppConfirmDialog.vue";
-    import VacancyInfo from "../../../../model/vacancy/VacancyInfo";
-    import {useFlashStore} from "../../../../component/general/app-flash/store";
-    import ErrorValidation from "../../../../model/transport-response/ErrorValidation";
-    import handleApiResponse from "../../../../module/HandleApiResponse";
+    import {useVacancyPageStore} from '../../store';
+    import AppConfirmDialog from '../../../../component/general/app-dialog/AppConfirmDialog.vue';
+    import VacancyInfo from '../../../../model/vacancy/VacancyInfo';
+    import {useFlashStore} from '../../../../component/general/app-flash/store';
+    import ErrorValidation from '../../../../model/transport-response/ErrorValidation';
+    import handleApiResponse from '../../../../module/HandleApiResponse';
 
     const props = defineProps({
         item: {
@@ -30,7 +30,7 @@
 
     const flashStore = useFlashStore();
     const vacancyPageStore = useVacancyPageStore();
-    const emit = defineEmits(['confirmed', 'canceled'])
+    const emit = defineEmits(['confirmed', 'canceled']);
     const dialog = defineModel('dialog', { type: Boolean, default: false });
 
     const onConfirmed = async () => {

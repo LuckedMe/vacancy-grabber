@@ -10,14 +10,14 @@
 </template>
 
 <script setup lang="ts">
-    import VueApexCharts from 'vue3-apexcharts'
-    import {useDashboardPageStore} from "../../store";
-    import {computed, PropType, ref} from "vue";
-    import ErrorValidation from "../../../../model/transport-response/ErrorValidation";
-    import ResumeSentDashboardInfo from "../../../../model/dashboard/ResumeSentDashboardInfo";
-    import _forEach from "lodash/forEach";
-    import dayjs from "dayjs";
-    import {formatDate, formatDateUrl} from "../../../../utils/DateUtils";
+    import VueApexCharts from 'vue3-apexcharts';
+    import {useDashboardPageStore} from '../../store';
+    import {computed, PropType, ref} from 'vue';
+    import ErrorValidation from '../../../../model/transport-response/ErrorValidation';
+    import ResumeSentDashboardInfo from '../../../../model/dashboard/ResumeSentDashboardInfo';
+    import _forEach from 'lodash/forEach';
+    import dayjs from 'dayjs';
+    import {formatDate, formatDateUrl} from '../../../../utils/DateUtils';
 
     const props = defineProps({
         items: {
@@ -93,7 +93,7 @@
                 //     },
                 // },
             },
-        }
+        };
     });
 
     const series = computed(() => {

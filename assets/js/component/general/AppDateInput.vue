@@ -5,12 +5,12 @@
         :label="props.label as string"
         :loading="loading"
         :clearable="props.clearable"
-    />
+    ></v-text-field>
 </template>
 
 
 <script setup lang="ts">
-    import {watch} from 'vue'
+    import {watch} from 'vue';
 
     const props = defineProps({
         loading: {type: Boolean, default: false},

@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia';
-import HttpClient from "../../module/HttpClient";
-import {computed, ref} from "vue";
+import HttpClient from '../../module/HttpClient';
+import {computed, ref} from 'vue';
 
 export const useDashboardPageStore = defineStore('dashboard-page-store', () =>{
     // State

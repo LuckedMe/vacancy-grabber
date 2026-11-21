@@ -1,13 +1,13 @@
 <template>
     <div
-        v-html="htmlContent"
         :style="style"
-    />
+        v-html="htmlContent"
+    ></div>
 </template>
 
 <script setup lang="ts">
-    import {nl2br} from "../../utils/HtmlUtils";
-    import { computed, type CSSProperties } from "vue";
+    import {nl2br} from '../../utils/HtmlUtils';
+    import { computed, type CSSProperties } from 'vue';
 
     const props = defineProps({
         html: {type: [String, null], required: false, default: null},

@@ -1,11 +1,11 @@
-import * as Yup from "yup";
-import {InferType as YupInferType, array as YupArray, object as YupObject} from "yup";
-import FactoryInterface from "../../types/FactoryInterface";
-import GrabLogInfoCollection from "../../model/grab-log/GrabLogInfoCollection";
-import PaginatorFactory, {PaginatorSchema} from "../transport-response/PaginatorFactory";
-import FiltersFactory, {FiltersSchema} from "../transport-response/FiltersFactory";
-import GrabLogInfoFactory, {GrabLogInfoSchema} from "./GrabLogInfoFactory";
-import VacancyInfo from "../../model/vacancy/VacancyInfo";
+import * as Yup from 'yup';
+import {InferType as YupInferType, array as YupArray, object as YupObject} from 'yup';
+import FactoryInterface from '../../types/FactoryInterface';
+import GrabLogInfoCollection from '../../model/grab-log/GrabLogInfoCollection';
+import PaginatorFactory, {PaginatorSchema} from '../transport-response/PaginatorFactory';
+import FiltersFactory, {FiltersSchema} from '../transport-response/FiltersFactory';
+import GrabLogInfoFactory, {GrabLogInfoSchema} from './GrabLogInfoFactory';
+import VacancyInfo from '../../model/vacancy/VacancyInfo';
 
 export const GrabLogInfoCollectionSchema = YupObject({
     items: YupArray(GrabLogInfoSchema.required()).required(),

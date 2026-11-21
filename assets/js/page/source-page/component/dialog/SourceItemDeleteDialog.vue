@@ -2,24 +2,24 @@
     <app-confirm-dialog
         v-if="dialog"
         v-model:dialog="dialog"
+        :title="`Delete the &quot;${item?.name}&quot; source?`"
+        :text="`Are you sure you want to delete the &quot;${item?.name}&quot; source?`"
+        leave-open
+        delete
         @confirmed="onConfirmed"
         @canceled="onCanceled"
         @keyup.esc="onCanceled"
         @keyup.enter="onConfirmed"
-        :title='`Delete the "${item?.name}" source?`'
-        :text='`Are you sure you want to delete the "${item?.name}" source?`'
-        leave-open
-        delete
-    />
+    ></app-confirm-dialog>
 </template>
 
 <script setup lang="ts">
-    import {useSourcePageStore} from "../../store";
-    import AppConfirmDialog from "../../../../component/general/app-dialog/AppConfirmDialog.vue";
-    import SourceInfo from "../../../../model/source/SourceInfo";
-    import {useFlashStore} from "../../../../component/general/app-flash/store";
-    import ErrorValidation from "../../../../model/transport-response/ErrorValidation";
-    import handleApiResponse from "../../../../module/HandleApiResponse";
+    import {useSourcePageStore} from '../../store';
+    import AppConfirmDialog from '../../../../component/general/app-dialog/AppConfirmDialog.vue';
+    import SourceInfo from '../../../../model/source/SourceInfo';
+    import {useFlashStore} from '../../../../component/general/app-flash/store';
+    import ErrorValidation from '../../../../model/transport-response/ErrorValidation';
+    import handleApiResponse from '../../../../module/HandleApiResponse';
 
     const props = defineProps({
         item: {
@@ -30,7 +30,7 @@
 
     const flashStore = useFlashStore();
     const sourcePageStore = useSourcePageStore();
-    const emit = defineEmits(['confirmed', 'canceled'])
+    const emit = defineEmits(['confirmed', 'canceled']);
     const dialog = defineModel('dialog', { type: Boolean, default: false });
 
     const onConfirmed = async () => {

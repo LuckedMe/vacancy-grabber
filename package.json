@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "private": true,
     "dependencies": {
+        "@eslint/js": "^10.0.0",
         "@babel/core": "^8.0.5",
         "@babel/preset-env": "^8.0.5",
         "@mdi/js": "^7.4.47",
@@ -24,6 +25,7 @@
         "eslint": "^10.15.0",
         "eslint-plugin-vue": "^10.12.1",
         "fs-extra": "^11.4.0",
+        "globals": "^16.0.0",
         "glob": "^13.0.6",
         "js-cookie": "^3.0.8",
         "lightningcss": "^1.33.0",
@@ -37,7 +39,9 @@
         "ts-loader": "^9.6.2",
         "tslib": "^2.8.1",
         "typescript": "6",
+        "typescript-eslint": "^8.73.0",
         "vue": "^3.5.42",
+        "vue-eslint-parser": "^10.0.0",
         "vue-i18n": "^11.4.10",
         "vue-loader": "^17.4.2",
         "vue3-apexcharts": "^1.11.1",
@@ -56,7 +60,7 @@
         "analyze": "ANALYZE=1 encore production --progress",
         "lint": "eslint ./assets/js",
         "lint:checkstyle": "eslint --format=checkstyle -o js-checkstyle-result.xml ./assets/js",
-        "lint:fix": "eslint --fix --ext .ts,.vue ./assets/js"
+        "lint:fix": "eslint --fix ./assets/js"
     },
     "browserslist": [
         "> 0.2%",

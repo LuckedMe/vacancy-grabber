@@ -1,12 +1,11 @@
 <template>
-
     <v-card-text>
         <div class="v-col-md-12 v-col-lg-9 v-col-xl-8 v-col-xxl-6">
             <v-form
                 ref="form"
                 validate-on="submit"
-                @submit.prevent="onSubmit"
                 :loading="loading"
+                @submit.prevent="onSubmit"
             >
                 <v-row>
                     <v-col cols="2">
@@ -19,7 +18,7 @@
                             type="date"
                             label="Created At From"
                             @update:model-value="onUpdate()"
-                        />
+                        ></v-text-field>
                     </v-col>
 
                     <v-col cols="2">
@@ -32,7 +31,7 @@
                             type="date"
                             label="Created At To"
                             @update:model-value="onUpdate()"
-                        />
+                        ></v-text-field>
                     </v-col>
 
                     <v-col cols="2">
@@ -45,9 +44,9 @@
                             clearable
                             label="Is Viewed?"
                             placeholder="All"
-                            @update:model-value="onUpdate()"
                             autocomplete="off"
-                        />
+                            @update:model-value="onUpdate()"
+                        ></v-autocomplete>
                     </v-col>
 
                     <v-col cols="2">
@@ -61,7 +60,7 @@
                             label="Status"
                             placeholder="All"
                             @update:model-value="onUpdate()"
-                        />
+                        ></v-select>
                     </v-col>
 
                     <v-col cols="2">
@@ -76,9 +75,9 @@
                             clearable
                             label="Source"
                             placeholder="All"
-                            @update:model-value="onUpdate()"
                             autocomplete="off"
-                        />
+                            @update:model-value="onUpdate()"
+                        ></v-autocomplete>
                     </v-col>
 
                     <v-col cols="2">
@@ -93,14 +92,13 @@
                             clearable
                             label="Company"
                             placeholder="All"
-                            @update:model-value="onUpdate()"
                             autocomplete="off"
-                        />
+                            @update:model-value="onUpdate()"
+                        ></v-autocomplete>
                     </v-col>
-
                 </v-row>
 
-                <v-divider class="my-2"/>
+                <v-divider class="my-2"></v-divider>
 
                 <v-row>
                     <v-col cols="2">
@@ -113,9 +111,9 @@
                             clearable
                             label="Is Resume Sent?"
                             placeholder="All"
-                            @update:model-value="onUpdate()"
                             autocomplete="off"
-                        />
+                            @update:model-value="onUpdate()"
+                        ></v-autocomplete>
                     </v-col>
 
                     <v-col cols="2">
@@ -128,7 +126,7 @@
                             type="date"
                             label="Resume Sent From"
                             @update:model-value="onUpdate()"
-                        />
+                        ></v-text-field>
                     </v-col>
 
                     <v-col cols="2">
@@ -141,7 +139,7 @@
                             type="date"
                             label="Resume Sent To"
                             @update:model-value="onUpdate()"
-                        />
+                        ></v-text-field>
                     </v-col>
 
                     <v-col cols="5">
@@ -150,7 +148,7 @@
                         </div>
                     </v-col>
                 </v-row>
-                <v-divider class="my-2"/>
+                <v-divider class="my-2"></v-divider>
 
                 <v-row>
                     <v-col cols="2">
@@ -163,9 +161,9 @@
                             clearable
                             label="Is Dead Line?"
                             placeholder="All"
-                            @update:model-value="onUpdate()"
                             autocomplete="off"
-                        />
+                            @update:model-value="onUpdate()"
+                        ></v-autocomplete>
                     </v-col>
 
                     <v-col cols="2">
@@ -178,7 +176,7 @@
                             type="date"
                             label="Dead Line From"
                             @update:model-value="onUpdate()"
-                        />
+                        ></v-text-field>
                     </v-col>
 
                     <v-col cols="2">
@@ -191,13 +189,13 @@
                             type="date"
                             label="Dead Line To"
                             @update:model-value="onUpdate()"
-                        />
+                        ></v-text-field>
                     </v-col>
 
                     <v-col cols="5">
                     </v-col>
                 </v-row>
-                <v-divider class="my-2"/>
+                <v-divider class="my-2"></v-divider>
 
                 <v-row>
                     <v-col cols="6">
@@ -209,7 +207,7 @@
                             clearable
                             label="Search"
                             placeholder="Search"
-                        />
+                        ></v-text-field>
                     </v-col>
 
                     <v-col cols="2">
@@ -220,7 +218,7 @@
                             color="secondary"
                             class="ml-5 text-right"
                             type="submit"
-                        />
+                        ></v-btn>
                     </v-col>
 
                     <v-col cols="2">
@@ -230,43 +228,42 @@
                             :disabled="loading"
                             color="secondary"
                             class="ml-5 text-right"
-                            @click="onReset"
                             variant="tonal"
-                        />
+                            @click="onReset"
+                        ></v-btn>
                     </v-col>
 
                     <v-col cols="2">
                     </v-col>
                 </v-row>
-
             </v-form>
         </div>
     </v-card-text>
 </template>
 
 <script setup lang="ts">
-    import {computed, onMounted, ref, useTemplateRef, watch} from "vue";
-    import {useVacancyPageStore} from "../store";
-    import {useFlashStore} from "../../../component/general/app-flash/store";
-    import {clearFormErrors, parseErrorValidation, processApiResponse} from "../../../module/HandleApiResponse";
-    import {itemsViewedFiltersOptions} from "./types/itemsViewedOptions";
-    import {itemsIsResumeSentOptions} from "./types/itemsIsResumeSentOptions";
-    import SourceSummary from "../../../model/source/SourceSummary";
-    import CompanySummary from "../../../model/company/CompanySummary";
-    import {itemsIsResumeStatusOptions} from "./types/itemsIsResumeStatusOptions";
-    import SourceSummaryCollectionFactory from "../../../model-factory/source/SourceSummaryCollectionFactory";
-    import SourceSummaryCollection from "../../../model/source/SourceSummaryCollection";
-    import CompanySummaryCollectionFactory from "../../../model-factory/company/CompanySummaryCollectionFactory";
-    import CompanySummaryCollection from "../../../model/company/CompanySummaryCollection";
-    import {useSourcePageStore} from "../../source-page/store";
-    import {useCompanyPageStore} from "../../company-page/store";
-    import {itemsIsDeadLineOptions} from "./types/itemsIsDeadLineOptions";
+    import {computed, onMounted, ref, useTemplateRef, watch} from 'vue';
+    import {useVacancyPageStore} from '../store';
+    import {useFlashStore} from '../../../component/general/app-flash/store';
+    import {clearFormErrors, parseErrorValidation, processApiResponse} from '../../../module/HandleApiResponse';
+    import {itemsViewedFiltersOptions} from './types/itemsViewedOptions';
+    import {itemsIsResumeSentOptions} from './types/itemsIsResumeSentOptions';
+    import SourceSummary from '../../../model/source/SourceSummary';
+    import CompanySummary from '../../../model/company/CompanySummary';
+    import {itemsIsResumeStatusOptions} from './types/itemsIsResumeStatusOptions';
+    import SourceSummaryCollectionFactory from '../../../model-factory/source/SourceSummaryCollectionFactory';
+    import SourceSummaryCollection from '../../../model/source/SourceSummaryCollection';
+    import CompanySummaryCollectionFactory from '../../../model-factory/company/CompanySummaryCollectionFactory';
+    import CompanySummaryCollection from '../../../model/company/CompanySummaryCollection';
+    import {useSourcePageStore} from '../../source-page/store';
+    import {useCompanyPageStore} from '../../company-page/store';
+    import {itemsIsDeadLineOptions} from './types/itemsIsDeadLineOptions';
 
     const flashStore = useFlashStore();
     const vacancyPageStore = useVacancyPageStore();
     const sourcePageStore = useSourcePageStore();
     const companyPageStore = useCompanyPageStore();
-    const emit = defineEmits(['filters:submit', 'filters:update', 'filters:reset', 'create:button'])
+    const emit = defineEmits(['filters:submit', 'filters:update', 'filters:reset', 'create:button']);
     const loading = computed(() => vacancyPageStore.loading);
 
     const sourceSummaryItems = ref([] as SourceSummary[]);
@@ -318,8 +315,8 @@
         return {
             message: message ?? null,
             fields: Object.fromEntries(
-                Object.entries(fields).map(([key, value]) => [key, value ?? null])
-            )
+                Object.entries(fields).map(([key, value]) => [key, value ?? null]),
+            ),
         } as formErrorsInterface;
     });
 

@@ -1,11 +1,11 @@
 import {defineStore} from 'pinia';
-import Paginator from "../../model/transport-response/Paginator";
-import HttpClient from "../../module/HttpClient";
-import SuccessResponse from "../../model/transport-response/SuccessResponse";
-import SourceInfo from "../../model/source/SourceInfo";
-import SourceInfoFilters from "../../model/source/SourceInfoFilters";
-import ErrorValidation from "../../model/transport-response/ErrorValidation";
-import {computed, ref} from "vue";
+import Paginator from '../../model/transport-response/Paginator';
+import HttpClient from '../../module/HttpClient';
+import SuccessResponse from '../../model/transport-response/SuccessResponse';
+import SourceInfo from '../../model/source/SourceInfo';
+import SourceInfoFilters from '../../model/source/SourceInfoFilters';
+import ErrorValidation from '../../model/transport-response/ErrorValidation';
+import {computed, ref} from 'vue';
 
 export const useSourcePageStore = defineStore('source-page-store', () => {
     // State

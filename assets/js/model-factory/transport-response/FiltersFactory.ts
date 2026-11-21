@@ -1,9 +1,9 @@
 import * as Yup from 'yup';
-import {InferType as YupInferType, array as YupArray, object as YupObject} from "yup";
-import FactoryInterface from "../../types/FactoryInterface";
-import Filters from "../../model/transport-response/Filters";
-import {camelCase} from "lodash";
-import {camelizeArrayKeys} from "../../utils/ArrayUtils";
+import {InferType as YupInferType, array as YupArray, object as YupObject} from 'yup';
+import FactoryInterface from '../../types/FactoryInterface';
+import Filters from '../../model/transport-response/Filters';
+import {camelCase} from 'lodash';
+import {camelizeArrayKeys} from '../../utils/ArrayUtils';
 
 export const FiltersValidator = {
     query: Yup.string().optional().nullable().transform((value, original) => (original === '' ? null : value)),

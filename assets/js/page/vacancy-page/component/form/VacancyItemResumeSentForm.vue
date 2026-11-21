@@ -1,13 +1,11 @@
 <template>
-
     <v-card-text v-if="formErrors.message">
-        <form-global-error :errors="[formErrors.message as string]"/>
+        <form-global-error :errors="[formErrors.message as string]"></form-global-error>
     </v-card-text>
 
-    <v-progress-linear indeterminate v-if="loading"></v-progress-linear>
+    <v-progress-linear v-if="loading" indeterminate></v-progress-linear>
 
     <v-card-text v-if="formView">
-
         <div class="v-col-md-12 v-col-lg-9 v-col-xl-8 v-col-xxl-6">
             <v-form
                 ref="form"
@@ -25,33 +23,31 @@
                             clearable
                             label="Resume Sent At"
                             type="date"
-                        />
+                        ></v-text-field>
                     </v-col>
                 </v-row>
-
             </v-form>
         </div>
     </v-card-text>
-
 </template>
 
 <script setup lang="ts">
-    import {computed, onMounted, ref, useTemplateRef} from "vue";
-    import {useVacancyPageStore} from "../../store";
-    import handleApiResponse, {clearFormErrors, processApiResponse} from "../../../../module/HandleApiResponse";
-    import FormGlobalError from "../../../../component/general/FormGlobalError.vue";
-    import VacancyDetailsFactory from "../../../../model-factory/vacancy/VacancyDetailsFactory";
-    import VacancyDetails from "../../../../model/vacancy/VacancyDetails";
-    import ErrorResponse from "../../../../model/transport-response/ErrorResponse";
-    import {formatDateUrl} from "../../../../utils/DateUtils";
-    import dayjs from "dayjs";
+    import {computed, onMounted, ref, useTemplateRef} from 'vue';
+    import {useVacancyPageStore} from '../../store';
+    import handleApiResponse, {clearFormErrors, processApiResponse} from '../../../../module/HandleApiResponse';
+    import FormGlobalError from '../../../../component/general/FormGlobalError.vue';
+    import VacancyDetailsFactory from '../../../../model-factory/vacancy/VacancyDetailsFactory';
+    import VacancyDetails from '../../../../model/vacancy/VacancyDetails';
+    import ErrorResponse from '../../../../model/transport-response/ErrorResponse';
+    import {formatDateUrl} from '../../../../utils/DateUtils';
+    import dayjs from 'dayjs';
 
     const vacancyPageStore = useVacancyPageStore();
-    const emit = defineEmits(['form:done', 'form:unable-load'])
+    const emit = defineEmits(['form:done', 'form:unable-load']);
     const loading = ref(false);
 
     const props = defineProps({
-        id: {type: String, required: true}
+        id: {type: String, required: true},
     });
 
     const form = useTemplateRef('form');
@@ -63,11 +59,11 @@
         message: null,
         fields: {
             resumeSentAt: null,
-        }
+        },
     });
     const formRules = computed(() => ({
         resumeSentAt: [() => formErrors.value.fields.resumeSentAt ?? null],
-    }))
+    }));
 
     onMounted(async () => {
         formView.value = true;

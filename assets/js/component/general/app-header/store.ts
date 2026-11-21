@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia';
-import {mdiAccount, mdiAccountArrowLeft, mdiAccountArrowRight} from "@mdi/js";
+import {mdiAccount, mdiAccountArrowLeft, mdiAccountArrowRight} from '@mdi/js';
 
 export const useHeaderStore = defineStore('header-store', () => {
 

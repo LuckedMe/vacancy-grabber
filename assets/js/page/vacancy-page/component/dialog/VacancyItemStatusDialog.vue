@@ -2,33 +2,33 @@
     <app-confirm-dialog
         v-if="dialog"
         v-model:dialog="dialog"
+        leave-open
+        title="Update status"
         @confirmed="onConfirmed"
         @canceled="onCanceled"
         @keyup.esc="onCanceled"
         @keyup.enter="onConfirmed"
-        leave-open
-        title="Update status"
     >
         <template #text>
             <v-card-text>
                 Update resume status
             </v-card-text>
             <vacancy-item-status-form
-                ref="form"
                 :id="item.id"
+                ref="form"
                 @form:done="onFormDone"
-            />
+            ></vacancy-item-status-form>
         </template>
     </app-confirm-dialog>
 </template>
 
 <script setup lang="ts">
-    import {useVacancyPageStore} from "../../store";
-    import AppConfirmDialog from "../../../../component/general/app-dialog/AppConfirmDialog.vue";
-    import VacancyInfo from "../../../../model/vacancy/VacancyInfo";
-    import {useFlashStore} from "../../../../component/general/app-flash/store";
-    import {useTemplateRef} from "vue";
-    import VacancyItemStatusForm from "../form/VacancyItemStatusForm.vue";
+    import {useVacancyPageStore} from '../../store';
+    import AppConfirmDialog from '../../../../component/general/app-dialog/AppConfirmDialog.vue';
+    import VacancyInfo from '../../../../model/vacancy/VacancyInfo';
+    import {useFlashStore} from '../../../../component/general/app-flash/store';
+    import {useTemplateRef} from 'vue';
+    import VacancyItemStatusForm from '../form/VacancyItemStatusForm.vue';
 
     const props = defineProps({
         item: {
@@ -39,7 +39,7 @@
 
     const flashStore = useFlashStore();
     const vacancyPageStore = useVacancyPageStore();
-    const emit = defineEmits(['confirmed', 'canceled'])
+    const emit = defineEmits(['confirmed', 'canceled']);
     const dialog = defineModel('dialog', { type: Boolean, default: false });
     const form = useTemplateRef('form');
 
@@ -50,7 +50,7 @@
     const onFormDone = () => {
         flashStore.addSuccess({text:'Vacancy was successfully updated'});
         emit('confirmed');
-    }
+    };
 
     const onCanceled = () => {
         emit('canceled');

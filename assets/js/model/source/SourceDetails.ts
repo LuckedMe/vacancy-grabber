@@ -1,5 +1,5 @@
-import {Dayjs} from "dayjs";
-import SourceInfo from "./SourceInfo";
+import {Dayjs} from 'dayjs';
+import SourceInfo from './SourceInfo';
 
 export default class SourceDetails extends SourceInfo {
     constructor(

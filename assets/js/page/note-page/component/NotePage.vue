@@ -1,23 +1,24 @@
 <template>
-
     <v-row>
         <v-col cols="11">
             <v-expansion-panels :loading="loading">
                 <v-expansion-panel :loading="loading">
-                    <template #title><h3>Filters</h3></template>
+                    <template #title>
+                        <h3>Filters</h3>
+                    </template>
                     <template #text>
                         <note-page-filters
                             @filters:reset="onFiltersReset"
                             @filters:update="onFiltersUpdate"
                             @filters:submit="onFiltersSubmit"
-                        />
+                        ></note-page-filters>
                     </template>
                 </v-expansion-panel>
             </v-expansion-panels>
         </v-col>
     </v-row>
 
-    <v-divider class="mt-5"/>
+    <v-divider class="mt-5"></v-divider>
 
     <v-data-table-server
         v-model:page="notePageStore.filters.page as number"
@@ -32,17 +33,17 @@
         :items-per-page-options="itemsPerPageOptions"
         @update:options="onTableOptionsUpdated"
     >
-
         <template #item.company="{ item }">
             <div class="mb-5 mt-5">
                 <a v-if="item.companyUrl" :href="item.companyUrl" target="_blank">{{ item.companyName }}</a>
-                <template v-else>{{ item.companyName }}</template>
-
+                <template v-else>
+                    {{ item.companyName }}
+                </template>
             </div>
         </template>
 
         <template #item.description="{ item }">
-            <app-html :html="item.description" max-width="800px"/>
+            <app-html :html="item.description" max-width="800px"></app-html>
         </template>
 
         <template #item.created_at="{ item }">
@@ -57,42 +58,40 @@
                     color="primary"
                     variant="tonal"
                     :href="RouteGenerator.generate('web.vacancy', filterUrlParams({company: item.companyId}))"
-                />
+                ></v-btn>
                 <v-btn
                     text="Notes"
                     class="ml-1"
                     color="primary"
                     variant="tonal"
                     :href="RouteGenerator.generate('web.note', filterUrlParams({company: item.companyId}))"
-                />
+                ></v-btn>
             </v-card-actions>
         </template>
-
     </v-data-table-server>
-
 </template>
 
 <script setup lang="ts">
 
-    import {computed, onMounted, ref, watch} from "vue";
-    import {useNotePageStore} from "../store";
-    import {itemsPerPageOptions} from "../../../utils/itemsPerPageOptions";
-    import NotePageFilters from "./NotePageFilters.vue";
+    import {computed, onMounted, ref, watch} from 'vue';
+    import {useNotePageStore} from '../store';
+    import {itemsPerPageOptions} from '../../../utils/itemsPerPageOptions';
+    import NotePageFilters from './NotePageFilters.vue';
 
     import _cloneDeep from 'lodash/cloneDeep';
     import _debounce from 'lodash/debounce';
-    import BaseCollectionTableOptions, {SortByInterface} from "../../../types/BaseCollectionTableOptions";
-    import {useFlashStore} from "../../../component/general/app-flash/store";
-    import {clearFormErrors, processApiResponse} from "../../../module/HandleApiResponse";
-    import ErrorResponse from "../../../model/transport-response/ErrorResponse";
-    import {formatDateTime, formatDateUrl} from "../../../utils/DateUtils";
-    import NoteInfo from "../../../model/note/NoteInfo";
-    import NoteInfoCollectionFactory from "../../../model-factory/note/NoteInfoCollectionFactory";
-    import NoteInfoCollection from "../../../model/note/NoteInfoCollection";
-    import RouteGenerator from "../../../module/RouteGenerator";
-    import {filterUrlParams} from "../../../utils/UrlUtils";
-    import {scrollToDataTable} from "../../../utils/ScrollUtils";
-    import AppHtml from "../../../component/general/AppHtml.vue";
+    import BaseCollectionTableOptions, {SortByInterface} from '../../../types/BaseCollectionTableOptions';
+    import {useFlashStore} from '../../../component/general/app-flash/store';
+    import {clearFormErrors, processApiResponse} from '../../../module/HandleApiResponse';
+    import ErrorResponse from '../../../model/transport-response/ErrorResponse';
+    import {formatDateTime, formatDateUrl} from '../../../utils/DateUtils';
+    import NoteInfo from '../../../model/note/NoteInfo';
+    import NoteInfoCollectionFactory from '../../../model-factory/note/NoteInfoCollectionFactory';
+    import NoteInfoCollection from '../../../model/note/NoteInfoCollection';
+    import RouteGenerator from '../../../module/RouteGenerator';
+    import {filterUrlParams} from '../../../utils/UrlUtils';
+    import {scrollToDataTable} from '../../../utils/ScrollUtils';
+    import AppHtml from '../../../component/general/AppHtml.vue';
 
     const notePageStore = useNotePageStore();
     const loading = computed(() => notePageStore.loading);
@@ -115,7 +114,7 @@
         await processApiResponse(notePageStore.loadCollection(), notePageStore.errors, new NoteInfoCollectionFactory())
             .then((data: NoteInfoCollection) => {
                 // update the originally loaded items
-                notePageStore.items = data.items
+                notePageStore.items = data.items;
                 notePageStore.paginator = data.paginator;
                 notePageStore.availableSortBy = data.filters?.availableSortBy || [];
                 notePageStore.availableFilters = {...notePageStore.availableFilters, ...data.filters?.availableFilters ?? {}};
@@ -130,12 +129,12 @@
     watch(
         () => notePageStore.items,
         () => items.value = cloneItems(),
-        {deep: true}
+        {deep: true},
     );
 
     const onFiltersReset = (): void => {
         onFiltersSubmit();
-    }
+    };
 
     const onFiltersUpdate = (): void => {
         notePageStore.filters.pushUrlParams();

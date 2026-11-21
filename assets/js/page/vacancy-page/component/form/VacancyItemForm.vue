@@ -1,13 +1,11 @@
 <template>
-
     <v-card-text v-if="formErrors.message">
-        <form-global-error :errors="[formErrors.message as string]"/>
+        <form-global-error :errors="[formErrors.message as string]"></form-global-error>
     </v-card-text>
 
-    <v-progress-linear indeterminate v-if="loading"></v-progress-linear>
+    <v-progress-linear v-if="loading" indeterminate></v-progress-linear>
 
     <v-card-text v-if="formView">
-
         <div class="v-col-md-12 v-col-lg-9 v-col-xl-8 v-col-xxl-6">
             <v-form
                 ref="form"
@@ -15,7 +13,6 @@
                 :disabled="loading"
                 @submit.prevent="onSubmit"
             >
-
                 <v-row>
                     <v-col>
                         <v-text-field
@@ -26,7 +23,7 @@
                             clearable
                             label="Title"
                             type="text"
-                        />
+                        ></v-text-field>
                     </v-col>
                 </v-row>
 
@@ -39,7 +36,7 @@
                             clearable
                             label="External Id"
                             type="text"
-                        />
+                        ></v-text-field>
                     </v-col>
                 </v-row>
 
@@ -52,7 +49,7 @@
                             clearable
                             label="Description"
                             type="text"
-                        />
+                        ></v-textarea>
                     </v-col>
                 </v-row>
 
@@ -65,7 +62,7 @@
                             clearable
                             label="URL"
                             type="text"
-                        />
+                        ></v-text-field>
                     </v-col>
                 </v-row>
 
@@ -78,7 +75,7 @@
                             clearable
                             label="Salary"
                             type="text"
-                        />
+                        ></v-text-field>
                     </v-col>
                 </v-row>
 
@@ -94,7 +91,7 @@
                             clearable
                             label="Source"
                             autocomplete="off"
-                        />
+                        ></v-autocomplete>
                     </v-col>
                 </v-row>
 
@@ -110,7 +107,7 @@
                             clearable
                             label="Company"
                             autocomplete="off"
-                        />
+                        ></v-autocomplete>
                     </v-col>
                 </v-row>
 
@@ -123,7 +120,7 @@
                             :items="itemsIsResumeStatusOptions"
                             clearable
                             label="Status"
-                        />
+                        ></v-select>
                     </v-col>
                 </v-row>
 
@@ -136,7 +133,7 @@
                             :items="itemsViewedFormOptions"
                             clearable
                             label="Viewed"
-                        />
+                        ></v-select>
                     </v-col>
                 </v-row>
 
@@ -150,7 +147,7 @@
                             clearable
                             type="date"
                             label="Resume Sent At"
-                        />
+                        ></v-text-field>
                     </v-col>
                 </v-row>
 
@@ -164,49 +161,47 @@
                             clearable
                             type="date"
                             label="Dead Line At"
-                        />
+                        ></v-text-field>
                     </v-col>
                 </v-row>
-
             </v-form>
         </div>
     </v-card-text>
-
 </template>
 
 <script setup lang="ts">
-    import {computed, onMounted, ref, useTemplateRef} from "vue";
-    import {useVacancyPageStore} from "../../store";
+    import {computed, onMounted, ref, useTemplateRef} from 'vue';
+    import {useVacancyPageStore} from '../../store';
     import handleApiResponse, {
         clearFormErrors,
         normalizeFormToRequest,
-        processApiResponse
-    } from "../../../../module/HandleApiResponse";
-    import FormGlobalError from "../../../../component/general/FormGlobalError.vue";
-    import VacancyDetailsFactory from "../../../../model-factory/vacancy/VacancyDetailsFactory";
-    import VacancyDetails from "../../../../model/vacancy/VacancyDetails";
-    import ErrorResponse from "../../../../model/transport-response/ErrorResponse";
-    import {formatDateUrl} from "../../../../utils/DateUtils";
-    import {itemsIsResumeStatusOptions} from "../types/itemsIsResumeStatusOptions";
-    import {itemsViewedFormOptions} from "../types/itemsViewedOptions";
-    import {useSourcePageStore} from "../../../source-page/store";
-    import SourceSummary from "../../../../model/source/SourceSummary";
-    import SourceSummaryCollectionFactory from "../../../../model-factory/source/SourceSummaryCollectionFactory";
-    import SourceSummaryCollection from "../../../../model/source/SourceSummaryCollection";
-    import {useCompanyPageStore} from "../../../company-page/store";
-    import CompanySummary from "../../../../model/company/CompanySummary";
-    import CompanySummaryCollectionFactory from "../../../../model-factory/company/CompanySummaryCollectionFactory";
-    import CompanySummaryCollection from "../../../../model/company/CompanySummaryCollection";
-    import {scrollToFormFieldError} from "../../../../utils/ScrollUtils";
+        processApiResponse,
+    } from '../../../../module/HandleApiResponse';
+    import FormGlobalError from '../../../../component/general/FormGlobalError.vue';
+    import VacancyDetailsFactory from '../../../../model-factory/vacancy/VacancyDetailsFactory';
+    import VacancyDetails from '../../../../model/vacancy/VacancyDetails';
+    import ErrorResponse from '../../../../model/transport-response/ErrorResponse';
+    import {formatDateUrl} from '../../../../utils/DateUtils';
+    import {itemsIsResumeStatusOptions} from '../types/itemsIsResumeStatusOptions';
+    import {itemsViewedFormOptions} from '../types/itemsViewedOptions';
+    import {useSourcePageStore} from '../../../source-page/store';
+    import SourceSummary from '../../../../model/source/SourceSummary';
+    import SourceSummaryCollectionFactory from '../../../../model-factory/source/SourceSummaryCollectionFactory';
+    import SourceSummaryCollection from '../../../../model/source/SourceSummaryCollection';
+    import {useCompanyPageStore} from '../../../company-page/store';
+    import CompanySummary from '../../../../model/company/CompanySummary';
+    import CompanySummaryCollectionFactory from '../../../../model-factory/company/CompanySummaryCollectionFactory';
+    import CompanySummaryCollection from '../../../../model/company/CompanySummaryCollection';
+    import {scrollToFormFieldError} from '../../../../utils/ScrollUtils';
 
     const vacancyPageStore = useVacancyPageStore();
     const sourcePageStore = useSourcePageStore();
     const companyPageStore = useCompanyPageStore();
-    const emit = defineEmits(['form:done', 'form:unable-load'])
+    const emit = defineEmits(['form:done', 'form:unable-load']);
     const loading = ref(false);
 
     const props = defineProps({
-        id: {type: String, required: false}
+        id: {type: String, required: false},
     });
 
     const form = useTemplateRef('form');
@@ -238,7 +233,7 @@
             viewed: null,
             resumeSentAt: null,
             deadLineAt: null,
-        }
+        },
     });
     const formRules = computed(() => ({
         title: [() => formErrors.value.fields.title ?? null],
@@ -252,7 +247,7 @@
         viewed: [() => formErrors.value.fields.viewed ?? null],
         resumeSentAt: [() => formErrors.value.fields.resumeSentAt ?? null],
         deadLineAt: [() => formErrors.value.fields.deadLineAt ?? null],
-    }))
+    }));
 
     const sourceSummaryItems = ref([] as SourceSummary[]);
     const companySummaryItems = ref([] as CompanySummary[]);

@@ -1,9 +1,9 @@
 import * as Yup from 'yup';
-import {InferType as YupInferType, array as YupArray, object as YupObject} from "yup";
-import CompanyInfo from "../../model/company/CompanyInfo";
-import FactoryInterface from "../../types/FactoryInterface";
-import {GrabLogInfoValidator} from "../grab-log/GrabLogInfoFactory";
-import dayjs from "dayjs";
+import {InferType as YupInferType, array as YupArray, object as YupObject} from 'yup';
+import CompanyInfo from '../../model/company/CompanyInfo';
+import FactoryInterface from '../../types/FactoryInterface';
+import {GrabLogInfoValidator} from '../grab-log/GrabLogInfoFactory';
+import dayjs from 'dayjs';
 
 export const CompanyInfoValidator = {
     id: Yup.string().required(),

@@ -1,11 +1,10 @@
 <template>
-
     <v-app-bar color="primary">
         <v-app-bar-nav-icon
             v-if="userId"
             variant="text"
             @click.stop="onClickLeftDrawer"
-        />
+        ></v-app-bar-nav-icon>
 
         <v-toolbar-title>
             <slot name="header-title">
@@ -16,8 +15,7 @@
         <v-app-bar-nav-icon
             :icon="mdiAccount"
             @click="onClickRightLeftDrawer"
-        />
-
+        ></v-app-bar-nav-icon>
     </v-app-bar>
 
     <v-navigation-drawer
@@ -39,13 +37,12 @@
         <slot name="user-navigation">
         </slot>
     </v-navigation-drawer>
-
 </template>
 
 <script setup lang="ts">
 
-    import {onMounted, ref} from "vue";
-    import {mdiAccount} from "@mdi/js";
+    import {onMounted, ref} from 'vue';
+    import {mdiAccount} from '@mdi/js';
 
     const userId = ref<string | null>(null);
     const leftDrawer = defineModel('leftDrawer', {type: Boolean, default: false});
@@ -53,16 +50,16 @@
 
     onMounted(() => {
         userId.value = document.documentElement.dataset.userId || null;
-    })
+    });
 
     const onClickLeftDrawer = () => {
         rightDrawer.value = false;
         leftDrawer.value = !leftDrawer.value;
-    }
+    };
 
     const onClickRightLeftDrawer = () => {
         leftDrawer.value = false;
         rightDrawer.value = !rightDrawer.value;
-    }
+    };
 
 </script>

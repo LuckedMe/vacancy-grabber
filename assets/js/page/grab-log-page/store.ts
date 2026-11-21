@@ -1,10 +1,10 @@
 import {defineStore} from 'pinia';
-import Paginator from "../../model/transport-response/Paginator";
-import HttpClient from "../../module/HttpClient";
-import GrabLogInfo from "../../model/grab-log/GrabLogInfo";
-import GrabLogInfoFilters from "../../model/grab-log/GrabLogInfoFilters";
-import ErrorValidation from "../../model/transport-response/ErrorValidation";
-import {computed, ref} from "vue";
+import Paginator from '../../model/transport-response/Paginator';
+import HttpClient from '../../module/HttpClient';
+import GrabLogInfo from '../../model/grab-log/GrabLogInfo';
+import GrabLogInfoFilters from '../../model/grab-log/GrabLogInfoFilters';
+import ErrorValidation from '../../model/transport-response/ErrorValidation';
+import {computed, ref} from 'vue';
 
 export const useGrabLogPageStore = defineStore('grab-log-page-store', () =>{
     // State
@@ -40,6 +40,6 @@ export const useGrabLogPageStore = defineStore('grab-log-page-store', () =>{
         appliedFilters,
         hasSortBy,
         // Actions
-        loadCollection
+        loadCollection,
     };
 });

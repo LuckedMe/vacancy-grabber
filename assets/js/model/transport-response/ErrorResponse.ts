@@ -1,4 +1,4 @@
-import {ServerValidationErrorInterface} from "../../types/ValidationErrorTypes";
+import {ServerValidationErrorInterface} from '../../types/ValidationErrorTypes';
 
 export default class ErrorResponse implements ServerValidationErrorInterface {
     public code: number;
@@ -8,7 +8,7 @@ export default class ErrorResponse implements ServerValidationErrorInterface {
     constructor(
         code: number,
         message: string,
-        errors?: { fields: Record<string, string> } | null
+        errors?: { fields: Record<string, string> } | null,
     ) {
         this.code = code;
         this.message = message;

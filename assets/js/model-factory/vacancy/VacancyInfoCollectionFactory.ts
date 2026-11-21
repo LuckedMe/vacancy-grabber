@@ -1,11 +1,11 @@
 import * as Yup from 'yup';
-import {InferType as YupInferType, array as YupArray, object as YupObject} from "yup";
-import FactoryInterface from "../../types/FactoryInterface";
-import VacancyInfoCollection from "../../model/vacancy/VacancyInfoCollection";
-import PaginatorFactory, {PaginatorSchema} from "../transport-response/PaginatorFactory";
-import FiltersFactory, {FiltersSchema} from "../transport-response/FiltersFactory";
-import VacancyInfoFactory, {VacancyInfoSchema} from "./VacancyInfoFactory";
-import VacancyInfo from "../../model/vacancy/VacancyInfo";
+import {InferType as YupInferType, array as YupArray, object as YupObject} from 'yup';
+import FactoryInterface from '../../types/FactoryInterface';
+import VacancyInfoCollection from '../../model/vacancy/VacancyInfoCollection';
+import PaginatorFactory, {PaginatorSchema} from '../transport-response/PaginatorFactory';
+import FiltersFactory, {FiltersSchema} from '../transport-response/FiltersFactory';
+import VacancyInfoFactory, {VacancyInfoSchema} from './VacancyInfoFactory';
+import VacancyInfo from '../../model/vacancy/VacancyInfo';
 
 export const VacancyInfoCollectionSchema = YupObject({
     items: YupArray().of(VacancyInfoSchema).required(),

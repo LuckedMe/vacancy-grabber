@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia';
-import {ref} from "vue";
+import {ref} from 'vue';
 
 export interface AlertInterface {
     title?: string | null,
@@ -12,7 +12,6 @@ export interface AlertInterface {
 export const useAlertStore = defineStore('alert-store', () => {
     // State
     const items = ref([] as AlertInterface[]);
-    const timeouts = ref([]);
 
     // Getters
     // const messages = computed(() => items.value);

@@ -1,13 +1,11 @@
 <template>
-
     <v-card-text v-if="formErrors.message">
-        <form-global-error :errors="[formErrors.message as string]" />
+        <form-global-error :errors="[formErrors.message as string]"></form-global-error>
     </v-card-text>
 
-    <v-progress-linear indeterminate v-if="loading"></v-progress-linear>
+    <v-progress-linear v-if="loading" indeterminate></v-progress-linear>
 
     <v-card-text v-if="formView">
-
         <div class="v-col-md-12 v-col-lg-9 v-col-xl-8 v-col-xxl-6">
             <v-form
                 ref="form"
@@ -15,7 +13,6 @@
                 :disabled="loading"
                 @submit.prevent="onSubmit"
             >
-
                 <v-row>
                     <v-col>
                         <v-text-field
@@ -26,7 +23,7 @@
                             clearable
                             label="Source Name"
                             type="text"
-                        />
+                        ></v-text-field>
                     </v-col>
                 </v-row>
 
@@ -39,7 +36,7 @@
                             clearable
                             label="URL"
                             type="text"
-                        />
+                        ></v-text-field>
                     </v-col>
                 </v-row>
 
@@ -52,31 +49,30 @@
                             :items="itemsActiveFormOptions"
                             clearable
                             label="Active"
-                        />
+                        ></v-select>
                     </v-col>
                 </v-row>
             </v-form>
         </div>
     </v-card-text>
-
 </template>
 
 <script setup lang="ts">
-    import {computed, onMounted, ref, useTemplateRef} from "vue";
-    import {useSourcePageStore} from "../../store";
-    import {itemsActiveFormOptions} from "../../../../utils/itemsActiveOptions";
-    import handleApiResponse, {clearFormErrors, normalizeFormToRequest, processApiResponse} from "../../../../module/HandleApiResponse";
-    import FormGlobalError from "../../../../component/general/FormGlobalError.vue";
-    import SourceDetailsFactory from "../../../../model-factory/source/SourceDetailsFactory";
-    import SourceDetails from "../../../../model/source/SourceDetails";
-    import ErrorResponse from "../../../../model/transport-response/ErrorResponse";
+    import {computed, onMounted, ref, useTemplateRef} from 'vue';
+    import {useSourcePageStore} from '../../store';
+    import {itemsActiveFormOptions} from '../../../../utils/itemsActiveOptions';
+    import handleApiResponse, {clearFormErrors, normalizeFormToRequest, processApiResponse} from '../../../../module/HandleApiResponse';
+    import FormGlobalError from '../../../../component/general/FormGlobalError.vue';
+    import SourceDetailsFactory from '../../../../model-factory/source/SourceDetailsFactory';
+    import SourceDetails from '../../../../model/source/SourceDetails';
+    import ErrorResponse from '../../../../model/transport-response/ErrorResponse';
 
     const sourcePageStore = useSourcePageStore();
-    const emit = defineEmits(['form:done', 'form:unable-load'])
+    const emit = defineEmits(['form:done', 'form:unable-load']);
     const loading = ref(false);
 
     const props = defineProps({
-        id: {type: String, required: false}
+        id: {type: String, required: false},
     });
 
     const form = useTemplateRef('form');
@@ -92,13 +88,13 @@
             name: null,
             url: null,
             active: null,
-        }
+        },
     });
     const formRules = computed(() => ({
         name: [() => formErrors.value.fields.name ?? null],
         url: [() => formErrors.value.fields.url ?? null],
         active: [() => formErrors.value.fields.active ?? null],
-    }))
+    }));
 
     onMounted(async () => {
         if (props.id) {

@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 import dayjs, {Dayjs} from 'dayjs';
-import {InferType as YupInferType, array as YupArray, object as YupObject} from "yup";
-import SourceInfo from "../../model/source/SourceInfo";
-import FactoryInterface from "../../types/FactoryInterface";
+import {InferType as YupInferType, array as YupArray, object as YupObject} from 'yup';
+import SourceInfo from '../../model/source/SourceInfo';
+import FactoryInterface from '../../types/FactoryInterface';
 
 export const SourceInfoValidator = {
     id: Yup.string().required(),

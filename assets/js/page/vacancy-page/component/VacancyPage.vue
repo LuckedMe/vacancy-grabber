@@ -1,17 +1,18 @@
 <template>
-
     <v-row>
         <v-col cols="11">
             <v-expansion-panels :loading="loading">
                 <v-expansion-panel :loading="loading">
-                    <template #title><h3>Filters</h3></template>
+                    <template #title>
+                        <h3>Filters</h3>
+                    </template>
                     <template #text>
                         <vacancy-page-filters
                             @filters:reset="onFiltersReset"
                             @filters:update="onFiltersUpdate"
                             @filters:submit="onFiltersSubmit"
                             @create:button="handleDialogActivator('create', null)"
-                        />
+                        ></vacancy-page-filters>
                     </template>
                 </v-expansion-panel>
             </v-expansion-panels>
@@ -25,12 +26,11 @@
                 color="primary"
                 class="ml-5 text-right"
                 @click="handleDialogActivator('create', null)"
-            />
+            ></v-btn>
         </v-col>
-
     </v-row>
 
-    <v-divider class="mt-5"/>
+    <v-divider class="mt-5"></v-divider>
 
     <v-data-table-server
         v-model:page="vacancyPageStore.filters.page as number"
@@ -60,7 +60,6 @@
         </template>
 
         <template #item.description="{ item }">
-
             <div v-if="item.externalId">
                 externalId: <strong>{{ item.externalId }}</strong>
             </div>
@@ -77,7 +76,7 @@
             </div>
 
             <div>
-                <app-html :html="item.description"/>
+                <app-html :html="item.description"></app-html>
             </div>
 
             <v-card-actions class="mb-5">
@@ -130,7 +129,7 @@
                 color="success"
                 size="x-large"
                 @update:model-value="handleDialogActivator('viewed', vacancyPageStore.items[index])"
-            />
+            ></v-switch>
         </template>
 
         <template #item.status="{ item, index }">
@@ -154,7 +153,7 @@
                 color="success"
                 size="x-large"
                 @update:model-value="handleDialogActivator('resumeSent', item)"
-            />
+            ></v-switch>
             <v-btn
                 v-else
                 color="success"
@@ -176,7 +175,6 @@
                 <strong v-else-if="item.deadLineAt?.diff(dayjs(), 'day') === 1">Dead Line: Tomorrow</strong>
                 <strong v-else>Dead Line: {{ item.deadLineAt?.diff(dayjs(), 'day') }} days</strong>
             </div>
-
         </template>
 
         <template #item.created_at="{ item }">
@@ -192,7 +190,7 @@
                     variant="tonal"
                     :prepend-icon="mdiPencil"
                     @click.prevent="handleDialogActivator('edit', item)"
-                />
+                ></v-btn>
 
                 <v-btn
                     text="Delete"
@@ -201,7 +199,7 @@
                     variant="tonal"
                     :prepend-icon="mdiDelete"
                     @click.prevent="handleDialogActivator('delete', item)"
-                />
+                ></v-btn>
             </v-card-actions>
         </template>
 
@@ -211,19 +209,22 @@
                 <td></td>
                 <td colspan="4">
                     <template v-if="item.companyNotesCount">
-                        <h3 class="mb-2">Company Notes: {{ item.companyNotesCount }}</h3>
-                        <vacancy-item-company-notes-list :item="item"/>
+                        <h3 class="mb-2">
+                            Company Notes: {{ item.companyNotesCount }}
+                        </h3>
+                        <vacancy-item-company-notes-list :item="item"></vacancy-item-company-notes-list>
                     </template>
 
                     <template v-if="item.notesCount">
-                        <h3 class="mb-2">Vacancy Notes: {{ item.notesCount }}</h3>
-                        <vacancy-item-vacancy-notes-list :item="item"/>
+                        <h3 class="mb-2">
+                            Vacancy Notes: {{ item.notesCount }}
+                        </h3>
+                        <vacancy-item-vacancy-notes-list :item="item"></vacancy-item-vacancy-notes-list>
                     </template>
                 </td>
                 <td colspan="3"></td>
             </tr>
         </template>
-
     </v-data-table-server>
 
     <vacancy-item-viewed-dialog
@@ -232,7 +233,7 @@
         :item="item as VacancyInfo"
         @confirmed="handleDialogDeActivator('viewed', true)"
         @canceled="handleDialogDeActivator('viewed', false)"
-    />
+    ></vacancy-item-viewed-dialog>
 
     <vacancy-item-resume-sent-dialog
         v-if="dialogs.resumeSent.model"
@@ -240,7 +241,7 @@
         :item="item as VacancyInfo"
         @confirmed="handleDialogDeActivator('resumeSent', true)"
         @canceled="handleDialogDeActivator('resumeSent', false)"
-    />
+    ></vacancy-item-resume-sent-dialog>
 
     <vacancy-item-status-dialog
         v-if="dialogs.status.model"
@@ -248,7 +249,7 @@
         :item="item as VacancyInfo"
         @confirmed="handleDialogDeActivator('status', true)"
         @canceled="handleDialogDeActivator('status', false)"
-    />
+    ></vacancy-item-status-dialog>
 
     <vacancy-item-create-dialog
         v-if="dialogs.create.model"
@@ -256,7 +257,7 @@
         :item="item as VacancyInfo"
         @confirmed="handleDialogDeActivator('create', true)"
         @canceled="handleDialogDeActivator('create', false)"
-    />
+    ></vacancy-item-create-dialog>
 
     <vacancy-item-edit-dialog
         v-if="dialogs.edit.model"
@@ -264,7 +265,7 @@
         :item="item as VacancyInfo"
         @confirmed="handleDialogDeActivator('edit', true)"
         @canceled="handleDialogDeActivator('edit', false)"
-    />
+    ></vacancy-item-edit-dialog>
 
     <vacancy-item-delete-dialog
         v-if="dialogs.delete.model"
@@ -272,7 +273,7 @@
         :item="item as VacancyInfo"
         @confirmed="handleDialogDeActivator('delete', true)"
         @canceled="handleDialogDeActivator('delete', false)"
-    />
+    ></vacancy-item-delete-dialog>
 
     <vacancy-item-note-list-dialog
         v-if="dialogs.noteList.model"
@@ -281,7 +282,7 @@
         @deleted="loadCollection"
         @confirmed="handleDialogDeActivator('noteList', true)"
         @canceled="handleDialogDeActivator('noteList', false)"
-    />
+    ></vacancy-item-note-list-dialog>
 
     <vacancy-item-note-create-dialog
         v-if="dialogs.noteCreate.model"
@@ -289,7 +290,7 @@
         :item="item as VacancyInfo"
         @confirmed="handleDialogDeActivator('noteCreate', true)"
         @canceled="handleDialogDeActivator('noteCreate', false)"
-    />
+    ></vacancy-item-note-create-dialog>
 
     <vacancy-item-details-dialog
         v-if="dialogs.details.model"
@@ -297,31 +298,30 @@
         :item="item as VacancyInfo"
         @confirmed="handleDialogDeActivator('details', true)"
         @canceled="handleDialogDeActivator('details', false)"
-    />
-
+    ></vacancy-item-details-dialog>
 </template>
 
 <script setup lang="ts">
-    import {computed, ref, watch} from "vue";
-    import {useVacancyPageStore} from "../store";
-    import {itemsPerPageOptions} from "../../../utils/itemsPerPageOptions";
-    import VacancyPageFilters from "./VacancyPageFilters.vue";
-    import VacancyInfo from "../../../model/vacancy/VacancyInfo";
-    import VacancyItemViewedDialog from "./dialog/VacancyItemViewedDialog.vue";
-    import VacancyItemResumeSentDialog from "./dialog/VacancyItemResumeSentDialog.vue";
-    import VacancyItemStatusDialog from "./dialog/VacancyItemStatusDialog.vue";
-    import VacancyItemEditDialog from "./dialog/VacancyItemEditDialog.vue";
-    import VacancyItemDeleteDialog from "./dialog/VacancyItemDeleteDialog.vue";
-    import VacancyItemCreateDialog from "./dialog/VacancyItemCreateDialog.vue";
-    import BaseCollectionTableOptions, {SortByInterface} from "../../../types/BaseCollectionTableOptions";
-    import {formatDateTime} from "../../../utils/DateUtils";
-    import {clearFormErrors, processApiResponse} from "../../../module/HandleApiResponse";
-    import VacancyInfoCollectionFactory from "../../../model-factory/vacancy/VacancyInfoCollectionFactory";
-    import VacancyInfoCollection from "../../../model/vacancy/VacancyInfoCollection";
-    import ErrorResponse from "../../../model/transport-response/ErrorResponse";
-    import {useFlashStore} from "../../../component/general/app-flash/store";
+    import {computed, ref, watch} from 'vue';
+    import {useVacancyPageStore} from '../store';
+    import {itemsPerPageOptions} from '../../../utils/itemsPerPageOptions';
+    import VacancyPageFilters from './VacancyPageFilters.vue';
+    import VacancyInfo from '../../../model/vacancy/VacancyInfo';
+    import VacancyItemViewedDialog from './dialog/VacancyItemViewedDialog.vue';
+    import VacancyItemResumeSentDialog from './dialog/VacancyItemResumeSentDialog.vue';
+    import VacancyItemStatusDialog from './dialog/VacancyItemStatusDialog.vue';
+    import VacancyItemEditDialog from './dialog/VacancyItemEditDialog.vue';
+    import VacancyItemDeleteDialog from './dialog/VacancyItemDeleteDialog.vue';
+    import VacancyItemCreateDialog from './dialog/VacancyItemCreateDialog.vue';
+    import BaseCollectionTableOptions, {SortByInterface} from '../../../types/BaseCollectionTableOptions';
+    import {formatDateTime} from '../../../utils/DateUtils';
+    import {clearFormErrors, processApiResponse} from '../../../module/HandleApiResponse';
+    import VacancyInfoCollectionFactory from '../../../model-factory/vacancy/VacancyInfoCollectionFactory';
+    import VacancyInfoCollection from '../../../model/vacancy/VacancyInfoCollection';
+    import ErrorResponse from '../../../model/transport-response/ErrorResponse';
+    import {useFlashStore} from '../../../component/general/app-flash/store';
     import _debounce from 'lodash/debounce';
-    import _cloneDeep from "lodash/cloneDeep";
+    import _cloneDeep from 'lodash/cloneDeep';
     import {
         mdiCheck,
         mdiChevronDown,
@@ -331,16 +331,16 @@
         mdiFormSelect,
         mdiNotePlus,
         mdiPencil,
-        mdiViewList
-    } from "@mdi/js";
-    import VacancyItemNoteCreateDialog from "./dialog/VacancyItemNoteCreateDialog.vue";
-    import VacancyItemNoteListDialog from "./dialog/VacancyItemNoteListDialog.vue";
-    import VacancyItemDetailsDialog from "./dialog/VacancyItemDetailsDialog.vue";
-    import dayjs from "dayjs";
-    import {scrollToDataTable} from "../../../utils/ScrollUtils";
-    import VacancyItemCompanyNotesList from "./vacancy-item-notes/VacancyItemCompanyNotesList.vue";
-    import VacancyItemVacancyNotesList from "./vacancy-item-notes/VacancyItemVacancyNotesList.vue";
-    import AppHtml from "../../../component/general/AppHtml.vue";
+        mdiViewList,
+    } from '@mdi/js';
+    import VacancyItemNoteCreateDialog from './dialog/VacancyItemNoteCreateDialog.vue';
+    import VacancyItemNoteListDialog from './dialog/VacancyItemNoteListDialog.vue';
+    import VacancyItemDetailsDialog from './dialog/VacancyItemDetailsDialog.vue';
+    import dayjs from 'dayjs';
+    import {scrollToDataTable} from '../../../utils/ScrollUtils';
+    import VacancyItemCompanyNotesList from './vacancy-item-notes/VacancyItemCompanyNotesList.vue';
+    import VacancyItemVacancyNotesList from './vacancy-item-notes/VacancyItemVacancyNotesList.vue';
+    import AppHtml from '../../../component/general/AppHtml.vue';
 
     const vacancyPageStore = useVacancyPageStore();
     const loading = computed(() => vacancyPageStore.loading);
@@ -354,7 +354,7 @@
             title: 'Resume Sent At',
             key: 'resume_sent_at',
             sortable: vacancyPageStore.hasSortBy('resume_sent_at'),
-            width: '100px'
+            width: '100px',
         },
         {title: 'Status', key: 'status', sortable: vacancyPageStore.hasSortBy('status'), width: '100px'},
 
@@ -375,14 +375,14 @@
     // made a copy, items could be changed separated from original version
     const cloneItems = () => _cloneDeep(vacancyPageStore.items).map(item => ({
         ...item,
-        isResumeSent: item.resumeSentAt !== null
+        isResumeSent: item.resumeSentAt !== null,
     }));
     const loadCollection = _debounce(async () => {
         clearFormErrors(vacancyPageStore.errors);
         await processApiResponse(vacancyPageStore.loadCollection(), vacancyPageStore.errors, new VacancyInfoCollectionFactory())
             .then((data: VacancyInfoCollection) => {
                 // update the originally loaded items
-                vacancyPageStore.items = data.items
+                vacancyPageStore.items = data.items;
                 vacancyPageStore.paginator = data.paginator;
                 vacancyPageStore.availableSortBy = data.filters?.availableSortBy || [];
                 vacancyPageStore.availableFilters = {...vacancyPageStore.availableFilters, ...data.filters?.availableFilters ?? {}};
@@ -397,12 +397,12 @@
     watch(
         () => vacancyPageStore.items,
         () => items.value = cloneItems(),
-        {deep: true}
+        {deep: true},
     );
 
     const onFiltersReset = (): void => {
         onFiltersSubmit();
-    }
+    };
 
     const onFiltersUpdate = (): void => {
         vacancyPageStore.filters.pushUrlParams();

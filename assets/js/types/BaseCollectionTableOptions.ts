@@ -7,4 +7,4 @@ export default interface BaseCollectionTableOptions {
     page: number;
     itemsPerPage: number;
     sortBy: SortByInterface[];
-}
+};

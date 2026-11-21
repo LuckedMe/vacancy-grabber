@@ -1,14 +1,14 @@
-import {ClientValidationErrorInterface, ServerValidationErrorInterface} from "../types/ValidationErrorTypes";
-import _forEach from "lodash/forEach";
-import _camelCase from "lodash/camelCase";
+import {ClientValidationErrorInterface, ServerValidationErrorInterface} from '../types/ValidationErrorTypes';
+import _forEach from 'lodash/forEach';
+import _camelCase from 'lodash/camelCase';
 import _transform from 'lodash/transform';
 import _isArray from 'lodash/isArray';
 import _isObject from 'lodash/isObject';
 import _snakeCase from 'lodash/snakeCase';
-import SuccessResponse from "../model/transport-response/SuccessResponse";
-import ErrorResponse from "../model/transport-response/ErrorResponse";
-import FactoryInterface from "../types/FactoryInterface";
-import handleApiResponse from "./HandleApiResponse";
+import SuccessResponse from '../model/transport-response/SuccessResponse';
+import ErrorResponse from '../model/transport-response/ErrorResponse';
+import FactoryInterface from '../types/FactoryInterface';
+import handleApiResponse from './HandleApiResponse';
 
 const HTTP_UNPROCESSABLE_ENTITY = 422;
 
@@ -24,11 +24,11 @@ const assignErrors = (errors: object, error: Violation): void => {
             errors[_camelCase(key as string)] = message;
         }
     });
-}
+};
 
 export const parseFormErrors = (
     response: ServerValidationErrorInterface,
-    errors: ClientValidationErrorInterface
+    errors: ClientValidationErrorInterface,
 ): void => {
     errors.message = response.message ?? null;
 
@@ -41,7 +41,7 @@ export const parseFormErrors = (
             }
         });
     }
-}
+};
 
 export const parseErrorValidation = (
     source: ClientValidationErrorInterface,
@@ -53,12 +53,12 @@ export const parseErrorValidation = (
         message: source.message,
         errors: {
             fields: source.fields,
-        }
+        },
     } as ServerValidationErrorInterface, errors);
-}
+};
 
 export const clearFormErrors = (
-    errors: ClientValidationErrorInterface
+    errors: ClientValidationErrorInterface,
 ): void => {
     errors.message = null;
 
@@ -67,7 +67,7 @@ export const clearFormErrors = (
             errors.fields![key] = null;
         });
     }
-}
+};
 
 export const normalizeFormToRequest = obj => _transform(obj, (result: any[] | {
     [index: string]: any
@@ -101,17 +101,17 @@ export const processApiResponse = async <T>(
     }
 
     return factory.create(response.data);
-}
+};
 
 export default async function (
     request: Promise<SuccessResponse>,
-    errors: ClientValidationErrorInterface
+    errors: ClientValidationErrorInterface,
 ): Promise<SuccessResponse | null> {
     const handleErrorResponse = (e: ErrorResponse): null => {
         parseFormErrors({
             code: e.code,
             message: e.message,
-            errors: e.errors
+            errors: e.errors,
         } as ServerValidationErrorInterface, errors);
 
         return null;
@@ -121,7 +121,7 @@ export default async function (
         .then((r: SuccessResponse): SuccessResponse => {
             if (r.error) {
                 parseFormErrors({
-                    message: r.error
+                    message: r.error,
                 } as ServerValidationErrorInterface, errors);
             }
 

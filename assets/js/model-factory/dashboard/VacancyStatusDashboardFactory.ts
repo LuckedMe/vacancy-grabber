@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 import dayjs, {Dayjs} from 'dayjs';
-import {InferType as YupInferType, array as YupArray, object as YupObject} from "yup";
-import VacancyStatusDashboard from "../../model/dashboard/VacancyStatusDashboard";
-import FactoryInterface from "../../types/FactoryInterface";
+import {InferType as YupInferType, array as YupArray, object as YupObject} from 'yup';
+import VacancyStatusDashboard from '../../model/dashboard/VacancyStatusDashboard';
+import FactoryInterface from '../../types/FactoryInterface';
 
 export const VacancyStatusDashboardValidator = {
     number: Yup.number().required().nullable().default(0),

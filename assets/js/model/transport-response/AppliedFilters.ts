@@ -1,7 +1,7 @@
-import {camelCase, snakeCase} from "lodash";
-import Paginator from "./Paginator";
-import {SortByInterface} from "../../types/BaseCollectionTableOptions";
-import {pushUrlParams} from "../../utils/UrlUtils";
+import {camelCase, snakeCase} from 'lodash';
+import Paginator from './Paginator';
+import {SortByInterface} from '../../types/BaseCollectionTableOptions';
+import {pushUrlParams} from '../../utils/UrlUtils';
 
 export default class AppliedFilters {
     constructor(
@@ -64,7 +64,7 @@ export default class AppliedFilters {
                 // convert property name to snake_case
                 .map(([key, value]) => {
                     return [snakeCase(key), value];
-                })
+                }),
         );
     }
 
@@ -77,7 +77,7 @@ export default class AppliedFilters {
             // convert property name to camelCase
             .map(([key, value]) => {
                 return [camelCase(key), value];
-            })
+            }),
         );
     }
 

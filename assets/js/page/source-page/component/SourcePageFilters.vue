@@ -1,14 +1,12 @@
 <template>
-
     <v-card-text>
         <div class="v-col-md-12 v-col-lg-9 v-col-xl-8 v-col-xxl-6">
             <v-form
                 ref="form"
                 validate-on="submit"
-                @submit.prevent="onSubmit"
                 :loading="loading"
+                @submit.prevent="onSubmit"
             >
-
                 <v-row>
                     <v-col cols="2">
                         <v-text-field
@@ -20,7 +18,7 @@
                             type="date"
                             label="Start Day"
                             @update:model-value="onUpdate()"
-                        />
+                        ></v-text-field>
                     </v-col>
 
                     <v-col cols="2">
@@ -33,7 +31,7 @@
                             type="date"
                             label="Start Day"
                             @update:model-value="onUpdate()"
-                        />
+                        ></v-text-field>
                     </v-col>
 
                     <v-col cols="2">
@@ -47,7 +45,7 @@
                             label="Is Active?"
                             placeholder="All"
                             @update:model-value="onUpdate()"
-                        />
+                        ></v-select>
                     </v-col>
 
                     <v-col cols="6">
@@ -55,10 +53,9 @@
                             {{ formErrors.message }}
                         </div>
                     </v-col>
-
                 </v-row>
 
-                <v-divider class="my-2"/>
+                <v-divider class="my-2"></v-divider>
 
                 <v-row>
                     <v-col cols="6">
@@ -70,7 +67,7 @@
                             clearable
                             label="Search"
                             placeholder="Search"
-                        />
+                        ></v-text-field>
                     </v-col>
 
                     <v-col cols="2">
@@ -81,7 +78,7 @@
                             color="secondary"
                             class="ml-5 text-right"
                             type="submit"
-                        />
+                        ></v-btn>
                     </v-col>
 
                     <v-col cols="2">
@@ -91,31 +88,29 @@
                             :disabled="loading"
                             color="secondary"
                             class="ml-5 text-right"
-                            @click="onReset"
                             variant="tonal"
-                        />
+                            @click="onReset"
+                        ></v-btn>
                     </v-col>
 
                     <v-col cols="2">
                     </v-col>
                 </v-row>
-
             </v-form>
         </div>
     </v-card-text>
-
 </template>
 
 <script setup lang="ts">
-    import {computed, onMounted, ref, useTemplateRef, watch} from "vue";
-    import {useSourcePageStore} from "../store";
-    import {itemsActiveFiltersOptions} from "../../../utils/itemsActiveOptions";
-    import {useFlashStore} from "../../../component/general/app-flash/store";
-    import {clearFormErrors, parseErrorValidation} from "../../../module/HandleApiResponse";
+    import {computed, onMounted, ref, useTemplateRef, watch} from 'vue';
+    import {useSourcePageStore} from '../store';
+    import {itemsActiveFiltersOptions} from '../../../utils/itemsActiveOptions';
+    import {useFlashStore} from '../../../component/general/app-flash/store';
+    import {clearFormErrors, parseErrorValidation} from '../../../module/HandleApiResponse';
 
     const flashStore = useFlashStore();
     const sourcePageStore = useSourcePageStore();
-    const emit = defineEmits(['filters:submit', 'filters:update', 'filters:reset', 'create:button'])
+    const emit = defineEmits(['filters:submit', 'filters:update', 'filters:reset', 'create:button']);
     const loading = computed(() => sourcePageStore.loading);
 
     onMounted(async () => {
@@ -141,8 +136,8 @@
         return {
             message: message ?? null,
             fields: Object.fromEntries(
-                Object.entries(fields).map(([key, value]) => [key, value ?? null])
-            )
+                Object.entries(fields).map(([key, value]) => [key, value ?? null]),
+            ),
         } as formErrorsInterface;
     });
 

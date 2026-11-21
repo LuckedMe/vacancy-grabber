@@ -1,18 +1,18 @@
-import SourceSummary from "./SourceSummary";
-import DataCollection from "../transport-response/DataCollection";
-import Paginator from "../transport-response/Paginator";
-import Filters from "../transport-response/Filters";
+import SourceSummary from './SourceSummary';
+import DataCollection from '../transport-response/DataCollection';
+import Paginator from '../transport-response/Paginator';
+import Filters from '../transport-response/Filters';
 
 export default class SourceSummaryCollection extends DataCollection<SourceSummary> {
     constructor(
         items: SourceSummary[],
         paginator: Paginator,
-        filters: Filters | null
+        filters: Filters | null,
     ) {
         super(
             items,
             paginator,
-            filters
+            filters,
         );
     }
 

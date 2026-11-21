@@ -1,11 +1,11 @@
 import * as Yup from 'yup';
-import {InferType as YupInferType, array as YupArray, object as YupObject} from "yup";
-import FactoryInterface from "../../types/FactoryInterface";
-import VacancyNoteCollection from "../../model/vacancy/VacancyNoteCollection";
-import VacancyNoteFactory, {VacancyNoteSchema} from "./VacancyNoteFactory";
-import VacancyNote from "../../model/vacancy/VacancyNote";
-import PaginatorFactory, {PaginatorSchema} from "../transport-response/PaginatorFactory";
-import FiltersFactory, {FiltersSchema} from "../transport-response/FiltersFactory";
+import {InferType as YupInferType, array as YupArray, object as YupObject} from 'yup';
+import FactoryInterface from '../../types/FactoryInterface';
+import VacancyNoteCollection from '../../model/vacancy/VacancyNoteCollection';
+import VacancyNoteFactory, {VacancyNoteSchema} from './VacancyNoteFactory';
+import VacancyNote from '../../model/vacancy/VacancyNote';
+import PaginatorFactory, {PaginatorSchema} from '../transport-response/PaginatorFactory';
+import FiltersFactory, {FiltersSchema} from '../transport-response/FiltersFactory';
 
 export const VacancyNoteCollectionSchema = YupObject({
     items: YupArray().of(VacancyNoteSchema).required(),

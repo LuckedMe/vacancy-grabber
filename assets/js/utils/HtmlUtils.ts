@@ -3,4 +3,4 @@ export const nl2br = (text?: string | null): string => {
         return '';
     }
     return text.replace(/\n/g, '<br>');
-}
+};

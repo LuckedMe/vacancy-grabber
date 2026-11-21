@@ -2,22 +2,22 @@
     <app-confirm-dialog
         v-if="dialog"
         v-model:dialog="dialog"
+        leave-open
+        :title="(item?.active ? 'Deactivate' : 'Activate') + ' the source: ' + item?.name"
         @confirmed="onConfirmed"
         @canceled="onCanceled"
         @keyup.esc="onCanceled"
         @keyup.enter="onConfirmed"
-        leave-open
-        :title="(item?.active ? 'Deactivate' : 'Activate') + ' the source: ' + item?.name"
-    />
+    ></app-confirm-dialog>
 </template>
 
 <script setup lang="ts">
-    import {useSourcePageStore} from "../../store";
-    import AppConfirmDialog from "../../../../component/general/app-dialog/AppConfirmDialog.vue";
-    import SourceInfo from "../../../../model/source/SourceInfo";
-    import {useFlashStore} from "../../../../component/general/app-flash/store";
-    import handleApiResponse from "../../../../module/HandleApiResponse";
-    import ErrorValidation from "../../../../model/transport-response/ErrorValidation";
+    import {useSourcePageStore} from '../../store';
+    import AppConfirmDialog from '../../../../component/general/app-dialog/AppConfirmDialog.vue';
+    import SourceInfo from '../../../../model/source/SourceInfo';
+    import {useFlashStore} from '../../../../component/general/app-flash/store';
+    import handleApiResponse from '../../../../module/HandleApiResponse';
+    import ErrorValidation from '../../../../model/transport-response/ErrorValidation';
 
     const props = defineProps({
         item: {
@@ -28,11 +28,11 @@
 
     const flashStore = useFlashStore();
     const sourcePageStore = useSourcePageStore();
-    const emit = defineEmits(['confirmed', 'canceled'])
+    const emit = defineEmits(['confirmed', 'canceled']);
     const dialog = defineModel('dialog', { type: Boolean, default: false });
 
     const onConfirmed = async () => {
-        const active = !(!!props.item?.active); // convert to boolean, then set the opposite as was before
+        const active = !(props.item?.active); // convert to boolean, then set the opposite as was before
         const errors = new ErrorValidation();
         const data = {properties: ['active'], active};
         const result = await handleApiResponse(sourcePageStore.patch(props.item?.id as string, data), errors);

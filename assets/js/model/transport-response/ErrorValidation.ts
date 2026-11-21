@@ -1,4 +1,4 @@
-import {ClientValidationErrorInterface} from "../../types/ValidationErrorTypes";
+import {ClientValidationErrorInterface} from '../../types/ValidationErrorTypes';
 
 export default class ErrorValidation implements ClientValidationErrorInterface {
     message: string | null;
@@ -6,7 +6,7 @@ export default class ErrorValidation implements ClientValidationErrorInterface {
 
     constructor(
         message?: string | null,
-        fields?: Record<string, string | null>
+        fields?: Record<string, string | null>,
     ) {
         this.message = message || null;
         this.fields = fields || {};

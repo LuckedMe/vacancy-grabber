@@ -1,7 +1,7 @@
 import {AxiosResponse, AxiosResponseHeaders, InternalAxiosRequestConfig, RawAxiosResponseHeaders} from 'axios';
-import DataCollection from "./DataCollection";
-import DataCollectionFactory from "../../model-factory/transport-response/DataCollectionFactory";
-import _toLower from "lodash/toLower";
+import DataCollection from './DataCollection';
+import DataCollectionFactory from '../../model-factory/transport-response/DataCollectionFactory';
+import _toLower from 'lodash/toLower';
 
 export default class SuccessResponse implements AxiosResponse {
     private readonly _response: AxiosResponse;

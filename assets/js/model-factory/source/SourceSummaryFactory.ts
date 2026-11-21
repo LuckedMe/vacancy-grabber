@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
-import {InferType as YupInferType, array as YupArray, object as YupObject} from "yup";
-import SourceSummary from "../../model/source/SourceSummary";
-import FactoryInterface from "../../types/FactoryInterface";
+import {InferType as YupInferType, array as YupArray, object as YupObject} from 'yup';
+import SourceSummary from '../../model/source/SourceSummary';
+import FactoryInterface from '../../types/FactoryInterface';
 
 export const SourceSummaryValidator = {
     id: Yup.string().required(),
