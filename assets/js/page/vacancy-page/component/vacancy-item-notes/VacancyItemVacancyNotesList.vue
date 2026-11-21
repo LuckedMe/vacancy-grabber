@@ -13,14 +13,14 @@
         class="hide-items-per-page-options"
         @update:options="onTableOptionsUpdated"
     >
-        <template #item.notedAt="{ item }">
-            {{ formatDateTime(item.notedAt) }}
+        <template #item.notedAt="{ item: entry }">
+            {{ formatDateTime(entry.notedAt) }}
         </template>
 
-        <template #item.description="{ item }">
+        <template #item.description="{ item: entry }">
             <v-confirm-edit
-                v-if="item.edit"
-                v-model="item.description"
+                v-if="entry.edit"
+                v-model="entry.description"
                 hide-actions
             >
                 <template #default="{ model: proxyModel, save, cancel, isPristine }">
@@ -37,7 +37,7 @@
                         <v-btn
                             color="error"
                             text="Cancel"
-                            @click="cancel; item.edit=false;"
+                            @click="cancel; entry.edit=false;"
                         ></v-btn>
                         <v-spacer></v-spacer>
 
@@ -45,25 +45,25 @@
                             color="primary"
                             :disabled="isPristine"
                             text="Ok"
-                            @click="onClickSaveNote(item, proxyModel.value)"
+                            @click="onClickSaveNote(entry, proxyModel.value)"
                         ></v-btn>
                     </v-card-actions>
                 </template>
             </v-confirm-edit>
 
             <v-row v-else>
-                <app-html :html="item.description"></app-html>
+                <app-html :html="entry.description"></app-html>
             </v-row>
         </template>
 
-        <template #item.actions="{ item, index }">
+        <template #item.actions="{ item: entry, index }">
             <v-card-actions>
                 <v-btn
                     text="Edit"
                     color="primary"
-                    :disabled="item.edit"
+                    :disabled="entry.edit"
                     :prepend-icon="mdiPencil"
-                    @click.prevent="item.edit=true"
+                    @click.prevent="entry.edit=true"
                 ></v-btn>
 
                 <v-btn
@@ -71,7 +71,7 @@
                     text="Delete"
                     color="error"
                     :prepend-icon="mdiDelete"
-                    @click.prevent="handleConfirmDelete(item)"
+                    @click.prevent="handleConfirmDelete(entry)"
                 ></v-btn>
             </v-card-actions>
         </template>

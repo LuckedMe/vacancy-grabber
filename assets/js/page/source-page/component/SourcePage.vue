@@ -45,19 +45,19 @@
         :items-per-page-options="itemsPerPageOptions"
         @update:options="onTableOptionsUpdated"
     >
-        <template #item.name="{ item }">
-            {{ item.name }}
+        <template #item.name="{ item: entry }">
+            {{ entry.name }}
         </template>
 
-        <template #item.url="{ item }">
+        <template #item.url="{ item: entry }">
             <div style="max-width: 300px; overflow-wrap: break-word; white-space: normal;">
-                <a :href="item.url" target="_blank">{{ item.url }}</a>
+                <a :href="entry.url" target="_blank">{{ entry.url }}</a>
             </div>
         </template>
 
-        <template #item.active="{ item, index }">
+        <template #item.active="{ item: entry, index }">
             <v-switch
-                v-model="item.active"
+                v-model="entry.active"
                 :loading="loading"
                 :true-icon="mdiCheck"
                 :false-icon="mdiClose"
@@ -67,10 +67,10 @@
             ></v-switch>
         </template>
 
-        <template #item.action-grab="{ item, index }">
+        <template #item.action-grab="{ item: entry, index }">
             <v-card-actions>
                 <v-btn
-                    :disabled="!item.active"
+                    :disabled="!entry.active"
                     text="Grab"
                     class="ml-1"
                     color="secondary"
@@ -80,15 +80,15 @@
             </v-card-actions>
         </template>
 
-        <template #item.last_grabbed_at="{ item }">
-            {{ formatDateTime(item.lastGrabbedAt) }}
+        <template #item.last_grabbed_at="{ item: entry }">
+            {{ formatDateTime(entry.lastGrabbedAt) }}
         </template>
 
-        <template #item.created_at="{ item }">
-            {{ formatDateTime(item.createdAt) }}
+        <template #item.created_at="{ item: entry }">
+            {{ formatDateTime(entry.createdAt) }}
         </template>
 
-        <template #item.actions="{ item, index }">
+        <template #item.actions="{ item: entry, index }">
             <v-card-actions>
                 <v-btn
                     text="Edit"
@@ -152,7 +152,6 @@
 </template>
 
 <script setup lang="ts">
-
     import {computed, ref, watch} from 'vue';
     import {useSourcePageStore} from '../store';
     import {itemsPerPageOptions} from '../../../utils/itemsPerPageOptions';
@@ -192,6 +191,7 @@
 
     const item = ref(null as SourceInfo | null);
     const items = ref([] as SourceInfo[]);
+
     // made a copy, items could be changed separated from original version
     const cloneItems = () => _cloneDeep(sourcePageStore.items).map(item => ({...item, edit: false}));
     const loadCollection = _debounce(async () => {

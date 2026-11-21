@@ -2,9 +2,9 @@
     <v-snackbar-queue
         ref="flash-message-queue"
         v-model="flashStore.items"
-        :absolute="props.absolute"
-        :timeout="props.timeout"
-        :total-visible="props.totalVisible"
+        :absolute="absolute"
+        :timeout="timeout"
+        :total-visible="totalVisible"
         transition="bouncy-slide-auto"
     >
         <template #text="{ item, props}">
@@ -28,7 +28,7 @@
         </template>
     </v-snackbar-queue>
 
-    <v-card-text v-if="props.example" class="mt-5">
+    <v-card-text v-if="example" class="mt-5">
         <v-divider class="my-2"></v-divider>
 
         <div>Flash:</div>

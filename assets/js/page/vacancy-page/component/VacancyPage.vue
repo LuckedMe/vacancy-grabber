@@ -48,35 +48,35 @@
         item-value="id"
         @update:options="onTableOptionsUpdated"
     >
-        <template #item.company="{ item }">
-            <div v-if="item.companyName">
+        <template #item.company="{ item: entry }">
+            <div v-if="entry.companyName">
                 <strong>
-                    <a :href="'/vacancies?company=' + item.companyId">{{ item.companyName }}</a>
+                    <a :href="'/vacancies?company=' + entry.companyId">{{ entry.companyName }}</a>
                 </strong>
             </div>
-            <div v-if="item.sourceName">
-                ({{ item.sourceName }})
+            <div v-if="entry.sourceName">
+                ({{ entry.sourceName }})
             </div>
         </template>
 
-        <template #item.description="{ item }">
-            <div v-if="item.externalId">
-                externalId: <strong>{{ item.externalId }}</strong>
+        <template #item.description="{ item: entry }">
+            <div v-if="entry.externalId">
+                externalId: <strong>{{ entry.externalId }}</strong>
             </div>
 
-            <div v-if="item.salary">
-                salary: <strong>{{ item.salary }}</strong>
+            <div v-if="entry.salary">
+                salary: <strong>{{ entry.salary }}</strong>
             </div>
 
-            <div v-if="item.title">
-                <strong v-if="item.url">
-                    <a :href="item.url" target="_blank">{{ item.title }}</a>
+            <div v-if="entry.title">
+                <strong v-if="entry.url">
+                    <a :href="entry.url" target="_blank">{{ entry.title }}</a>
                 </strong>
-                <strong v-else>{{ item.title }}</strong>
+                <strong v-else>{{ entry.title }}</strong>
             </div>
 
             <div>
-                <app-html :html="item.description"></app-html>
+                <app-html :html="entry.description"></app-html>
             </div>
 
             <v-card-actions class="mb-5">
@@ -84,7 +84,7 @@
                     :prepend-icon="mdiNotePlus"
                     variant="tonal"
                     color="primary"
-                    @click.prevent="handleDialogActivator('details', item)"
+                    @click.prevent="handleDialogActivator('details', entry)"
                 >
                     Add Details
                 </v-btn>
@@ -103,26 +103,26 @@
                     :prepend-icon="mdiNotePlus"
                     variant="tonal"
                     color="primary"
-                    @click.prevent="handleDialogActivator('noteCreate', item)"
+                    @click.prevent="handleDialogActivator('noteCreate', entry)"
                 >
                     Add Note
                 </v-btn>
 
                 <v-btn
-                    :disabled="item.notesCount == 0"
-                    :prepend-icon="isExpanded(item) ? mdiChevronUp : mdiChevronDown"
+                    :disabled="entry.notesCount == 0 && entry.companyNotesCount == 0"
+                    :prepend-icon="isExpanded(entry) ? mdiChevronUp : mdiChevronDown"
                     variant="tonal"
                     color="primary"
-                    @click.prevent="toggleExpanded(item)"
+                    @click.prevent="toggleExpanded(entry)"
                 >
-                    Latest Notes: {{ item.companyNotesCount + item.notesCount }}
+                    Latest Notes: {{ entry.notesCount + entry.companyNotesCount }}
                 </v-btn>
             </v-card-actions>
         </template>
 
-        <template #item.viewed="{ item, index }">
+        <template #item.viewed="{ item: row, index }">
             <v-switch
-                v-model="item.viewed"
+                v-model="row.viewed"
                 :loading="loading"
                 :true-icon="mdiCheck"
                 :false-icon="mdiClose"
@@ -132,56 +132,56 @@
             ></v-switch>
         </template>
 
-        <template #item.status="{ item, index }">
+        <template #item.status="{ item: entry, index }">
             <v-btn
                 :prepend-icon="mdiFormSelect"
                 variant="tonal"
                 color="primary"
-                @click.prevent="handleDialogActivator('status', item)"
+                @click.prevent="handleDialogActivator('status', entry)"
             >
-                {{ item.status }}
+                {{ entry.status }}
             </v-btn>
         </template>
 
-        <template #item.resume_sent_at="{ item }">
+        <template #item.resume_sent_at="{ item: entry }">
             <v-switch
-                v-if="!item.isResumeSent"
-                v-model="item.isResumeSent"
+                v-if="!entry.isResumeSent"
+                v-model="entry.isResumeSent"
                 :loading="loading"
                 :true-icon="mdiCheck"
                 :false-icon="mdiClose"
                 color="success"
                 size="x-large"
-                @update:model-value="handleDialogActivator('resumeSent', item)"
+                @update:model-value="handleDialogActivator('resumeSent', entry)"
             ></v-switch>
             <v-btn
                 v-else
                 color="success"
                 variant="tonal"
                 prepend-icon="$success"
-                @click="handleDialogActivator('resumeSent', item)"
+                @click="handleDialogActivator('resumeSent', entry)"
             >
-                SentAt: {{ formatDateTime(item.resumeSentAt) }}
+                SentAt: {{ formatDateTime(entry.resumeSentAt) }}
             </v-btn>
 
-            <div v-if="item.resumeSentAt">
-                <strong v-if="dayjs().diff(item.resumeSentAt, 'day') === 0">Sent: Today</strong>
-                <strong v-else-if="dayjs().diff(item.resumeSentAt, 'day') === 1">Sent: Yesterday</strong>
-                <strong v-else>Sent: {{ dayjs().diff(item.resumeSentAt, 'day') }} days ago</strong>
+            <div v-if="entry.resumeSentAt">
+                <strong v-if="dayjs().diff(entry.resumeSentAt, 'day') === 0">Sent: Today</strong>
+                <strong v-else-if="dayjs().diff(entry.resumeSentAt, 'day') === 1">Sent: Yesterday</strong>
+                <strong v-else>Sent: {{ dayjs().diff(entry.resumeSentAt, 'day') }} days ago</strong>
             </div>
 
-            <div v-if="item.deadLineAt">
-                <strong v-if="item.deadLineAt?.diff(dayjs(), 'day') === 0">Dead Line: Today</strong>
-                <strong v-else-if="item.deadLineAt?.diff(dayjs(), 'day') === 1">Dead Line: Tomorrow</strong>
-                <strong v-else>Dead Line: {{ item.deadLineAt?.diff(dayjs(), 'day') }} days</strong>
+            <div v-if="entry.deadLineAt">
+                <strong v-if="entry.deadLineAt?.diff(dayjs(), 'day') === 0">Dead Line: Today</strong>
+                <strong v-else-if="entry.deadLineAt?.diff(dayjs(), 'day') === 1">Dead Line: Tomorrow</strong>
+                <strong v-else>Dead Line: {{ entry.deadLineAt?.diff(dayjs(), 'day') }} days</strong>
             </div>
         </template>
 
-        <template #item.created_at="{ item }">
-            {{ formatDateTime(item.createdAt) }}
+        <template #item.created_at="{ item: entry }">
+            {{ formatDateTime(entry.createdAt) }}
         </template>
 
-        <template #item.actions="{ item, index }">
+        <template #item.actions="{ item: entry, index }">
             <v-card-actions>
                 <v-btn
                     text="Edit"
@@ -189,7 +189,7 @@
                     color="primary"
                     variant="tonal"
                     :prepend-icon="mdiPencil"
-                    @click.prevent="handleDialogActivator('edit', item)"
+                    @click.prevent="handleDialogActivator('edit', entry)"
                 ></v-btn>
 
                 <v-btn
@@ -198,28 +198,28 @@
                     color="error"
                     variant="tonal"
                     :prepend-icon="mdiDelete"
-                    @click.prevent="handleDialogActivator('delete', item)"
+                    @click.prevent="handleDialogActivator('delete', entry)"
                 ></v-btn>
             </v-card-actions>
         </template>
 
-        <template #expanded-row="{ columns, item }">
+        <template #expanded-row="{ columns, item: entry }">
             <tr class="mb-15">
                 <td></td>
                 <td></td>
                 <td colspan="4">
-                    <template v-if="item.companyNotesCount">
+                    <template v-if="entry.companyNotesCount">
                         <h3 class="mb-2">
-                            Company Notes: {{ item.companyNotesCount }}
+                            Company Notes: {{ entry.companyNotesCount }}
                         </h3>
-                        <vacancy-item-company-notes-list :item="item"></vacancy-item-company-notes-list>
+                        <vacancy-item-company-notes-list :item="entry"></vacancy-item-company-notes-list>
                     </template>
 
-                    <template v-if="item.notesCount">
+                    <template v-if="entry.notesCount">
                         <h3 class="mb-2">
-                            Vacancy Notes: {{ item.notesCount }}
+                            Vacancy Notes: {{ entry.notesCount }}
                         </h3>
-                        <vacancy-item-vacancy-notes-list :item="item"></vacancy-item-vacancy-notes-list>
+                        <vacancy-item-vacancy-notes-list :item="entry"></vacancy-item-vacancy-notes-list>
                     </template>
                 </td>
                 <td colspan="3"></td>
