@@ -71,7 +71,7 @@
     const loading = ref(false);
 
     const props = defineProps({
-        id: {type: String, required: false},
+        id: {type: String, required: false, default: null},
     });
 
     const form = useTemplateRef('form');
