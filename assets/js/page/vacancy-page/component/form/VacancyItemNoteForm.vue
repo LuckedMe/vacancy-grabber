@@ -50,7 +50,6 @@
     import {useVacancyPageStore} from '../../store';
     import handleApiResponse, {clearFormErrors, normalizeFormToRequest, processApiResponse} from '../../../../module/HandleApiResponse';
     import FormGlobalError from '../../../../component/general/FormGlobalError.vue';
-    import ErrorResponse from '../../../../model/transport-response/ErrorResponse';
     import {formatDateUrl} from '../../../../utils/DateUtils';
     import {scrollToFormFieldError} from '../../../../utils/ScrollUtils';
     import dayjs from 'dayjs';
@@ -63,7 +62,7 @@
 
     const props = defineProps({
         id: {type: String, required: true},
-        noteId: {type: String, required: false},
+        noteId: {type: String, required: false, default: null},
     });
 
     const form = useTemplateRef('form');
@@ -97,7 +96,7 @@
                     formView.value = true;
                     formData.value.description = data.description;
                     formData.value.notedAt = formatDateUrl(data.notedAt);
-                }, (response: ErrorResponse) => {
+                }, (/*response: ErrorResponse*/) => {
                     formView.value = false;
                     emit('form:unable-load');
                 }).finally(() => loading.value = false);

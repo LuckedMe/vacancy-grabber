@@ -28,7 +28,7 @@
     import {useFlashStore} from '../../../../component/general/app-flash/store';
     import SourceDetailsForm from '../form/SourceDetailsForm.vue';
 
-    const props = defineProps({
+    defineProps({
         item: {
             type: SourceInfo,
             required: true,

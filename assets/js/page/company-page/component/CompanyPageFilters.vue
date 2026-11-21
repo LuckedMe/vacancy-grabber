@@ -62,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-    import {computed, onMounted, ref, useTemplateRef, watch} from 'vue';
+    import {computed, onMounted, useTemplateRef, watch} from 'vue';
     import {useCompanyPageStore} from '../store';
     import {useFlashStore} from '../../../component/general/app-flash/store';
     import {clearFormErrors, parseErrorValidation} from '../../../module/HandleApiResponse';
@@ -114,12 +114,12 @@
         emit('filters:reset');
     };
 
-    const onUpdate = async () => {
-        form.value.resetValidation();
-        const {valid: formIsValid} = await form.value.validate();
-
-        emit('filters:update');
-    };
+    // const onUpdate = async () => {
+    //     form.value.resetValidation();
+    //     // const {valid: formIsValid} = await form.value.validate();
+    //
+    //     emit('filters:update');
+    // };
 
     const onSubmit = async () => {
         clearFormErrors(formErrors.value);

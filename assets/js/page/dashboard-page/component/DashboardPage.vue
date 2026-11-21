@@ -34,7 +34,7 @@
 <script setup lang="ts">
     import DashboardResumeSentMonthly from './dashboard/DashboardResumeSentMonthly.vue';
     import DashboardVacancyStatus from './dashboard/DashboardVacancyStatus.vue';
-    import {computed, onMounted, ref} from 'vue';
+    import {onMounted, ref} from 'vue';
     import {processApiResponse} from '../../../module/HandleApiResponse';
     import ResumeSentDashboardInfoCollectionFactory
         from '../../../model-factory/dashboard/ResumeSentDashboardInfoCollectionFactory';
@@ -47,7 +47,6 @@
     import ResumeSentDashboardInfo from '../../../model/dashboard/ResumeSentDashboardInfo';
 
     const dashboardPageStore = useDashboardPageStore();
-    const loading = computed(() => dashboardPageStore.loading);
     const errors = ref<ErrorValidation>(new ErrorValidation());
 
     const vacancyStatusDashboard = ref<VacancyStatusDashboard>({

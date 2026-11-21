@@ -7,6 +7,9 @@ import SuccessResponse from '../model/transport-response/SuccessResponse';
 import {ServerValidationErrorInterface} from '../types/ValidationErrorTypes';
 // import {throttleAdapterEnhancer} from 'axios-extensions';
 
+const HTTP_BAD_REQUEST = 400;
+const HTTP_UNAUTHORIZED = 401;
+
 let currentLocale = 'en_GB';
 
 const HttpClient = Axios.create({
@@ -47,7 +50,7 @@ HttpClient.interceptors.response.use(response => {
     return new SuccessResponse(response);
 }, error => {
     if (error.response
-        && error.response.status === 401
+        && error.response.status === HTTP_UNAUTHORIZED
         && error.request.responseURL !== RouteGenerator.generate('api.auth.login', {}, true)
     ) {
         EventBus.emit(events.LOGIN_REQUIRED);
@@ -57,7 +60,7 @@ HttpClient.interceptors.response.use(response => {
 
     console.error('HttpClient.interceptors.response: Bad request', data);
     throw new ErrorResponse(
-        data.code || 400,
+        data.code || HTTP_BAD_REQUEST,
         data.message ?? 'Bad request',
         data.errors,
     );

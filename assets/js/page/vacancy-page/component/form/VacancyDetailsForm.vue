@@ -123,18 +123,16 @@
     import FormGlobalError from '../../../../component/general/FormGlobalError.vue';
     import VacancyDetailsFactory from '../../../../model-factory/vacancy/VacancyDetailsFactory';
     import VacancyDetails from '../../../../model/vacancy/VacancyDetails';
-    import ErrorResponse from '../../../../model/transport-response/ErrorResponse';
-    import {formatDate, formatDateUrl} from '../../../../utils/DateUtils';
+    import { formatDateUrl} from '../../../../utils/DateUtils';
     import {itemsIsResumeStatusOptions} from '../types/itemsIsResumeStatusOptions';
-    import {useSourcePageStore} from '../../../source-page/store';
-    import {useCompanyPageStore} from '../../../company-page/store';
+    //import {useSourcePageStore} from '../../../source-page/store';
     import {scrollToFormFieldError} from '../../../../utils/ScrollUtils';
     import {mdiCheck, mdiClose} from '@mdi/js';
     import dayjs from 'dayjs';
 
     const vacancyPageStore = useVacancyPageStore();
-    const sourcePageStore = useSourcePageStore();
-    const companyPageStore = useCompanyPageStore();
+    //const sourcePageStore = useSourcePageStore();
+    //const companyPageStore = useCompanyPageStore();
     const emit = defineEmits(['form:done', 'form:unable-load']);
     const loading = ref(false);
 
@@ -192,7 +190,7 @@
                     formData.value.deadLineAt = formatDateUrl(data.deadLineAt);
                     formData.value.notedAt = null;
                     formData.value.note = null;
-                }, (response: ErrorResponse) => {
+                }, (/*response: ErrorResponse*/) => {
                     formView.value = false;
                     emit('form:unable-load');
                 }).finally(() => loading.value = false);
@@ -203,10 +201,10 @@
         formData.value.viewed = true;
     };
 
-    const onResumeSentAtToday = () => {
-        formData.value.resumeSentAt = formatDateUrl(dayjs());
-        onResumeSentAtUpdated();
-    };
+    // const onResumeSentAtToday = () => {
+    //     formData.value.resumeSentAt = formatDateUrl(dayjs());
+    //     onResumeSentAtUpdated();
+    // };
 
     const onResumeSentAtUpdated = () => {
         formData.value.viewed = true;

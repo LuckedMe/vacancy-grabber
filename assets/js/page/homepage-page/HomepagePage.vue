@@ -20,7 +20,7 @@
     import Page from '../../model/page/Page';
     import AppHtml from '../../component/general/AppHtml.vue';
 
-    const props = defineProps({
+    defineProps({
         page: {
             type: Page,
             required: false,

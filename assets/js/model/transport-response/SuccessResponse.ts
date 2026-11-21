@@ -18,6 +18,7 @@ export default class SuccessResponse implements AxiosResponse {
         return _toLower(this._response.request.responseType) === 'blob';
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     get data(): any {
         return this._response.data;
     }

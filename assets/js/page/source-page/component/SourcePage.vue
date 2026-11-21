@@ -153,7 +153,7 @@
 
 <script setup lang="ts">
 
-    import {computed, onMounted, ref, watch} from 'vue';
+    import {computed, ref, watch} from 'vue';
     import {useSourcePageStore} from '../store';
     import {itemsPerPageOptions} from '../../../utils/itemsPerPageOptions';
     import SourcePageFilters from './SourcePageFilters.vue';

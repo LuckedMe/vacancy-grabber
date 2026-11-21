@@ -79,22 +79,18 @@
 </template>
 
 <script setup lang="ts">
-    import {computed, onMounted, PropType, ref, watch} from 'vue';
+    import {computed, onMounted, ref, watch} from 'vue';
     import VacancyInfo from '../../../../model/vacancy/VacancyInfo';
     import VacancyNote from '../../../../model/vacancy/VacancyNote';
-    import VacancyNoteFilters from '../../../../model/vacancy/VacancyNoteFilters';
-    import VacancyNoteCollectionFactory from '../../../../model-factory/vacancy/VacancyNoteCollectionFactory';
     import ErrorResponse from '../../../../model/transport-response/ErrorResponse';
     import ErrorValidation from '../../../../model/transport-response/ErrorValidation';
     import handleApiResponse, {clearFormErrors, processApiResponse} from '../../../../module/HandleApiResponse';
     import {useVacancyPageStore} from '../../store';
     import {useFlashStore} from '../../../../component/general/app-flash/store';
     import {formatDateTime} from '../../../../utils/DateUtils';
-    import {nl2br} from '../../../../utils/HtmlUtils';
     import _cloneDeep from 'lodash/cloneDeep';
     import Paginator from '../../../../model/transport-response/Paginator';
     import _debounce from 'lodash/debounce';
-    import VacancyInfoCollection from '../../../../model/vacancy/VacancyInfoCollection';
     import {itemsPerPageOptions} from '../../../../utils/itemsPerPageOptions';
     import {mdiDelete, mdiPencil} from '@mdi/js';
     import BaseCollectionTableOptions, {SortByInterface} from '../../../../types/BaseCollectionTableOptions';
@@ -133,7 +129,6 @@
     const paginator = ref<Paginator>(new Paginator());
     const availableSortBy = ref<string[]>([] as string[]);
     const availableFilters = ref({} as object | null);
-    const appliedFilters = ref({} as object | null);
 
     const loadNoteCollection = _debounce(async () => {
         clearFormErrors(errors.value);

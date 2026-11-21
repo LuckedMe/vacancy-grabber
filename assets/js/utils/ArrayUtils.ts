@@ -4,12 +4,14 @@ import _isObject from 'lodash/isObject';
 import _camelCase from 'lodash/camelCase';
 import _snakeCase from 'lodash/snakeCase';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const camelizeArrayKeys = obj => _transform(obj, (result: any[] | { [index: string]: any }, value, key: string | number, target) => {
     const camelKey = _isArray(target) ? key : _camelCase(key as string);
 
     result[camelKey] = _isObject(value) ? camelizeArrayKeys(value) : value;
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const snakeArrayKeys = obj => _transform(obj, (result: any[] | { [index: string]: any }, value, key: string | number, target) => {
     const snakeKey = _isArray(target) ? key : _snakeCase(key as string);
 

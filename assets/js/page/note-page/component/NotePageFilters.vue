@@ -83,10 +83,7 @@
     import {useNotePageStore} from '../store';
     import {useFlashStore} from '../../../component/general/app-flash/store';
     import {clearFormErrors, parseErrorValidation, processApiResponse} from '../../../module/HandleApiResponse';
-    import SourceSummary from '../../../model/source/SourceSummary';
     import CompanySummary from '../../../model/company/CompanySummary';
-    import SourceSummaryCollectionFactory from '../../../model-factory/source/SourceSummaryCollectionFactory';
-    import SourceSummaryCollection from '../../../model/source/SourceSummaryCollection';
     import CompanySummaryCollectionFactory from '../../../model-factory/company/CompanySummaryCollectionFactory';
     import CompanySummaryCollection from '../../../model/company/CompanySummaryCollection';
     import {useCompanyPageStore} from '../../company-page/store';
@@ -151,7 +148,7 @@
 
     const onUpdate = async () => {
         form.value.resetValidation();
-        const {valid: formIsValid} = await form.value.validate();
+        // const {valid: formIsValid} = await form.value.validate();
 
         emit('filters:update');
     };

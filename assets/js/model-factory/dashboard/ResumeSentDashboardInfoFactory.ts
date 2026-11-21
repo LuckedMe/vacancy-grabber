@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
-import dayjs, {Dayjs} from 'dayjs';
-import {InferType as YupInferType, array as YupArray, object as YupObject} from 'yup';
+import dayjs from 'dayjs';
+import {InferType as YupInferType, object as YupObject} from 'yup';
 import ResumeSentDashboardInfo from '../../model/dashboard/ResumeSentDashboardInfo';
 import FactoryInterface from '../../types/FactoryInterface';
 

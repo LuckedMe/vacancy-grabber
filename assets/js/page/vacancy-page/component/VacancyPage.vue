@@ -331,7 +331,6 @@
         mdiFormSelect,
         mdiNotePlus,
         mdiPencil,
-        mdiViewList,
     } from '@mdi/js';
     import VacancyItemNoteCreateDialog from './dialog/VacancyItemNoteCreateDialog.vue';
     import VacancyItemNoteListDialog from './dialog/VacancyItemNoteListDialog.vue';

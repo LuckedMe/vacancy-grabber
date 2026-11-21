@@ -65,8 +65,7 @@
     import FormGlobalError from '../../../../component/general/FormGlobalError.vue';
     import SourceDetailsFactory from '../../../../model-factory/source/SourceDetailsFactory';
     import SourceDetails from '../../../../model/source/SourceDetails';
-    import ErrorResponse from '../../../../model/transport-response/ErrorResponse';
-
+    
     const sourcePageStore = useSourcePageStore();
     const emit = defineEmits(['form:done', 'form:unable-load']);
     const loading = ref(false);
@@ -108,7 +107,7 @@
                     formData.value.name = data.name;
                     formData.value.url = data.url;
                     formData.value.active = !!data.active;
-                }, (response: ErrorResponse) => {
+                }, (/*response: ErrorResponse*/) => {
                     formView.value = false;
                     emit('form:unable-load');
                 }).finally(() => loading.value = false);

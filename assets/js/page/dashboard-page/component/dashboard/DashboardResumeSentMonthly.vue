@@ -11,9 +11,7 @@
 
 <script setup lang="ts">
     import VueApexCharts from 'vue3-apexcharts';
-    import {useDashboardPageStore} from '../../store';
-    import {computed, PropType, ref} from 'vue';
-    import ErrorValidation from '../../../../model/transport-response/ErrorValidation';
+    import {computed, PropType} from 'vue';
     import ResumeSentDashboardInfo from '../../../../model/dashboard/ResumeSentDashboardInfo';
     import _forEach from 'lodash/forEach';
     import dayjs from 'dayjs';
@@ -25,10 +23,6 @@
             required: true,
         },
     });
-
-    const dashboardPageStore = useDashboardPageStore();
-    const loading = computed(() => dashboardPageStore.loading);
-    const errors = ref<ErrorValidation>(new ErrorValidation());
 
     const chartOptions = computed(() => {
         return {

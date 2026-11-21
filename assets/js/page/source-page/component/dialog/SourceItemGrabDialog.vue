@@ -26,8 +26,6 @@
     import handleApiResponse from '../../../../module/HandleApiResponse';
     import RouteGenerator from '../../../../module/RouteGenerator';
     import {camelizeArrayKeys} from '../../../../utils/ArrayUtils';
-    import {formatDateUrl} from '../../../../utils/DateUtils';
-    import dayjs from 'dayjs';
     import {filterUrlParams} from '../../../../utils/UrlUtils';
 
     const props = defineProps({

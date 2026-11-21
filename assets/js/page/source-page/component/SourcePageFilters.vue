@@ -102,7 +102,7 @@
 </template>
 
 <script setup lang="ts">
-    import {computed, onMounted, ref, useTemplateRef, watch} from 'vue';
+    import {computed, onMounted, useTemplateRef, watch} from 'vue';
     import {useSourcePageStore} from '../store';
     import {itemsActiveFiltersOptions} from '../../../utils/itemsActiveOptions';
     import {useFlashStore} from '../../../component/general/app-flash/store';
@@ -164,7 +164,7 @@
 
     const onUpdate = async () => {
         form.value.resetValidation();
-        const {valid: formIsValid} = await form.value.validate();
+        // const {valid: formIsValid} = await form.value.validate();
 
         emit('filters:update');
     };

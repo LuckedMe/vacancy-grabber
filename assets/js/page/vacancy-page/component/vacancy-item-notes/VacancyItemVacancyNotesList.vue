@@ -79,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-    import {computed, onMounted, PropType, ref, watch} from 'vue';
+    import {computed, onMounted, ref, watch} from 'vue';
     import VacancyInfo from '../../../../model/vacancy/VacancyInfo';
     import VacancyNote from '../../../../model/vacancy/VacancyNote';
     import ErrorResponse from '../../../../model/transport-response/ErrorResponse';
@@ -129,7 +129,6 @@
     const paginator = ref<Paginator>(new Paginator());
     const availableSortBy = ref<string[]>([] as string[]);
     const availableFilters = ref({} as object | null);
-    const appliedFilters = ref({} as object | null);
 
     const loadNoteCollection = _debounce(async () => {
         clearFormErrors(errors.value);

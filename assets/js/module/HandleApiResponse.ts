@@ -10,7 +10,9 @@ import ErrorResponse from '../model/transport-response/ErrorResponse';
 import FactoryInterface from '../types/FactoryInterface';
 import handleApiResponse from './HandleApiResponse';
 
+const HTTP_BAD_REQUEST = 400;
 const HTTP_UNPROCESSABLE_ENTITY = 422;
+const HTTP_INTERNAL_SERVER_ERROR = 500;
 
 export type Violation = {
     [key: string]: object | string | null,
@@ -49,7 +51,7 @@ export const parseErrorValidation = (
     code?: number | null,
 ): void => {
     parseFormErrors({
-        code: code || 0,
+        code: code || HTTP_UNPROCESSABLE_ENTITY,
         message: source.message,
         errors: {
             fields: source.fields,
@@ -69,7 +71,9 @@ export const clearFormErrors = (
     }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const normalizeFormToRequest = obj => _transform(obj, (result: any[] | {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [index: string]: any
 }, value, key: string | number, target) => {
     const snakeKey = _isArray(target) ? key : _snakeCase(key as string);
@@ -80,6 +84,7 @@ export const normalizeFormToRequest = obj => _transform(obj, (result: any[] | {
 export const processApiResponse = async <T>(
     request: Promise<SuccessResponse>,
     errors: ClientValidationErrorInterface,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     factory: FactoryInterface<any>,
 ): Promise<T | null> => {
     const response = await handleApiResponse(request, errors);
@@ -88,8 +93,8 @@ export const processApiResponse = async <T>(
     const validationError = await request
         .catch((error: ServerValidationErrorInterface) => error) as ServerValidationErrorInterface;
 
-    if (validationError.code >= 400
-        && validationError.code <= 499
+    if (validationError.code >= HTTP_BAD_REQUEST
+        && validationError.code < HTTP_INTERNAL_SERVER_ERROR
     ) {
         parseErrorValidation(validationError, errors);
         throw new Error(errors.message as string);

@@ -11,7 +11,7 @@
     >
         <template #text>
             <v-card-text>
-                Update resume status
+                Update vacancy status
             </v-card-text>
             <vacancy-item-status-form
                 :id="item.id"
@@ -23,14 +23,13 @@
 </template>
 
 <script setup lang="ts">
-    import {useVacancyPageStore} from '../../store';
     import AppConfirmDialog from '../../../../component/general/app-dialog/AppConfirmDialog.vue';
     import VacancyInfo from '../../../../model/vacancy/VacancyInfo';
     import {useFlashStore} from '../../../../component/general/app-flash/store';
     import {useTemplateRef} from 'vue';
     import VacancyItemStatusForm from '../form/VacancyItemStatusForm.vue';
 
-    const props = defineProps({
+    defineProps({
         item: {
             type: VacancyInfo,
             required: true,
@@ -38,7 +37,6 @@
     });
 
     const flashStore = useFlashStore();
-    const vacancyPageStore = useVacancyPageStore();
     const emit = defineEmits(['confirmed', 'canceled']);
     const dialog = defineModel('dialog', { type: Boolean, default: false });
     const form = useTemplateRef('form');

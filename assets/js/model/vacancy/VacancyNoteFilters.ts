@@ -21,7 +21,7 @@ export default class VacancyNoteFilters extends AppliedFilters {
 
         this.processFromUrlParams(this);
     }
-    processFromUrlParams(obj: AppliedFilters) {
+    processFromUrlParams(/*obj: AppliedFilters*/) {
         // super.processFromUrlParams(obj);
     }
 }

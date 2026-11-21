@@ -38,7 +38,6 @@
     import FormGlobalError from '../../../../component/general/FormGlobalError.vue';
     import VacancyDetailsFactory from '../../../../model-factory/vacancy/VacancyDetailsFactory';
     import VacancyDetails from '../../../../model/vacancy/VacancyDetails';
-    import ErrorResponse from '../../../../model/transport-response/ErrorResponse';
     import {formatDateUrl} from '../../../../utils/DateUtils';
     import dayjs from 'dayjs';
 
@@ -75,7 +74,7 @@
                 const today = dayjs();
                 formView.value = true;
                 formData.value.resumeSentAt = data.resumeSentAt ? formatDateUrl(data.resumeSentAt) : formatDateUrl(today);
-            }, (response: ErrorResponse) => {
+            }, (/*response: ErrorResponse*/) => {
                 formView.value = false;
                 emit('form:unable-load');
             }).finally(() => loading.value = false);

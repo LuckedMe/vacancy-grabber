@@ -51,7 +51,7 @@
     import {FLASH_TIMEOUT, useFlashStore} from './store';
     import {nl2br} from '../../../utils/HtmlUtils';
 
-    const props = defineProps({
+    defineProps({
         example: {type: Boolean, default: false},
         absolute: {type: Boolean, default: false},
         timeout: {type: Number, default: FLASH_TIMEOUT},

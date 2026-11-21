@@ -30,7 +30,7 @@
     import {useFlashStore} from '../../../../component/general/app-flash/store';
     import VacancyItemNoteForm from '../form/VacancyItemNoteForm.vue';
 
-    const props = defineProps({
+    defineProps({
         item: {
             type: VacancyInfo,
             required: true,
@@ -43,8 +43,6 @@
     const form = useTemplateRef('form');
 
     const btnConfirmActive = ref(true);
-
-    const tab = ref('one');
 
     const onConfirmed = () => {
         form.value?.onSubmit();

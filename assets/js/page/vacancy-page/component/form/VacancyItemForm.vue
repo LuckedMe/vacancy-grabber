@@ -180,7 +180,6 @@
     import FormGlobalError from '../../../../component/general/FormGlobalError.vue';
     import VacancyDetailsFactory from '../../../../model-factory/vacancy/VacancyDetailsFactory';
     import VacancyDetails from '../../../../model/vacancy/VacancyDetails';
-    import ErrorResponse from '../../../../model/transport-response/ErrorResponse';
     import {formatDateUrl} from '../../../../utils/DateUtils';
     import {itemsIsResumeStatusOptions} from '../types/itemsIsResumeStatusOptions';
     import {itemsViewedFormOptions} from '../types/itemsViewedOptions';
@@ -287,7 +286,7 @@
                     formData.value.viewed = !!data.viewed;
                     formData.value.resumeSentAt = formatDateUrl(data.resumeSentAt);
                     formData.value.deadLineAt = formatDateUrl(data.deadLineAt);
-                }, (response: ErrorResponse) => {
+                }, (/*response: ErrorResponse*/) => {
                     formView.value = false;
                     emit('form:unable-load');
                 }).finally(() => loading.value = false);

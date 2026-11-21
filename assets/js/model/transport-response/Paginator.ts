@@ -21,6 +21,7 @@ export default class Paginator {
         this._maxPage = Math.ceil(this.total / this.perPage);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     static normalizePage(page: any): number {
         page = Number(page);
 
@@ -31,20 +32,22 @@ export default class Paginator {
         return <number>Math.floor(page);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     static normalizePerPage(perPage: any): number {
         perPage = Number(perPage);
 
         if (!perPage || perPage <= 0) {
-            perPage = this.MIN_PER_PAGE;
+            perPage = Paginator.MIN_PER_PAGE;
         }
 
-        if (perPage > this.MAX_PER_PAGE) {
-            perPage = this.MAX_PER_PAGE;
+        if (perPage > Paginator.MAX_PER_PAGE) {
+            perPage = Paginator.MAX_PER_PAGE;
         }
 
         return <number>Math.floor(perPage);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     static normalizeBoolean(value: any): boolean | null {
         if (value === 'true' || value === '1' || value === 1) {
             return true;

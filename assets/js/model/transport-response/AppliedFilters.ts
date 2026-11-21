@@ -91,7 +91,7 @@ export default class AppliedFilters {
             return;
         }
 
-        Object.entries(obj).forEach(([key, value]) => {
+        Object.entries(obj).forEach(([key/*, value*/]) => {
             if (Object.prototype.hasOwnProperty.call(params, key)) {
                 if (key === 'page') {
                     obj[key] = Paginator.normalizePage(params[key]);

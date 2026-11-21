@@ -72,19 +72,17 @@
 </template>
 
 <script setup lang="ts">
-
-    import {computed, onMounted, ref, watch} from 'vue';
+    import {computed, ref, watch} from 'vue';
     import {useNotePageStore} from '../store';
     import {itemsPerPageOptions} from '../../../utils/itemsPerPageOptions';
     import NotePageFilters from './NotePageFilters.vue';
-
     import _cloneDeep from 'lodash/cloneDeep';
     import _debounce from 'lodash/debounce';
     import BaseCollectionTableOptions, {SortByInterface} from '../../../types/BaseCollectionTableOptions';
     import {useFlashStore} from '../../../component/general/app-flash/store';
     import {clearFormErrors, processApiResponse} from '../../../module/HandleApiResponse';
     import ErrorResponse from '../../../model/transport-response/ErrorResponse';
-    import {formatDateTime, formatDateUrl} from '../../../utils/DateUtils';
+    import {formatDateTime} from '../../../utils/DateUtils';
     import NoteInfo from '../../../model/note/NoteInfo';
     import NoteInfoCollectionFactory from '../../../model-factory/note/NoteInfoCollectionFactory';
     import NoteInfoCollection from '../../../model/note/NoteInfoCollection';
@@ -105,7 +103,6 @@
         {title: 'Actions', key: 'actions', sortable: false, width: '150px'},
     ]);
 
-    const item = ref(null as NoteInfo | null);
     const items = ref([] as NoteInfo[]);
     // made a copy, items could be changed separated from original version
     const cloneItems = () => _cloneDeep(notePageStore.items).map(item => ({...item, edit: false}));

@@ -4,6 +4,7 @@ const tseslint = require('typescript-eslint');
 const pluginVue = require('eslint-plugin-vue');
 const vueParser = require('vue-eslint-parser');
 const stylistic = require('@stylistic/eslint-plugin');
+const unusedImports = require('eslint-plugin-unused-imports');
 
 module.exports = tseslint.config(
     {
@@ -32,6 +33,7 @@ module.exports = tseslint.config(
 
         plugins: {
             '@stylistic': stylistic,
+            'unused-imports': unusedImports,
         },
 
         // add your custom rules here
@@ -91,7 +93,9 @@ module.exports = tseslint.config(
                 'allowedNames': ['vm'], // Allow `const vm= this`
             }],
             '@typescript-eslint/no-explicit-any': 'warn',
-            '@typescript-eslint/no-unused-vars': 'warn',
+            '@typescript-eslint/no-unused-vars': 'off',
+            'unused-imports/no-unused-imports': 'error',
+            'unused-imports/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
         },
     },
 

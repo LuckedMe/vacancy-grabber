@@ -30,7 +30,7 @@
     import {useFlashStore} from '../../../../component/general/app-flash/store';
     import VacancyItemForm from '../form/VacancyItemForm.vue';
 
-    const props = defineProps({
+    defineProps({
         item: {
             type: VacancyInfo,
             required: true,

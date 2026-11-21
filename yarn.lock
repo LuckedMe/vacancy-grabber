@@ -2269,6 +2269,11 @@ escape-string-regexp@^5.0.0:
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-5.0.0.tgz#4683126b500b61762f2dbebace1806e8be31b1c8"
   integrity sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==
 
+eslint-plugin-unused-imports@^4.4.1:
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-unused-imports/-/eslint-plugin-unused-imports-4.4.1.tgz#a831f0a2937d7631eba30cb87091ab7d3a5da0e1"
+  integrity sha512-oZGYUz1X3sRMGUB+0cZyK2VcvRX5lm/vB56PgNNcU+7ficUCKm66oZWKUubXWnOuPjQ8PvmXtCViXBMONPe7tQ==
+
 eslint-plugin-vue@^10.12.1:
   version "10.12.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-vue/-/eslint-plugin-vue-10.12.1.tgz#df31d719ed33faee6a5ff7c2375018158a0a1f91"

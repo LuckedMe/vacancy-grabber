@@ -183,7 +183,7 @@
 
     const onUpdate = async () => {
         form.value.resetValidation();
-        const {valid: formIsValid} = await form.value.validate();
+        // const {valid: formIsValid} = await form.value.validate();
 
         emit('filters:update');
     };

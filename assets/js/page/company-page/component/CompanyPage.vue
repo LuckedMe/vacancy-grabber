@@ -80,8 +80,7 @@
 </template>
 
 <script setup lang="ts">
-
-    import {computed, onMounted, ref, watch} from 'vue';
+    import {computed, ref, watch} from 'vue';
     import {useCompanyPageStore} from '../store';
     import {itemsPerPageOptions} from '../../../utils/itemsPerPageOptions';
     import CompanyPageFilters from './CompanyPageFilters.vue';
@@ -111,7 +110,6 @@
         {title: 'Actions', key: 'actions', sortable: false, width: '150px'},
     ]);
 
-    const item = ref(null as CompanyInfo | null);
     const items = ref([] as CompanyInfo[]);
     // made a copy, items could be changed separated from original version
     const cloneItems = () => _cloneDeep(companyPageStore.items).map(item => ({...item, edit: false}));

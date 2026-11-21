@@ -83,7 +83,7 @@
 
 <script setup lang="ts">
 
-    import {computed, onMounted, ref, watch} from 'vue';
+    import {computed, ref, watch} from 'vue';
     import {useGrabLogPageStore} from '../store';
     import {itemsPerPageOptions} from '../../../utils/itemsPerPageOptions';
     import grabLogPageFilters from './GrabLogPageFilters.vue';
@@ -115,7 +115,6 @@
         //{title: 'Actions', key: 'actions', sortable: false, width: '150px'},
     ]);
 
-    const item = ref(null as GrabLogInfo | null);
     const items = ref([] as GrabLogInfo[]);
     // made a copy, items could be changed separated from original version
     const cloneItems = () => _cloneDeep(grabLogPageStore.items).map(item => ({...item, edit: false}));

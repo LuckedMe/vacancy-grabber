@@ -29,12 +29,12 @@ export const useNotePageStore = defineStore('note-page-store', () => {
             .finally(() => isLoading.value = false);
     };
 
-    const patch = async (noteId: string, data: object): Promise<SuccessResponse> => {
-        isLoading.value = true;
-        return HttpClient
-            .patch('api.note.patch', {id: noteId}, data)
-            .finally(() => isLoading.value = false);
-    };
+    // const patch = async (noteId: string, data: object): Promise<SuccessResponse> => {
+    //     isLoading.value = true;
+    //     return HttpClient
+    //         .patch('api.note.patch', {id: noteId}, data)
+    //         .finally(() => isLoading.value = false);
+    // };
 
     return {
         loading,

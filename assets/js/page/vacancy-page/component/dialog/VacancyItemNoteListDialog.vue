@@ -22,19 +22,15 @@
     import {ref} from 'vue';
     import AppConfirmDialog from '../../../../component/general/app-dialog/AppConfirmDialog.vue';
     import VacancyInfo from '../../../../model/vacancy/VacancyInfo';
-    import {useFlashStore} from '../../../../component/general/app-flash/store';
-    import {useVacancyPageStore} from '../../store';
     import VacancyItemVacancyNotesList from '../vacancy-item-notes/VacancyItemVacancyNotesList.vue';
 
-    const props = defineProps({
+    defineProps({
         item: {
             type: VacancyInfo,
             required: true,
         },
     });
 
-    const vacancyPageStore = useVacancyPageStore();
-    const flashStore = useFlashStore();
     const emit = defineEmits(['confirmed', 'canceled', 'deleted']);
     const dialog = defineModel('dialog', {type: Boolean, default: false});
     const btnConfirmActive = ref(false);
