@@ -26,7 +26,7 @@ export default function createApp(components: object = {}, mount = '#app') {
     // import days locale
     try {
         import(/* webpackInclude: /\.js$/ */ 'dayjs/locale/' + lang).then((v) => dayjs.locale(v));
-    } catch (e) {
+    } catch {
         import('dayjs/locale/en').then((v) => dayjs.locale(v));
     }
 

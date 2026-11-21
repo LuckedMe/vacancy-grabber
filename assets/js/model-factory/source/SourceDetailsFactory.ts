@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import {InferType as YupInferType, array as YupArray, object as YupObject} from 'yup';
+import {InferType as YupInferType, object as YupObject} from 'yup';
 import SourceDetails from '../../model/source/SourceDetails';
 import FactoryInterface from '../../types/FactoryInterface';
 import dayjs from 'dayjs';

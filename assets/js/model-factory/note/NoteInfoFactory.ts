@@ -1,9 +1,8 @@
 import dayjs from 'dayjs';
 import * as Yup from 'yup';
-import {InferType as YupInferType, array as YupArray, object as YupObject} from 'yup';
+import {InferType as YupInferType, object as YupObject} from 'yup';
 import NoteInfo from '../../model/note/NoteInfo';
 import FactoryInterface from '../../types/FactoryInterface';
-import {GrabLogInfoValidator} from '../grab-log/GrabLogInfoFactory';
 
 export const NoteInfoValidator = {
     id: Yup.string().required(),

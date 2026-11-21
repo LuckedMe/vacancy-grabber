@@ -86,7 +86,7 @@
         minHeight: {type: [String, Number, null], default: 100},
 
         title: {type: [String, null], default: null},
-        subtitle: {type: [String, null]},
+        subtitle: {type: [String, null], default: null},
 
         titleDelete: {type: [String, null], default: 'Confirm deletion'},
         titleConfirm: {type: [String, null], default: 'Confirm action'},

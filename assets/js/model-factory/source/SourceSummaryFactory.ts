@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import {InferType as YupInferType, array as YupArray, object as YupObject} from 'yup';
+import {InferType as YupInferType, object as YupObject} from 'yup';
 import SourceSummary from '../../model/source/SourceSummary';
 import FactoryInterface from '../../types/FactoryInterface';
 
