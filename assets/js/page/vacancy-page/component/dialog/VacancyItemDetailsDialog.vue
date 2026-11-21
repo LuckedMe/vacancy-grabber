@@ -10,7 +10,7 @@
         @confirmed="onConfirmed"
         @canceled="onCanceled"
         @keyup.esc="onCanceled"
-        @keyup.enter=""
+        @keyup.enter.prevent
     >
         <template #text>
             <vacancy-details-form
@@ -44,7 +44,7 @@
             <!--                                ref="form"-->
             <!--                                :id="item?.id as string"-->
             <!--                                @form:done="onFormDone"-->
-            <!--                                @form:unableLoad="btnConfirmActive = false"-->
+            <!--                                @form:unable-load="btnConfirmActive = false"-->
             <!--                            />-->
             <!--                        </v-sheet>-->
             <!--                    </v-tabs-window-item>-->

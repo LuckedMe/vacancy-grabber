@@ -17,7 +17,7 @@
                 :id="item?.id"
                 ref="form"
                 @form:done="onFormDone"
-                @form:unableLoad="btnConfirmActive = false"
+                @form:unable-load="btnConfirmActive = false"
             ></vacancy-item-form>
         </template>
     </app-confirm-dialog>

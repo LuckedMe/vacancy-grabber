@@ -10,7 +10,7 @@
         @confirmed="onCanceled"
         @canceled="onCanceled"
         @keyup.esc="onCanceled"
-        @keyup.enter=""
+        @keyup.enter.prevent
     >
         <template #text>
             <vacancy-item-vacancy-notes-list :item="item"></vacancy-item-vacancy-notes-list>

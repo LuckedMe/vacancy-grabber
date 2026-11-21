@@ -51,7 +51,7 @@
                     'In-Progress',
                 ],
                 labels: {
-                    formatter: (label: string, param, opts?: { i?: number, w?: {} }) => {
+                    formatter: (label: string, param, opts?: { i?: number, w?: object }) => {
                         const w = opts?.w as { config?: { series?: [] } }; // ApexCharts
                         const index = opts?.i;
                         const total = w?.config?.series?.[index]?.data?.[0] ?? 0;

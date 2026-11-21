@@ -14,7 +14,7 @@ const HTTP_UNPROCESSABLE_ENTITY = 422;
 
 export type Violation = {
     [key: string]: object | string | null,
-}
+};
 
 const assignErrors = (errors: object, error: Violation): void => {
     _forEach(error, (message: object | string | null, key: string) => {

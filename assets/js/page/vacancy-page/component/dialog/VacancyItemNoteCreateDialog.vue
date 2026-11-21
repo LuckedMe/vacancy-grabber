@@ -10,14 +10,14 @@
         @confirmed="onConfirmed"
         @canceled="onCanceled"
         @keyup.esc="onCanceled"
-        @keyup.enter=""
+        @keyup.enter.prevent
     >
         <template #text>
             <vacancy-item-note-form
                 :id="item?.id as string"
                 ref="form"
                 @form:done="onFormDone"
-                @form:unableLoad="btnConfirmActive = false"
+                @form:unable-load="btnConfirmActive = false"
             ></vacancy-item-note-form>
         </template>
     </app-confirm-dialog>

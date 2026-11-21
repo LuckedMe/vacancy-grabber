@@ -3,6 +3,7 @@ const globals = require('globals');
 const tseslint = require('typescript-eslint');
 const pluginVue = require('eslint-plugin-vue');
 const vueParser = require('vue-eslint-parser');
+const stylistic = require('@stylistic/eslint-plugin');
 
 module.exports = tseslint.config(
     {
@@ -29,9 +30,14 @@ module.exports = tseslint.config(
             },
         },
 
+        plugins: {
+            '@stylistic': stylistic,
+        },
+
         // add your custom rules here
         rules: {
-            semi: ['error', 'always'],
+            semi: 'off',
+            '@stylistic/semi': ['error', 'always'],
             quotes: ['error', 'single', { 'avoidEscape': true, 'allowTemplateLiterals': true }],
             indent: ['error', 4],
             'comma-dangle': ['error', 'always-multiline'],
@@ -72,6 +78,10 @@ module.exports = tseslint.config(
                 ],
             }],
             'vue/no-v-html': 'off',
+            'vue/valid-v-slot': ['error', { allowModifiers: true }], // Vuetify `#item.name` slots
+            'vue/no-unused-vars': 'off', // unused slot props are common with Vuetify
+            'vue/multi-word-component-names': 'off',
+            '@typescript-eslint/no-unused-expressions': ['error', { allowShortCircuit: true, allowTernary: true }],
 
             '@typescript-eslint/no-empty-object-type': ['error', {
                 allowInterfaces: 'with-single-extends',

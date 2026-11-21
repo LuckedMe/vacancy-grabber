@@ -51,7 +51,7 @@
                                 :id="item?.id as string"
                                 ref="form"
                                 @form:done="onFormDone"
-                                @form:unableLoad="btnConfirmActive = false"
+                                @form:unable-load="btnConfirmActive = false"
                             ></vacancy-item-note-form>
                         </v-sheet>
                     </v-tabs-window-item>

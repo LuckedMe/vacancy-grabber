@@ -176,9 +176,9 @@
         {deep: true},
     );
 
-    const onReset = () => {grabLogPageStore;
-                           grabLogPageStore.filters.reset();
-                           emit('filters:reset');
+    const onReset = () => {
+        grabLogPageStore.filters.reset();
+        emit('filters:reset');
     };
 
     const onUpdate = async () => {
