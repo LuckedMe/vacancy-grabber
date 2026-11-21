@@ -50,16 +50,20 @@ final readonly class GrabSourceHandler implements CommandHandlerInterface
             );
         }
 
+        if (!($owner = $this->userRepository->findOneById($command->userId))) {
+            throw new EntityNotFoundException(
+                $this->translator->trans(id: 'USER.NOT_FOUND', domain: 'validators')
+            );
+        }
+
         if (!$this->security->isGranted(SourceVoter::GRAB, [$command->userId, $source])) {
             throw new AccessDeniedException($this->translator->trans(id: 'SECURITY.ACCESS_DENIED', domain: 'security'));
         }
 
-        $grabbed = $this->grabberProvider->forSource($source)->grab((string) $source->getUrl());
-        $owner   = $command->userId ? $this->userRepository->findOneById($command->userId) : null;
-
         // update the vacancies changed on the source before the new ones are imported
-        $synced   = $this->vacancySynchronizer->sync($source, $grabbed, $command->userId);
-        $imported = $this->vacancyImporter->import($owner, $source, $grabbed, $synced->vacanciesUpdated);
+        $grabber  = $this->grabberProvider->forSource($source)->grab((string) $source->getUrl());
+        $synced   = $this->vacancySynchronizer->sync($source, $grabber, $command->userId);
+        $imported = $this->vacancyImporter->import($owner, $source, $grabber, $synced->vacanciesUpdated);
 
         $result = new GrabSourceResultDTO(
             vacanciesCreated: $imported->vacanciesCreated,
@@ -67,7 +71,7 @@ final readonly class GrabSourceHandler implements CommandHandlerInterface
         );
 
         // the async grab (e.g. started from the telegram bot) has no caller waiting for the result, so it is reported
-        if ($command instanceof GrabSourceAsyncCommand && $owner !== null) {
+        if ($command instanceof GrabSourceAsyncCommand) {
             $this->notifyOwner($owner, $source, $result);
         }
 
@@ -83,16 +87,18 @@ final readonly class GrabSourceHandler implements CommandHandlerInterface
         }
 
         try {
-            $this->telegramNotifier->send($chatId, $this->translator->trans(
-                id: 'SOURCE.GRAB_FINISHED.TELEGRAM',
-                parameters: [
-                    '%source%'  => (string) $source->getName(),
-                    '%created%' => $result->vacanciesCreated,
-                    '%updated%' => $result->vacanciesUpdated,
-                    '%link%'    => rtrim($this->baseUrl, '/') . '/vacancies?viewed=0',
-                ],
-                domain: 'messages',
-            ));
+            $params = [
+                '%source%'  => (string) $source->getName(),
+                '%created%' => $result->vacanciesCreated,
+                '%updated%' => $result->vacanciesUpdated,
+                '%link%'    => rtrim($this->baseUrl, '/') . '/vacancies?not-viewed',
+            ];
+
+            $message = ($result->vacanciesCreated > 0 || $result->vacanciesUpdated > 0)
+                ? $this->translator->trans(id: 'SOURCE.GRAB_REPORT.DONE', parameters: $params, domain: 'messages')
+                : $this->translator->trans(id: 'SOURCE.GRAB_REPORT.NO_UPDATES', parameters: $params, domain: 'messages');
+
+            $this->telegramNotifier->send($chatId, $message);
         } catch (Throwable) {
             // a failed notification must not fail (and retry) the grab that has already been saved
         }

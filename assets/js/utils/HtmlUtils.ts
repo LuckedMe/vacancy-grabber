@@ -1,4 +1,4 @@
-export const nl2br = (text?: string): string => {
+export const nl2br = (text?: string | null): string => {
     if (!text) {
         return '';
     }

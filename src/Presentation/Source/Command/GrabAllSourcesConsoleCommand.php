@@ -107,7 +107,7 @@ final class GrabAllSourcesConsoleCommand extends Command
 
         $ids   = array_map(static fn (string $uuid) => Uuid::fromString($uuid), array_keys($notify));
         $users = $ids ? $this->userRepository->findAllByIds($ids) : [];
-        $link  = rtrim($this->baseUrl, '/') . '/vacancies?viewed=0';
+        $link  = rtrim($this->baseUrl, '/') . '/vacancies?not-viewed';
 
         foreach ($users as $user) {
             $chatId = $user->getTelegramChatId();
@@ -118,7 +118,7 @@ final class GrabAllSourcesConsoleCommand extends Command
             }
 
             $message = $this->translator->trans(
-                id: 'SOURCE.GRAB_REPORT.TELEGRAM',
+                id: 'SOURCE.GRAB_REPORT.DONE',
                 parameters: [
                     '%created%' => $stat['created'],
                     '%updated%' => $stat['updated'],

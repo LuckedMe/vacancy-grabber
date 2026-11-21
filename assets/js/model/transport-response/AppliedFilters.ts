@@ -8,15 +8,25 @@ export default class AppliedFilters {
         public page: number | null = null,
         public perPage: number | null = null,
         public query: string | null = null,
-        public sort: string | null = null,
+        protected _sort: string | null = null,
     ) {
         this.page = Paginator.normalizePage(this.page);
         this.perPage = Paginator.normalizePerPage(this.perPage);
+        this.query = AppliedFilters.normalizeQuery(this.query);
+        this._sort = AppliedFilters.normalizeSort(this.sort);
 
         this.processFromUrlParams(this);
     }
 
-    set sort(value: string | null) {
+    static normalizeQuery(value: string | null): string|null {
+        if (value && typeof value === 'string') {
+            value = value.trim();
+        }
+
+        return value;
+    }
+
+    static normalizeSort(value: string | null): string|null {
         if (value && typeof value === 'string' && value.includes(' ')) {
             const [sortField, sortDirection] = value.split(' ');
             if (sortField !== value) {
@@ -24,7 +34,15 @@ export default class AppliedFilters {
             }
         }
 
-        this.sort = value;
+        return value;
+    }
+
+    get sort() {
+        return this._sort;
+    }
+
+    set sort(value: string | null) {
+        this._sort = AppliedFilters.normalizeSort(value);
     }
 
     get sortBy(): SortByInterface[] {

@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
     import {nl2br} from "../../utils/HtmlUtils";
-    import {computed} from "vue";
+    import { computed, type CSSProperties } from "vue";
 
     const props = defineProps({
         html: {type: [String, null], required: false, default: null},
@@ -16,10 +16,10 @@
         maxHeight: {type: [String, Number, null], default: '300px'},
     });
 
-    const style = computed(() => {
+    const style = computed<CSSProperties>(() => {
         return {
-            'max-width': props.maxWidth,
-            'max-height': props.maxHeight,
+            'max-width': props.maxWidth ?? undefined,
+            'max-height': props.maxHeight ?? undefined,
             'overflow-y': 'auto',
             'overflow-wrap': 'break-word',
             'white-space': 'normal',

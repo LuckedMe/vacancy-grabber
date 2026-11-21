@@ -43,9 +43,11 @@ class SourceDoctrineRepository extends ServiceEntityRepository implements Source
 
     public function findAllReadyToGrab(): array
     {
-        return $this
-            ->createBaseQuery(new SourceCriteria(active: true, hasUser: true, hasUrl: true))
+        $qb = $this->createBaseQuery(new SourceCriteria(active: true, hasUser: true, hasUrl: true));
+
+        return $qb
             ->join('q.user', 'u')
+            ->andWhere($qb->expr()->isNotNull('q.user'))
             ->getQuery()
             ->getResult();
     }

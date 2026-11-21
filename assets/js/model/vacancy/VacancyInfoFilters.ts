@@ -29,6 +29,15 @@ export default class VacancyInfoFilters extends AppliedFilters {
             sort,
         );
 
+        const url = new URL(window.location.href);
+        if (url.searchParams.has('not-viewed')) {
+            url.searchParams.delete('not-viewed');
+            url.searchParams.set('viewed', '0');
+
+            // Updates the URL in the address bar without reloading the page
+            window.history.replaceState({}, '', url);
+        }
+
         this.processFromUrlParams(this);
     }
 }

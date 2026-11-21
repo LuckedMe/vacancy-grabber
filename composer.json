@@ -110,6 +110,9 @@
         "lint:junit": [
             "PHP_CS_FIXER_IGNORE_ENV=1 php -d pcov.enabled=0 -d memory_limit=-1 ./vendor/friendsofphp/php-cs-fixer/php-cs-fixer check -v --format=junit > ./tests/_output/php-cs-report.xml"
         ],
+        "lint:checkstyle": [
+            "PHP_CS_FIXER_IGNORE_ENV=1 php -d pcov.enabled=0 -d memory_limit=-1 ./vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix --dry-run --format=checkstyle > ./tests/_output/php-checkstyle-result.xml"
+        ],
         "lint:fix": [
             "PHP_CS_FIXER_IGNORE_ENV=1 php -d pcov.enabled=0 -d memory_limit=-1 ./vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix"
         ],

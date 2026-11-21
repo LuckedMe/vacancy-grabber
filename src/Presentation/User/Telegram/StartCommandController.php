@@ -92,7 +92,7 @@ final class StartCommandController extends TelegramCommand
         $buttonGrab    = new Type\KeyboardButton(text: self::BUTTON_GRAB);
 
         $keyboard   = [];
-        $keyboard[] = [$buttonStart, $buttonStatus];
+        $keyboard[] = [$buttonGrab, $buttonStatus];
 
         if ($user !== null) {
             // a request_contact button: one tap shares the phone number (or a new one), see ContactCommandController
@@ -106,11 +106,9 @@ final class StartCommandController extends TelegramCommand
             $keyboard[] = $user->isTelegramNotificationsEnabled()
                 ? [$buttonDisable, $buttonContactShare]
                 : [$buttonEnable, $buttonContactShare];
-
-            $keyboard[] = [$buttonGrab, $buttonCancel];
-        } else {
-            $keyboard[] = [$buttonCancel];
         }
+
+        $keyboard[] = [$buttonCancel];
 
         return new Type\ReplyKeyboardMarkup(
             keyboard: $keyboard,

@@ -18,7 +18,7 @@ export default class Paginator {
             this.total = 0;
         }
 
-        this._maxPage = Math.ceil(total / perPage);
+        this._maxPage = Math.ceil(this.total / this.perPage);
     }
 
     static normalizePage(page: any): number {

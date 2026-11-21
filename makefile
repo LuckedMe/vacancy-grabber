@@ -129,6 +129,12 @@ yarn-watch: ## Build frontend assets and watch for changes
 yarn-build: ## Build frontend assets for production
 	$(NODE) yarn build
 
+yarn-lint:
+	$(NODE) yarn run lint
+
+yarn-lint-fix:
+	$(NODE) yarn run lint:fix
+
 ## --- Production (VPS) -------------------------------------------------------
 
 PROD     = docker compose -f docker-compose.prod.yaml --env-file .env.prod.local
