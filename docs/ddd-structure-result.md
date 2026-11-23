@@ -1,6 +1,6 @@
 # DDD structure check result
 
-Date: 2026-11-23 · Branch: main · Commit: 7d24c94
+Date: 2026-11-23 · Branch: main · Commit: 60b2b0f
 Command: `bash .claude/skills/ddd-structure/scripts/check.sh` · Exit code: 0
 
 ## Summary
