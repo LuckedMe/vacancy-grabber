@@ -268,10 +268,10 @@ Other top-level folders: `assets/` (Vue + TypeScript), `templates/`, `translatio
 The layer rules are enforced by a script that runs on the host:
 
 ```bash
-bash .claude/skills/ddd-structure-fix/scripts/check.sh   # exit code 1 on violations
+bash .claude/skills/ddd-structure/scripts/check.sh   # exit code 1 on violations
 ```
 
-It is also available as the Claude Code skill `/ddd-structure-fix`; the last result is in [docs/ddd-structure-fix-result.md](docs/ddd-structure-fix-result.md). Migrations are formatted with the global skill `/fix-migrations` (see [docs/migrations-style.md](docs/migrations-style.md)). The production Dockerfile is checked with the global skill `/fix-dockerfile` (see [docs/dockerfile-check.md](docs/dockerfile-check.md)).
+It is also available as the Claude Code skill `/ddd-structure`; the last result is in [docs/ddd-structure-result.md](docs/ddd-structure-result.md). Migrations are formatted with the global skill `/fix-migrations` (see [docs/migrations-style.md](docs/migrations-style.md)). The production Dockerfile is checked with the global skill `/fix-dockerfile` (see [docs/dockerfile-check.md](docs/dockerfile-check.md)).
 
 ## Telegram notifications
 
@@ -335,7 +335,7 @@ It pulls, rebuilds, migrates and registers the Telegram webhook. Options and the
 | [docs/deploy.md](docs/deploy.md) | production deploy |
 | [docs/migrations-style.md](docs/migrations-style.md) | formatting Doctrine migrations with `/fix-migrations` |
 | [docs/dockerfile-check.md](docs/dockerfile-check.md) | checking the production Dockerfile with `/fix-dockerfile` |
-| [docs/ddd-structure-fix-result.md](docs/ddd-structure-fix-result.md) | result of the last DDD layer check |
+| [docs/ddd-structure-result.md](docs/ddd-structure-result.md) | result of the last DDD layer check |
 
 ## License
 

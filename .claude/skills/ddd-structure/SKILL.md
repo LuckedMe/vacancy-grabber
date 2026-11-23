@@ -1,6 +1,6 @@
 ---
-name: ddd-structure-fix
-description: Check that src follows the DDD layer rules (Domain/Application/Infrastructure/Presentation dependency direction, framework-free Domain, repository and mapping pairing, no legacy folders) and write the result with fix recommendations to docs/ddd-structure-fix-result.md. Use when asked to check, validate, verify or audit the DDD structure, layer rules or architecture, to get DDD fix recommendations, or to measure refactor progress.
+name: ddd-structure
+description: Check that src follows the DDD layer rules (Domain/Application/Infrastructure/Presentation dependency direction, framework-free Domain, repository and mapping pairing, no legacy folders) and write the result with fix recommendations to docs/ddd-structure-result.md. Use when asked to check, validate, verify or audit the DDD structure, layer rules or architecture, to get DDD fix recommendations, or to measure refactor progress.
 ---
 
 # DDD structure check and fix recommendations
@@ -10,8 +10,8 @@ Layer rules: **Domain → nothing** (only its own code plus `Doctrine\Common\Col
 ## Run
 
 ```bash
-bash .claude/skills/ddd-structure-fix/scripts/check.sh        # scans src/
-bash .claude/skills/ddd-structure-fix/scripts/check.sh path/to/src
+bash .claude/skills/ddd-structure/scripts/check.sh        # scans src/
+bash .claude/skills/ddd-structure/scripts/check.sh path/to/src
 ```
 
 Each violation is printed on one line as `RULE  path:line  message`, followed by a per-rule summary. The exit code is `0` when clean, `1` when there are violations and `2` when the scan root is bad. There is no baseline: every violation fails the check. Runs on the host, no container needed.
@@ -38,12 +38,12 @@ Each violation is printed on one line as `RULE  path:line  message`, followed by
 1. Run the script and read its whole output.
 2. Check each hit. A hit that is not a real dependency (e.g. a match inside a comment or a string) is a false positive: list it separately, don't count it.
 3. Group the real violations by rule, most severe first (D1, I1, P1, D2, D3, D4, A1, A2, A3, N1, N2, L1), and within a rule by module. For each rule write the concrete fix for these files, based on the "How to fix" column.
-4. Write the result to `docs/ddd-structure-fix-result.md` (see below). Overwrite the file on every run: it always describes the current state.
+4. Write the result to `docs/ddd-structure-result.md` (see below). Overwrite the file on every run: it always describes the current state.
 5. In chat, give the totals, the most severe findings and the path to the result file.
 
 This skill does not edit code; it reports and recommends. After moving code between layers, run this skill again.
 
-## Result file: `docs/ddd-structure-fix-result.md`
+## Result file: `docs/ddd-structure-result.md`
 
 Use this structure:
 
@@ -51,7 +51,7 @@ Use this structure:
 # DDD structure check result
 
 Date: <YYYY-MM-DD> · Branch: <git branch> · Commit: <short hash>[, uncommitted changes]
-Command: `bash .claude/skills/ddd-structure-fix/scripts/check.sh` · Exit code: <0|1>
+Command: `bash .claude/skills/ddd-structure/scripts/check.sh` · Exit code: <0|1>
 
 ## Summary
 
