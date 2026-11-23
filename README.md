@@ -271,7 +271,7 @@ The layer rules are enforced by a script that runs on the host:
 bash .claude/skills/ddd-structure-fix/scripts/check.sh   # exit code 1 on violations
 ```
 
-It is also available as the Claude Code skill `/ddd-structure-fix`; the last result is in [docs/ddd-structure-fix-result.md](docs/ddd-structure-fix-result.md). Other project skills in `.claude/skills/`: `fix-migrations` (format Doctrine migrations) and `main-dockerfile-fix` (check the production Dockerfile).
+It is also available as the Claude Code skill `/ddd-structure-fix`; the last result is in [docs/ddd-structure-fix-result.md](docs/ddd-structure-fix-result.md). Another project skill in `.claude/skills/`: `fix-migrations` (format Doctrine migrations). The production Dockerfile is checked with the global skill `/fix-dockerfile` (see [docs/dockerfile-check.md](docs/dockerfile-check.md)).
 
 ## Telegram notifications
 
@@ -333,6 +333,7 @@ It pulls, rebuilds, migrates and registers the Telegram webhook. Options and the
 | [docs/telegram-webhook.md](docs/telegram-webhook.md) | Telegram webhook and bot commands |
 | [docs/crontab.md](docs/crontab.md) | scheduled grabbing on the server |
 | [docs/deploy.md](docs/deploy.md) | production deploy |
+| [docs/dockerfile-check.md](docs/dockerfile-check.md) | checking the production Dockerfile with `/fix-dockerfile` |
 | [docs/ddd-structure-fix-result.md](docs/ddd-structure-fix-result.md) | result of the last DDD layer check |
 
 ## License

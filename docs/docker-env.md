@@ -31,4 +31,4 @@ The build-arg names inside the Dockerfiles are unchanged; only the source variab
   The extra `COMPOSE_*` keys are harmless for all of them.
 - **Prod.** `docker-compose.prod.yaml` uses `--env-file .env.prod.local` and does not use these variables.
 - **Checks.** `docker compose config` shows the resolved values.
-  `.claude/skills/main-dockerfile-fix/scripts/check.sh` still works, because its regex matches `PHP_VERSION:-x.y` inside `COMPOSE_PHP_VERSION:-x.y`.
+  the global skill `/fix-dockerfile` (`~/.claude/skills/fix-dockerfile/scripts/check.sh`) still works, because its regex matches `PHP_VERSION:-x.y` inside `COMPOSE_PHP_VERSION:-x.y`.
