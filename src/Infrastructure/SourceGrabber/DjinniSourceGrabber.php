@@ -78,11 +78,11 @@ class DjinniSourceGrabber extends AbstractSourceGrabber
         $vacancyUrl  = 'https://djinni.co' . $node->filter('a.job_item__header-link')->attr('href');
         $externalId  = array_last(explode('-', $node->attr('id')));
         $title       = $this->cleanText($node->filter('h2.job-item__position')->getNode(0)?->nodeValue);
-        $description = $this->cleanText(
-            $node->filter("div[id=job-description-{$externalId}]")->filter('.js-truncated-text')->html()
-        );
-        $salary  = $this->cleanText($node->filter('a.job_item__header-link')->filter('div.fs-5')->text());
-        $company = $this->parseCompany($node);
+        $text        = $node->filter("div[id=job-description-{$externalId}]")->filter('.js-truncated-text')->getNode(0)?->nodeValue;
+        $description = $this->cleanText($text);
+        $text        = $node->filter('a.job_item__header-link')->filter('div.fs-5')->getNode(0)?->nodeValue;
+        $salary      = $this->cleanText($text);
+        $company     = $this->parseCompany($node);
 
         return new GrabbedVacancy(
             externalId: $externalId,
