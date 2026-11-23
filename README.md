@@ -3,31 +3,31 @@
 Collects job vacancies from the sources you choose (Djinni, DOU), keeps them up to date and helps you track your applications: status, resume sent date, deadline and notes. New and changed vacancies are reported to you in Telegram.
 
 **Backend**<br>
-![PHP](https://img.shields.io/badge/PHP-8.4-777BB4?logo=php&logoColor=white)
-![Symfony](https://img.shields.io/badge/Symfony-8.1-000000?logo=symfony&logoColor=white)
+[![PHP](https://img.shields.io/badge/PHP-8.4-777BB4?logo=php&logoColor=white)](https://www.php.net)
+[![Symfony](https://img.shields.io/badge/Symfony-8.1-000000?logo=symfony&logoColor=white)](https://symfony.com)
 [![Doctrine](https://img.shields.io/badge/Doctrine-ORM_3-FC6A31?logo=doctrine&logoColor=white)](https://www.doctrine-project.org/projects/orm.html)
-![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?logo=mysql&logoColor=white)
-![JWT](https://img.shields.io/badge/JWT-auth-000000?logo=jsonwebtokens&logoColor=white)
-![Telegram](https://img.shields.io/badge/Telegram-Bot-26A5E4?logo=telegram&logoColor=white)
-![Composer](https://img.shields.io/badge/Composer-2-885630?logo=composer&logoColor=white)
+[![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?logo=mysql&logoColor=white)](https://www.mysql.com)
+[![JWT](https://img.shields.io/badge/JWT-auth-000000?logo=jsonwebtokens&logoColor=white)](https://jwt.io)
+[![Telegram](https://img.shields.io/badge/Telegram-Bot-26A5E4?logo=telegram&logoColor=white)](https://core.telegram.org/bots)
+[![Composer](https://img.shields.io/badge/Composer-2-885630?logo=composer&logoColor=white)](https://getcomposer.org)
 
 **Frontend**<br>
-![Vue](https://img.shields.io/badge/Vue-3-4FC08D?logo=vuedotjs&logoColor=white)
-![Vuetify](https://img.shields.io/badge/Vuetify-4-1867C0?logo=vuetify&logoColor=white)
-![Pinia](https://img.shields.io/badge/Pinia-4-FFD859?logo=pinia&logoColor=black)
-![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)
-![Sass](https://img.shields.io/badge/Sass-SCSS-CC6699?logo=sass&logoColor=white)
-![Webpack Encore](https://img.shields.io/badge/Webpack_Encore-7-8DD6F9?logo=webpack&logoColor=black)
-![Node.js](https://img.shields.io/badge/Node.js-24-5FA04E?logo=nodedotjs&logoColor=white)
-![Yarn](https://img.shields.io/badge/Yarn-2C8EBB?logo=yarn&logoColor=white)
+[![Vue](https://img.shields.io/badge/Vue-3-4FC08D?logo=vuedotjs&logoColor=white)](https://vuejs.org)
+[![Vuetify](https://img.shields.io/badge/Vuetify-4-1867C0?logo=vuetify&logoColor=white)](https://vuetifyjs.com)
+[![Pinia](https://img.shields.io/badge/Pinia-4-FFD859?logo=pinia&logoColor=black)](https://pinia.vuejs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Sass](https://img.shields.io/badge/Sass-SCSS-CC6699?logo=sass&logoColor=white)](https://sass-lang.com)
+[![Webpack Encore](https://img.shields.io/badge/Webpack_Encore-7-8DD6F9?logo=webpack&logoColor=black)](https://symfony.com/doc/current/frontend/encore/index.html)
+[![Node.js](https://img.shields.io/badge/Node.js-24-5FA04E?logo=nodedotjs&logoColor=white)](https://nodejs.org)
+[![Yarn](https://img.shields.io/badge/Yarn-2C8EBB?logo=yarn&logoColor=white)](https://yarnpkg.com)
 
 **Tooling and infrastructure**<br>
-![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
-![Traefik](https://img.shields.io/badge/Traefik-proxy-24A1C1?logo=traefikproxy&logoColor=white)
-![Codeception](https://img.shields.io/badge/Codeception-5-1E1E1E)
-![Selenium](https://img.shields.io/badge/Selenium-tests-43B02A?logo=selenium&logoColor=white)
-![ESLint](https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=white)
-![PHP-CS-Fixer](https://img.shields.io/badge/PHP--CS--Fixer-code_style-777BB4?logo=php&logoColor=white)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](https://www.docker.com)
+[![Traefik](https://img.shields.io/badge/Traefik-proxy-24A1C1?logo=traefikproxy&logoColor=white)](https://traefik.io)
+[![Codeception](https://img.shields.io/badge/Codeception-5-1E1E1E)](https://codeception.com)
+[![Selenium](https://img.shields.io/badge/Selenium-tests-43B02A?logo=selenium&logoColor=white)](https://www.selenium.dev)
+[![ESLint](https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=white)](https://eslint.org)
+[![PHP-CS-Fixer](https://img.shields.io/badge/PHP--CS--Fixer-code_style-777BB4?logo=php&logoColor=white)](https://cs.symfony.com)
 
 ## Table of contents
 
