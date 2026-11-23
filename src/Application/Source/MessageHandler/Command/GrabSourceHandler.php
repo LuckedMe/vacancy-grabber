@@ -7,6 +7,7 @@ namespace App\Application\Source\MessageHandler\Command;
 use App\Application\Exception\Security\AccessDeniedException;
 use App\Application\Security\Voter\SourceVoter;
 use App\Application\Shared\Bus\CommandHandlerInterface;
+use App\Application\Shared\Bus\MessageBus;
 use App\Application\Source\DTO\GrabSourceResultDTO;
 use App\Application\Source\Message\Command\GrabSourceAsyncCommand;
 use App\Application\Source\Message\Command\GrabSourceCommand;
@@ -19,7 +20,6 @@ use App\Domain\Source\Service\VacancyImporter;
 use App\Domain\Source\Service\VacancySynchronizer;
 use App\Domain\User\Entity\User;
 use App\Domain\User\Repository\UserRepository;
-use App\Infrastructure\Messenger\MessageBusHandler;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -37,7 +37,7 @@ final readonly class GrabSourceHandler implements CommandHandlerInterface
         private GrabberProvider $grabberProvider,
         private VacancyImporter $vacancyImporter,
         private VacancySynchronizer $vacancySynchronizer,
-        private MessageBusHandler $messageBusHandler,
+        private MessageBus $messageBus,
         #[Autowire('%env(DEFAULT_URI)%')]
         private string $baseUrl,
     ) {
@@ -100,7 +100,7 @@ final readonly class GrabSourceHandler implements CommandHandlerInterface
                 : $this->translator->trans(id: 'SOURCE.GRAB_REPORT.NO_UPDATES', parameters: $params, domain: 'messages');
 
             // sent by the worker after the current (transactional) bus has finished and the grab is saved
-            $this->messageBusHandler->handleCommand(
+            $this->messageBus->handleCommand(
                 new SendTelegramNotificationAsyncCommand($chatId, $message),
                 dispatchAfterCurrentBus: true,
             );

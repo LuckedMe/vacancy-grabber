@@ -5,7 +5,7 @@ description: Check that src follows the DDD layer rules (Domain/Application/Infr
 
 # DDD structure check and fix recommendations
 
-Layer rules: **Domain → nothing** (only its own code plus `Doctrine\Common\Collections`, `Symfony\Component\Uid` and Carbon). **Application → Domain**. **Infrastructure → Application + Domain**. **Presentation** (controllers, request objects, Sonata Admin, Twig, templates) is the outermost layer: it may use all the others, and nothing may import it.
+Layer rules: **Domain → nothing** (only its own code plus `Doctrine\Common\Collections`, `Symfony\Component\Uid` and Carbon). **Application → Domain** (never Infrastructure: it uses ports). **Infrastructure → Application + Domain**. **Presentation** (controllers, request objects, Sonata Admin, Twig, templates) is the outermost layer: it may use all the others, and nothing may import it.
 
 ## Run
 
@@ -28,6 +28,7 @@ Each violation is printed on one line as `RULE  path:line  message`, followed by
 | P1 | Domain, Application and Infrastructure must not import Presentation | Move the shared piece inward (e.g. validation used by handlers → `Application/Shared/Validation`), or move the caller outward into Presentation. |
 | A1 | Application must not use `EntityManagerInterface` / `QueryBuilder` | Persist with `save()`/`remove()` on the repository port; load related entities through their repositories instead of `getReference()`. |
 | A2 | DomCrawler/HttpClient adapters belong in Infrastructure | Define a Domain port (as `Domain/Source/Grabber/Grabber`) and implement it in `Infrastructure/<Adapter>/`. |
+| A3 | Application must not depend on Infrastructure | Define a port in Application (as `Application/Telegram/TelegramSender`, `Application/Shared/Bus/MessageBus`) or Domain, implement it in `Infrastructure/<Adapter>/` and inject the port. |
 | N1 | `Domain/<M>/Repository/` holds only `<E>Repository` (no `Interface` suffix) and `<E>Criteria`; each `<E>Repository` has `Infrastructure/Doctrine/Repository/<E>DoctrineRepository` | Create the missing implementation or rename the file. |
 | N2 | Every non-enum `Domain/<M>/Entity/<E>` has `Infrastructure/Doctrine/Mapping/<M>.Entity.<E>.orm.xml` | Add the mapping. |
 | L1 | No PHP left in `src/Component`, `src/Contract`, `src/Controller`, `src/VacancyGrabber` | Fold the code into `src/{Domain,Application,Infrastructure,Presentation}`. |
@@ -36,7 +37,7 @@ Each violation is printed on one line as `RULE  path:line  message`, followed by
 
 1. Run the script and read its whole output.
 2. Check each hit. A hit that is not a real dependency (e.g. a match inside a comment or a string) is a false positive: list it separately, don't count it.
-3. Group the real violations by rule, most severe first (D1, I1, P1, D2, D3, D4, A1, A2, N1, N2, L1), and within a rule by module. For each rule write the concrete fix for these files, based on the "How to fix" column.
+3. Group the real violations by rule, most severe first (D1, I1, P1, D2, D3, D4, A1, A2, A3, N1, N2, L1), and within a rule by module. For each rule write the concrete fix for these files, based on the "How to fix" column.
 4. Write the result to `docs/ddd-structure-fix-result.md` (see below). Overwrite the file on every run: it always describes the current state.
 5. In chat, give the totals, the most severe findings and the path to the result file.
 

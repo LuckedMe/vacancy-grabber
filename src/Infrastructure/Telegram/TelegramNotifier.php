@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Telegram;
 
+use App\Application\Telegram\TelegramSender;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 use function sprintf;
 
-final readonly class TelegramNotifier
+final readonly class TelegramNotifier implements TelegramSender
 {
     public function __construct(
         private HttpClientInterface $httpClient,

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Messenger;
 
 use App\Application\Shared\Bus\AsyncMessageInterface;
+use App\Application\Shared\Bus\MessageBus;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Exception\LogicException;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -19,7 +20,7 @@ use function get_class;
 use function implode;
 use function sprintf;
 
-final readonly class MessageBusHandler
+final readonly class MessageBusHandler implements MessageBus
 {
     public function __construct(
         private MessageBusInterface $commandBus,

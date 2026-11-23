@@ -15,7 +15,7 @@ if [[ ! -d "$VG/Domain" ]]; then
     exit 2
 fi
 
-RULES=(D1 D2 D3 D4 I1 P1 A1 A2 N1 N2 L1)
+RULES=(D1 D2 D3 D4 I1 P1 A1 A2 A3 N1 N2 L1)
 declare -A COUNT
 declare -A TITLE=(
     [D1]="Domain depends on Application/Infrastructure"
@@ -26,6 +26,7 @@ declare -A TITLE=(
     [P1]="Inner layer depends on Presentation"
     [A1]="Application uses the ORM directly"
     [A2]="External adapter (DomCrawler/HttpClient) in Application"
+    [A3]="Application depends on Infrastructure"
     [N1]="Repository naming/pairing"
     [N2]="Entity without XML mapping"
     [L1]="File in legacy location"
@@ -66,6 +67,7 @@ for layer in Domain Application Infrastructure; do
 done
 scan A1 "$VG/Application"    'Doctrine\\ORM\\(EntityManagerInterface|QueryBuilder)([^A-Za-z0-9_]|$)'
 scan A2 "$VG/Application"    'Symfony\\(Component\\(DomCrawler|HttpClient)|Contracts\\HttpClient)\\'
+scan A3 "$VG/Application"    'App\\Infrastructure\\'
 
 # N1: Domain/<M>/Repository/<E>Repository.php needs Infrastructure/Doctrine/Repository/<E>DoctrineRepository.php
 # (Domain/Shared holds cross-module contracts, not an entity module)

@@ -6,24 +6,24 @@ namespace App\Application\Telegram\MessageHandler\Command;
 
 use App\Application\Shared\Bus\CommandHandlerInterface;
 use App\Application\Telegram\Message\Command\SendTelegramNotificationAsyncCommand;
-use App\Infrastructure\Telegram\TelegramNotifier;
+use App\Application\Telegram\TelegramSender;
 
 final readonly class SendTelegramNotificationHandler implements CommandHandlerInterface
 {
     public function __construct(
-        private TelegramNotifier $telegramNotifier,
+        private TelegramSender $telegramSender,
     ) {
     }
 
     /**
-     * A TelegramException is not caught on purpose: Messenger retries the message and then moves it to the failed transport.
+     * A send error is not caught on purpose: Messenger retries the message and then moves it to the failed transport.
      */
     public function __invoke(SendTelegramNotificationAsyncCommand $command): void
     {
-        if (!$this->telegramNotifier->isEnabled()) {
+        if (!$this->telegramSender->isEnabled()) {
             return;
         }
 
-        $this->telegramNotifier->send($command->chatId, $command->message);
+        $this->telegramSender->send($command->chatId, $command->message);
     }
 }
