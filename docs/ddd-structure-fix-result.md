@@ -1,6 +1,6 @@
 # DDD structure check result
 
-Date: 2026-11-23 · Branch: main · Commit: 826ec78
+Date: 2026-11-23 · Branch: main · Commit: 771a23a
 Command: `bash .claude/skills/ddd-structure-fix/scripts/check.sh` · Exit code: 0
 
 ## Summary
@@ -36,5 +36,5 @@ None.
    - `SendTelegramNotificationHandler` depends on the Application port `App\Application\Telegram\TelegramSender`, implemented by `Infrastructure/Telegram/TelegramNotifier`.
    - `GrabSourceHandler` and `GetDashboardCollectionHandler` depend on the Application port `App\Application\Shared\Bus\MessageBus`, implemented by `Infrastructure/Messenger/MessageBusHandler`.
 3. Rule A3 (Application must not depend on Infrastructure) now enforces this, so it can not come back unnoticed.
-4. The Presentation controllers (about 40 files) still import the concrete `MessageBusHandler`. This is allowed, since Presentation may use every layer, so it is not a violation.
+4. Presentation now uses the `MessageBus` port too (35 files switched). Nothing outside `Infrastructure/Messenger/MessageBusHandler.php` references the concrete class, so the port is the only entry point to the bus.
 5. The script greps imports only. It cannot see fully-qualified class names used inline without `use`, runtime service lookups, or logic that belongs in another layer.
