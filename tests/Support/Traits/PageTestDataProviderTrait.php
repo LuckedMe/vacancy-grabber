@@ -7,6 +7,7 @@ namespace App\Tests\Support\Traits;
 use Codeception\Util\HttpCode;
 
 use function array_column;
+use function array_filter;
 use function array_map;
 
 trait PageTestDataProviderTrait
@@ -52,7 +53,8 @@ trait PageTestDataProviderTrait
         return [
             ... array_map(
                 static fn(array $item): array => [... $item, ... $publicPageDataProviderCodes],
-                $this->publicPageDataProvider(),
+                // the homepage is public for anonymous users (the CMS page); it redirects to the dashboard only when logged in
+                [... $this->publicPageDataProvider(), ['url' => '/']],
             ),
             ... array_map(
                 static fn(array $item): array => [... $item, ... $adminPageDataProviderCodes],
@@ -62,7 +64,10 @@ trait PageTestDataProviderTrait
                 static fn(array $item): array => [... $item, ... $privatePageDataProviderCodes],
                 array_map(
                     static fn(string $url): array => ['url' => $url],
-                    array_column($this->privatePageDataProvider(), 'url'),
+                    array_filter(
+                        array_column($this->privatePageDataProvider(), 'url'),
+                        static fn(string $url): bool => $url !== '/',
+                    ),
                 )
             ),
         ];
