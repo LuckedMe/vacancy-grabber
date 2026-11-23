@@ -1,141 +1,205 @@
-# Vacancy grabber
-Grab vacancies by source URL
+# Vacancy Grabber
 
-## Requirements:
-- php 8.4
-- mysql 8
+Collects job vacancies from the sources you choose (Djinni, DOU), keeps them up to date and helps you track your applications: status, resume sent date, deadline and notes. New and changed vacancies are reported to you in Telegram.
 
-## Installation:
+![PHP](https://img.shields.io/badge/PHP-8.4-777BB4?logo=php&logoColor=white)
+![Symfony](https://img.shields.io/badge/Symfony-8.1-000000?logo=symfony&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?logo=mysql&logoColor=white)
+![Vue](https://img.shields.io/badge/Vue-3-4FC08D?logo=vuedotjs&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
 
-### Add a host 
-edit /etc/hosts  
-add a new host: vacancy-grabber.local
+## Table of contents
 
-### Compile all docker images
+- [Features](#features)
+- [Tech stack](#tech-stack)
+- [Quick start](#quick-start)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Development](#development)
+- [Testing](#testing)
+- [Architecture](#architecture)
+- [Telegram notifications](#telegram-notifications)
+- [Scheduled grabbing](#scheduled-grabbing)
+- [Deployment](#deployment)
+- [Troubleshooting](#troubleshooting)
+- [Documentation](#documentation)
+- [License](#license)
 
-#### Build docker images
+## Features
+
+- **Grabbing by source URL**: each source is a search/list URL; the grabber imports new vacancies and updates the ones that changed on the site.
+- **Vacancy tracking**: statuses, resume sent date, deadline, notes, companies, grab log per run.
+- **Dashboards** with vacancy status and resume statistics.
+- **Web app** (Vue 3) on top of a REST API secured with JWT, plus a **Sonata admin** at `/admin`.
+- **Telegram**: a report after every grab, and a bot (`/start`, `/grab`, ...) working through a webhook.
+- **Scheduled grabbing** by cron and **async processing** by a Symfony Messenger worker.
+
+## Tech stack
+
+| Area | Technology |
+|---|---|
+| Backend | PHP 8.4, Symfony 8.1, Doctrine ORM 3, Symfony Messenger |
+| Admin | Sonata Admin (with Google Authenticator) |
+| API auth | LexikJWTAuthenticationBundle (JWT + refresh tokens) |
+| Frontend | Vue 3, TypeScript, Webpack Encore, Yarn |
+| Database | MySQL 8 |
+| Telegram | `luzrain/telegram-bot-bundle` (webhook) and the Bot API |
+| Tests | Codeception 5 (unit, api, web, acceptance with Selenium) |
+| Code style | PHP-CS-Fixer, ESLint |
+| Runtime | Docker Compose (dev and production), Traefik on the server |
+
+## Quick start
+
+### Prerequisites
+
+- Docker with the Compose plugin, `make`, `git`
+- A local reverse proxy that routes `*.vacancy-grabber.local` by `VIRTUAL_HOST` (nginx-proxy style). `docker-compose.yaml` expects two **external** Docker networks: `reverse-proxy` and `shared-smtp`. If you do not have them yet:
+  ```bash
+  docker network create reverse-proxy
+  docker network create shared-smtp
+  ```
+- The host name in `/etc/hosts`:
+  ```
+  127.0.0.1  vacancy-grabber.local
+  ```
+
+### Install
+
 ```bash
-make docker-build
+git clone git@github.com:LuckedMe/vacancy-grabber.git
+cd vacancy-grabber
+
+make docker-build     # build the images
+make docker-up        # start the containers
+make install          # composer install
+make jwt-keys         # one-time: JWT keypair into config/jwt/
+make migrate          # migrations for the dev AND the test database
+make yarn-install     # JS dependencies
+make yarn-dev         # build the frontend (or `make yarn-watch` while developing)
 ```
 
-#### Run docker images
-```bash
-make docker-up
-```
+Open <https://vacancy-grabber.local>. `make help` lists all documented make targets.
 
-#### Run docker logs
-```bash
-make docker-logs
-```
+> **Note**
+> Every dev command runs inside the containers, so the stack must be up (`make docker-up`).
 
-#### Connect to php-fpm console
-```bash
-make php-console
-```
+## Configuration
 
-#### Connect to mysql console
-```bash
-make mysql-console
-```
+Symfony loads the files in this order, the latter taking precedence:
 
-[//]: # (#### Connect to nodejs console)
-[//]: # (```bash)
-[//]: # (make nodejs-console)
-[//]: # (```)
-
-#### Install vendor packages
-```bash
-make install
-```
-
-#### Run Migrations
-```bash
-make migrate
-```
-It migrates both the dev database and the test database (`--env=test`), so the test suite has its schema.
-
-#### Generate the JWT keypair (one-time)
-```bash
-make jwt-keys
-```
-The keys are written to `config/jwt/` (git-ignored). If you protect the private key with a passphrase, set `JWT_PASSPHRASE` in `.env.local` **and** in `.env.test.local`: Symfony does not read `.env.local` when `APP_ENV=test`.
-
-#### Build the frontend
-```bash
-make yarn-install
-make yarn-dev        # or `make yarn-watch` while developing
-```
-
-### Docker environment variables
-`COMPOSE_PROJECT_NAME`, `COMPOSE_PHP_VERSION`, `COMPOSE_USER_ID` and `COMPOSE_GROUP_ID` live in the root `.env` and are read by `docker-compose.yaml`. After changing the PHP version or the user/group id, rebuild with `make docker-build`. Details: [docs/docker-env.md](docs/docker-env.md).
-
-## Makefile commands
-Run `make help` for the list of documented targets. The main ones:
-
-| Group | Command | What it does |
+| File | Committed | Purpose |
 |---|---|---|
-| Docker | `make docker-build` / `docker-up` / `docker-stop` / `docker-down` / `docker-restart` | Build, start, stop, remove and restart the dev containers |
-| | `make docker-ps` / `docker-logs` | Container status / follow all logs (`php-logs`, `node-logs`, `mysql-logs` for one service) |
-| Shells | `make php-console` / `node-console` / `mysql-console` | Open a shell in the php-fpm / nodejs container, or the mysql client |
-| Backend | `make install` / `update` | `composer install` / `composer update` |
-| | `make migrate` | Doctrine migrations for dev **and** test databases |
-| | `make fixtures` | Load database fixtures |
-| | `make cache-clear` | Clear the Symfony cache (dev and test) |
-| | `make jwt-keys` | Generate the JWT keypair (one-time) |
-| | `make lint` / `lint-fix` | PHP-CS-Fixer check / fix |
-| Frontend | `make yarn-install` / `yarn-dev` / `yarn-watch` / `yarn-build` | Install JS packages, build for dev, watch, build for production |
-| | `make yarn-lint` / `yarn-lint-fix` | ESLint check / fix |
-| Tests | `make test` / `test-unit` / `test-api` / `test-web` / `test-acceptance` | See [Testing](#testing) |
-| | `make test-coverage` / `test-coverage-html` | Coverage reports |
-| Production | `make prod-build` / `prod-up` / `prod-down` / `prod-migrate` / `prod-jwt-keys` / `prod-deploy` / `prod-logs` / `prod-ps` / `prod-console` / `prod-assets` | Same idea for `docker-compose.prod.yaml`, see [Deploy](#deploy-to-live-vps) |
+| `.env` | yes | defaults and documentation of every variable |
+| `.env.local` | no | your machine secrets and overrides (not read when `APP_ENV=test`) |
+| `.env.test` | yes | test environment defaults |
+| `.env.test.local` | no | test environment secrets |
+| `.env.prod.local` | no | production values, created from `.env.prod.dist` |
 
-All dev targets run inside the containers, so the stack must be up (`make docker-up`).
+Never commit secrets: put tokens, passwords and keys into the `*.local` files.
 
-## Code Style:
+| Variable | Meaning |
+|---|---|
+| `APP_ENV`, `APP_SECRET`, `TIMEZONE` | Symfony environment, secret, application time zone |
+| `DEFAULT_URI` | public base URL (used in Telegram links) |
+| `DATABASE_URL` | MySQL connection |
+| `MESSENGER_TRANSPORT_DSN` | queue transport (`doctrine://...` in production, `sync://` in tests and local dev) |
+| `JWT_SECRET_KEY`, `JWT_PUBLIC_KEY`, `JWT_PASSPHRASE`, `JWT_TOKEN_TTL` | JWT keypair, its passphrase and token lifetime |
+| `RATE_LIMIT_*` | login and API rate limits |
+| `TELEGRAM_API_TOKEN`, `TELEGRAM_WEBHOOK_URL`, `TELEGRAM_WEBHOOK_SECRET` | Telegram bot, see [Telegram notifications](#telegram-notifications) |
+| `LUCKED_ME_CMS_CLIENT_*` | CMS client that supplies the public homepage content |
+| `COMPOSE_PROJECT_NAME`, `COMPOSE_PHP_VERSION`, `COMPOSE_USER_ID`, `COMPOSE_GROUP_ID` | Docker Compose settings read from `.env`; after changing the PHP version or user/group id run `make docker-build`. Details: [docs/docker-env.md](docs/docker-env.md) |
 
-### PHP
-> **_NOTE:_** All commands must be executed inside docker image
+Optionally copy `docker-compose.override.yaml.dist` to `docker-compose.override.yaml` (git-ignored) to publish the MySQL port `3306` on the host.
 
-#### Check
+## Usage
+
+| What | URL |
+|---|---|
+| Application | <https://vacancy-grabber.local> |
+| Admin | <https://vacancy-grabber.local/admin> |
+| phpMyAdmin | <https://webmysql.vacancy-grabber.local> |
+| Adminer | <https://adminer.vacancy-grabber.local> |
+| Selenium viewer (acceptance tests) | <http://localhost:7900> |
+
+### Grab vacancies
+
+1. Open [Vacancies ⇒ Sources](https://vacancy-grabber.local/admin/source/list) in the admin menu.
+2. Set the URL for each source you need.
+3. Click the **Grab** action for the chosen sources.
+
+![Vacancies ⇒ Sources list](./docs/images/admin-source-list.png)
+
+From the console:
+
 ```bash
-composer run lint
+bin/console app:source:grab-all        # all active sources, then the Telegram reports
 ```
-#### Fix
+
+## Development
+
+### Make targets
+
+| Group | Commands | What they do |
+|---|---|---|
+| Docker | `make docker-build` `docker-up` `docker-stop` `docker-down` `docker-restart` | build, start, stop, remove and restart the dev containers |
+| | `make docker-ps` `docker-logs` | status / follow all logs (`php-logs`, `node-logs`, `mysql-logs` for one service) |
+| Shells | `make php-console` `node-console` `mysql-console` | shell in the php-fpm / nodejs container, mysql client |
+| Backend | `make install` `update` | `composer install` / `composer update` |
+| | `make migrate` | Doctrine migrations for the dev **and** the test database |
+| | `make fixtures` | load database fixtures |
+| | `make cache-clear` | clear the Symfony cache (dev and test) |
+| | `make jwt-keys` | generate the JWT keypair (one-time) |
+| | `make lint` `lint-fix` | PHP-CS-Fixer check / fix |
+| Frontend | `make yarn-install` `yarn-dev` `yarn-watch` `yarn-build` | install packages, build for dev, watch, build for production |
+| | `make yarn-lint` `yarn-lint-fix` | ESLint check / fix |
+| Tests | `make test` `test-unit` `test-api` `test-web` `test-acceptance` | see [Testing](#testing) |
+| | `make test-coverage` `test-coverage-html` | coverage reports |
+| Production | `make prod-build` `prod-up` `prod-down` `prod-migrate` `prod-jwt-keys` `prod-deploy` `prod-logs` `prod-ps` `prod-console` `prod-assets` | the same idea for `docker-compose.prod.yaml`, see [Deployment](#deployment) |
+
+### Code style
+
 ```bash
-composer run lint:fix
+make lint          # check (composer run lint inside the container)
+make lint-fix      # fix
+make yarn-lint     # frontend
 ```
+
+### Database migrations
+
+Generate with `bin/console doctrine:migrations:diff`, then format the file with the project skill `fix-migrations` so it matches the hand-formatted references in `migrations/2026/`. Apply with `make migrate`.
 
 ## Testing
-The tests use [Codeception](https://codeception.com/) (suites in `tests/Suite/`):
 
-| Suite | Command | What it covers |
+[Codeception](https://codeception.com/) suites live in `tests/Suite/`:
+
+| Suite | Command | Covers |
 |---|---|---|
-| Unit | `make test-unit` | Domain and Application classes without the framework or a database |
-| API | `make test-api` | REST API (`/api/...`) against the test database, JSON-schema checks in `tests/_data/schemas` |
-| Web | `make test-web` | Server-rendered pages and redirects |
-| Acceptance | `make test-acceptance` | Browser tests in the `selenium` container (watch at http://localhost:7900); filter with `make test-acceptance ARGS="LoginPageCest"` |
+| Unit | `make test-unit` | Domain and Application classes, no framework, no database |
+| Api | `make test-api` | REST API (`/api/...`) on the test database, JSON-schema checks in `tests/_data/schemas` |
+| Web | `make test-web` | server-rendered pages and redirects |
+| Acceptance | `make test-acceptance` | browser tests in the `selenium` container (watch at <http://localhost:7900>); filter with `make test-acceptance ARGS="LoginPageCest"` |
 
 `make test` runs everything **except** acceptance (unit, api, web). `make test-coverage` and `make test-coverage-html` (report in `tests/_output/coverage`) build coverage reports.
 
-Before the first run:
-- `make migrate` creates the schema in the test database (`<dbname>_test`).
-- `config/jwt/` needs a keypair (`make jwt-keys`). With a passphrase-protected key, add `JWT_PASSPHRASE` to `.env.test.local` (see above), otherwise login returns 500.
-- The test env uses `MESSENGER_TRANSPORT_DSN=sync://`, so async messages are handled immediately.
+**Before the first run**
 
-The login and API rate limits are raised for the test env in `.env.test` (`RATE_LIMIT_*`). If a test still gets `429 Too many requests`, clear the limiter cache (inside `make php-console`):
-```bash
-bin/console cache:pool:clear cache.rate_limiter cache.app --env=test
-```
+- `make migrate` creates the schema in the test database (`<dbname>_test`).
+- `config/jwt/` needs a keypair (`make jwt-keys`). With a passphrase-protected key put `JWT_PASSPHRASE` into **both** `.env.local` and `.env.test.local`; otherwise login returns 500.
+- The test environment uses `MESSENGER_TRANSPORT_DSN=sync://`, so async messages are handled immediately.
+- Login and API rate limits are raised in `.env.test` (`RATE_LIMIT_*`).
 
 ### Run a single test method
+
 Run these inside the php-fpm container (`make php-console`). Acceptance tests also need the `selenium` and `nginx` containers (`make test-acceptance` starts them). The pattern is `codecept run <suite> [<path/to/Class>[::<method>]]`; `<Class>:<method>` works too, and `-d pcov.enabled=1` is only needed for coverage.
 
 Run a single test method (do not forget it):
+
 ```bash
 php -d pcov.enabled=1 -d memory_limit=-1 ./vendor/bin/codecept run acceptance PageCest::privatePageSuccess
 ```
 
 Examples per suite:
+
 ```bash
 # Unit suite
 ./vendor/bin/codecept run unit                                                  # whole suite
@@ -156,67 +220,100 @@ php -d pcov.enabled=1 -d memory_limit=-1 ./vendor/bin/codecept run acceptance   
 php -d pcov.enabled=1 -d memory_limit=-1 ./vendor/bin/codecept run acceptance PageCest                  # one class
 php -d pcov.enabled=1 -d memory_limit=-1 ./vendor/bin/codecept run acceptance PageCest::privatePageSuccess   # one method
 ```
+
 From the host, `make test-unit`, `make test-api`, `make test-web` and `make test-acceptance ARGS="PageCest"` do the same for whole suites or a filter.
 
 ## Architecture
-The code in `src/` is split into four layers: **Domain** (entities, repository ports, no framework) <- **Application** (commands, queries, handlers; uses ports only) <- **Infrastructure** (Doctrine, Telegram, Messenger adapters) <- **Presentation** (controllers, console commands, Sonata admin). Commands, queries and events go through the `MessageBus` port; handlers implement `CommandHandlerInterface` / `QueryHandlerInterface`.
 
-The layer rules are checked by a script (also available as the Claude Code skill `/ddd-structure-fix`):
-```bash
-bash .claude/skills/ddd-structure-fix/scripts/check.sh   # runs on the host, exit code 1 on violations
+The code in `src/` has four layers, and dependencies point inward only:
+
 ```
-The last result is in [docs/ddd-structure-fix-result.md](docs/ddd-structure-fix-result.md). Other project skills in `.claude/skills/`: `fix-migrations` (format Doctrine migrations) and `main-dockerfile-fix` (check the production Dockerfile).
+Presentation  ->  Infrastructure  ->  Application  ->  Domain
+(controllers,     (Doctrine, Telegram,  (commands, queries,  (entities, repository
+ console, admin)   Messenger, grabbers)  handlers, ports)      ports, no framework)
+```
+
+| Layer | Path | Rule |
+|---|---|---|
+| Domain | `src/Domain/<Module>` | framework-free: entities, value objects, repository ports |
+| Application | `src/Application/<Module>` | use cases; depends on Domain and on **ports** only (for example `MessageBus`, `TelegramSender`) |
+| Infrastructure | `src/Infrastructure` | adapters implementing the ports: Doctrine repositories and XML mappings, Messenger, Telegram, source grabbers (`SourceGrabber`: Djinni, DOU) |
+| Presentation | `src/Presentation/<Module>` | REST controllers, Sonata admin, console commands, Telegram bot controllers |
+
+Modules: Company, GrabLog, Note, Source, User, Vacancy. Commands, queries and events go through the `MessageBus` port; handlers implement `CommandHandlerInterface` or `QueryHandlerInterface`. Messages marked `*PriorityAsyncMessageInterface` are routed to the matching queue and consumed by the `worker`.
+
+Other top-level folders: `assets/` (Vue + TypeScript), `templates/`, `translations/`, `migrations/`, `config/`, `bin/` (deploy and cron scripts), `docs/`, `tests/`.
+
+The layer rules are enforced by a script that runs on the host:
+
+```bash
+bash .claude/skills/ddd-structure-fix/scripts/check.sh   # exit code 1 on violations
+```
+
+It is also available as the Claude Code skill `/ddd-structure-fix`; the last result is in [docs/ddd-structure-fix-result.md](docs/ddd-structure-fix-result.md). Other project skills in `.claude/skills/`: `fix-migrations` (format Doctrine migrations) and `main-dockerfile-fix` (check the production Dockerfile).
 
 ## Telegram notifications
-After a grab, users get a report in Telegram (vacancies created/updated and a link to the unviewed ones).
-- Set `TELEGRAM_API_TOKEN` in `.env.local` (empty = notifications are skipped).
-- Each user needs a Telegram chat ID: enter a username in the admin and run `bin/console app:telegram:link-users`, or let the bot link users on `/start`.
-- Notifications are per user (admin form: **Allow Telegram notifications**).
-- Messages are sent **asynchronously**: `SendTelegramNotificationAsyncCommand($chatId, $message)` goes to the `queue_standard_priority` transport and is delivered by the messenger `worker` (retried 5 times, then moved to the `failed` transport).
-- The bot also answers commands (`/start`, `/grab`, ...) through a webhook.
 
-Guides: [docs/telegram-notifications.md](docs/telegram-notifications.md) (token, chat IDs, async sending) and [docs/telegram-webhook.md](docs/telegram-webhook.md) (webhook, bot commands).
+After a grab, a user gets a report in Telegram: how many vacancies were created and updated, with a link to the unviewed ones.
+
+1. Create a bot with [@BotFather](https://t.me/BotFather) and put the token into `.env.local` as `TELEGRAM_API_TOKEN` (empty = notifications are skipped).
+2. Give every user a chat ID: enter a Telegram username in the admin and run `bin/console app:telegram:link-users`, or let the bot link the user on `/start`.
+3. Enable **Allow Telegram notifications** on the user in the admin (off by default).
+
+Messages are sent **asynchronously**: `SendTelegramNotificationAsyncCommand($chatId, $message)` goes to the `queue_standard_priority` transport and is delivered by the `worker`. A failed delivery is retried 5 times with growing delays, then moved to the `failed` transport (`bin/console messenger:failed:show`). The bot also answers `/start`, `/grab` and other commands through a webhook.
+
+More: [docs/telegram-notifications.md](docs/telegram-notifications.md) (token, chat IDs, async sending) and [docs/telegram-webhook.md](docs/telegram-webhook.md) (webhook, bot commands).
 
 ## Scheduled grabbing
-In production, cron runs `bin/console app:source:grab-all` every hour from 08:00 to 20:00 through `bin/source-grab-all.sh`: [docs/crontab.md](docs/crontab.md). Run it by hand with
-```bash
-bin/console app:source:grab-all
-```
 
-## Start using:
-### Sources
-- Open [Vacancies ⇒ Sources](https://vacancy-grabber.local/admin/source/list) left menu 
-- Update URL for the required sources 
-- Click on the "Grab" action button for the chosen sources
-  ![Vacancies ⇒ Sources list](./docs/images/admin-source-list.png)
+In production cron runs `app:source:grab-all` every hour from 08:00 to 20:00 through `bin/source-grab-all.sh`. Installation and troubleshooting: [docs/crontab.md](docs/crontab.md).
 
-## Deploy to live (VPS)
+## Deployment
 
-The production image is built from the root `Dockerfile` (targets `app` and `nginx`). The stack lives in `docker-compose.prod.yaml`: php-fpm, the messenger worker, nginx and mysql. It runs behind a shared Traefik reverse proxy.
+The production image is built from the root `Dockerfile` (targets `app` and `nginx`). The stack in `docker-compose.prod.yaml` has php-fpm, the Messenger worker, nginx and MySQL, and runs behind a shared Traefik reverse proxy.
 
-Full step-by-step server setup (Ubuntu 24.04, Docker, Traefik, first deploy, backups, domains, more projects): **[vps-setup/docs/vps-setup.md](../vps-setup/docs/vps-setup.md)**.
+Full server setup (Ubuntu 24.04, Docker, Traefik, first deploy, backups, domains, more projects): [vps-setup/docs/vps-setup.md](../vps-setup/docs/vps-setup.md).
 
-### Short version (server already prepared)
+**First deploy** (server already prepared):
+
 ```bash
 cd /home/dad/workspace/www/vacancy-grabber
 cp .env.prod.dist .env.prod.local   # fill in real values
-make prod-up        # build images and start the stack
-make prod-jwt-keys  # one-time: JWT keypair (stored in the "jwt" volume)
-make prod-migrate   # DB migrations + messenger transports
+make prod-up                        # build images and start the stack
+make prod-jwt-keys                  # one-time: JWT keypair (stored in the "jwt" volume)
+make prod-migrate                   # DB migrations and Messenger transports
 ```
 
-### Update
+**Update**:
+
 ```bash
-bin/deploy.sh --remote      # from your machine (or `bin/deploy.sh` on the server, `make prod-deploy`)
+bin/deploy.sh --remote      # from your machine; `bin/deploy.sh` on the server, or `make prod-deploy`
 ```
-It pulls, rebuilds, migrates and registers the Telegram webhook; options and the manual steps: [docs/deploy.md](docs/deploy.md).
+
+It pulls, rebuilds, migrates and registers the Telegram webhook. Options and the manual steps: [docs/deploy.md](docs/deploy.md).
+
+## Troubleshooting
+
+| Symptom | Cause and fix |
+|---|---|
+| `network reverse-proxy declared as external, but could not be found` | create the external networks, see [Prerequisites](#prerequisites) |
+| Tests: login returns 500 "encode the JWT token" | the key is passphrase-protected and `JWT_PASSPHRASE` is missing in `.env.test.local` |
+| Tests: `Table ... doesn't exist` | the test database has no schema, run `make migrate` |
+| Tests: `429 Too many requests` | clear the limiter: `bin/console cache:pool:clear cache.rate_limiter cache.app --env=test` |
+| Containers and volumes got new names | `COMPOSE_PROJECT_NAME` changed, run `docker compose down` with the old setup first ([docs/docker-env.md](docs/docker-env.md)) |
+| No Telegram report | check `TELEGRAM_API_TOKEN`, the user's chat ID and notifications flag, and that the `worker` is running |
 
 ## Documentation
+
 | File | Topic |
 |---|---|
 | [docs/docker-env.md](docs/docker-env.md) | `COMPOSE_*` variables and how they are used |
-| [docs/telegram-notifications.md](docs/telegram-notifications.md) | Bot token, chat IDs, async sending |
+| [docs/telegram-notifications.md](docs/telegram-notifications.md) | bot token, chat IDs, async sending |
 | [docs/telegram-webhook.md](docs/telegram-webhook.md) | Telegram webhook and bot commands |
-| [docs/crontab.md](docs/crontab.md) | Scheduled grabbing on the server |
-| [docs/deploy.md](docs/deploy.md) | Production deploy |
-| [docs/ddd-structure-fix-result.md](docs/ddd-structure-fix-result.md) | Result of the last DDD layer check |
+| [docs/crontab.md](docs/crontab.md) | scheduled grabbing on the server |
+| [docs/deploy.md](docs/deploy.md) | production deploy |
+| [docs/ddd-structure-fix-result.md](docs/ddd-structure-fix-result.md) | result of the last DDD layer check |
+
+## License
+
+Proprietary. All rights reserved.
