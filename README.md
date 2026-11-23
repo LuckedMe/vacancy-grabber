@@ -2,11 +2,32 @@
 
 Collects job vacancies from the sources you choose (Djinni, DOU), keeps them up to date and helps you track your applications: status, resume sent date, deadline and notes. New and changed vacancies are reported to you in Telegram.
 
+**Backend**<br>
 ![PHP](https://img.shields.io/badge/PHP-8.4-777BB4?logo=php&logoColor=white)
 ![Symfony](https://img.shields.io/badge/Symfony-8.1-000000?logo=symfony&logoColor=white)
+![Doctrine](https://img.shields.io/badge/Doctrine-ORM_3-FC6A31?logo=doctrine&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?logo=mysql&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-auth-000000?logo=jsonwebtokens&logoColor=white)
+![Telegram](https://img.shields.io/badge/Telegram-Bot-26A5E4?logo=telegram&logoColor=white)
+![Composer](https://img.shields.io/badge/Composer-2-885630?logo=composer&logoColor=white)
+
+**Frontend**<br>
 ![Vue](https://img.shields.io/badge/Vue-3-4FC08D?logo=vuedotjs&logoColor=white)
+![Vuetify](https://img.shields.io/badge/Vuetify-4-1867C0?logo=vuetify&logoColor=white)
+![Pinia](https://img.shields.io/badge/Pinia-4-FFD859?logo=pinia&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)
+![Sass](https://img.shields.io/badge/Sass-SCSS-CC6699?logo=sass&logoColor=white)
+![Webpack Encore](https://img.shields.io/badge/Webpack_Encore-7-8DD6F9?logo=webpack&logoColor=black)
+![Node.js](https://img.shields.io/badge/Node.js-24-5FA04E?logo=nodedotjs&logoColor=white)
+![Yarn](https://img.shields.io/badge/Yarn-2C8EBB?logo=yarn&logoColor=white)
+
+**Tooling and infrastructure**<br>
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
+![Traefik](https://img.shields.io/badge/Traefik-proxy-24A1C1?logo=traefikproxy&logoColor=white)
+![Codeception](https://img.shields.io/badge/Codeception-5-1E1E1E)
+![Selenium](https://img.shields.io/badge/Selenium-tests-43B02A?logo=selenium&logoColor=white)
+![ESLint](https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=white)
+![PHP-CS-Fixer](https://img.shields.io/badge/PHP--CS--Fixer-code_style-777BB4?logo=php&logoColor=white)
 
 ## Table of contents
 
@@ -41,7 +62,7 @@ Collects job vacancies from the sources you choose (Djinni, DOU), keeps them up 
 | Backend | PHP 8.4, Symfony 8.1, Doctrine ORM 3, Symfony Messenger |
 | Admin | Sonata Admin (with Google Authenticator) |
 | API auth | LexikJWTAuthenticationBundle (JWT + refresh tokens) |
-| Frontend | Vue 3, TypeScript, Webpack Encore, Yarn |
+| Frontend | Vue 3, Vuetify 4, Pinia, TypeScript, Sass, Webpack Encore, Yarn (Node 24) |
 | Database | MySQL 8 |
 | Telegram | `luzrain/telegram-bot-bundle` (webhook) and the Bot API |
 | Tests | Codeception 5 (unit, api, web, acceptance with Selenium) |
