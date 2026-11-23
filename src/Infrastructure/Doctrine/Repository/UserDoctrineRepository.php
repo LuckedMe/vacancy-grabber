@@ -7,7 +7,7 @@ namespace App\Infrastructure\Doctrine\Repository;
 use App\Domain\User\Entity\User;
 use App\Domain\User\Repository\UserRepository;
 use App\Infrastructure\Doctrine\Repository\Trait\FindByIdTrait;
-use App\Infrastructure\Doctrine\Repository\Trait\SaveRemoveRepositoryTrait;
+use App\Infrastructure\Doctrine\Repository\Trait\SaveRepositoryTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -17,7 +17,7 @@ use function array_map;
 
 class UserDoctrineRepository extends ServiceEntityRepository implements UserRepository
 {
-    use SaveRemoveRepositoryTrait;
+    use SaveRepositoryTrait;
     use FindByIdTrait;
 
     public function __construct(ManagerRegistry $registry)

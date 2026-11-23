@@ -13,14 +13,14 @@ use App\Infrastructure\Doctrine\Repository\Trait\FindByIdTrait;
 use App\Infrastructure\Doctrine\Repository\Trait\OrderByRepositoryTrait;
 use App\Infrastructure\Doctrine\Repository\Trait\PaginatorRepositoryTrait;
 use App\Infrastructure\Doctrine\Repository\Trait\QueryConditionBuilderRepositoryTrait;
-use App\Infrastructure\Doctrine\Repository\Trait\SaveRemoveRepositoryTrait;
+use App\Infrastructure\Doctrine\Repository\Trait\SaveRepositoryTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 class GrabLogDoctrineRepository extends ServiceEntityRepository implements GrabLogRepository
 {
-    use SaveRemoveRepositoryTrait;
+    use SaveRepositoryTrait;
     use OrderByRepositoryTrait;
     use FindByIdTrait;
     use FindByIdAndUserIdTrait;

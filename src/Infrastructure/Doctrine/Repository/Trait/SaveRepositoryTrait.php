@@ -6,7 +6,7 @@ namespace App\Infrastructure\Doctrine\Repository\Trait;
 
 use Doctrine\ORM\Exception\ORMException;
 
-trait SaveRemoveRepositoryTrait
+trait SaveRepositoryTrait
 {
     public function save(object $entity): void
     {

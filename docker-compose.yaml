@@ -3,9 +3,9 @@ services:
         build:
             context: ./.docker/php-fpm
             args:
-                PHP_VERSION: ${PHP_VERSION:-8.4}
-                USER_ID: ${USER_ID:-1000}
-                GROUP_ID: ${GROUP_ID:-1000}
+                PHP_VERSION: ${COMPOSE_PHP_VERSION:-8.4}
+                USER_ID: ${COMPOSE_USER_ID:-1000}
+                GROUP_ID: ${COMPOSE_GROUP_ID:-1000}
         restart: unless-stopped
         extra_hosts:
             - "vacancy-grabber.local:host-gateway"

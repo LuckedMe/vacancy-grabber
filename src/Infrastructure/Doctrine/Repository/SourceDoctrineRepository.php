@@ -13,7 +13,7 @@ use App\Infrastructure\Doctrine\Repository\Trait\FindByIdTrait;
 use App\Infrastructure\Doctrine\Repository\Trait\OrderByRepositoryTrait;
 use App\Infrastructure\Doctrine\Repository\Trait\PaginatorRepositoryTrait;
 use App\Infrastructure\Doctrine\Repository\Trait\QueryConditionBuilderRepositoryTrait;
-use App\Infrastructure\Doctrine\Repository\Trait\SaveRemoveRepositoryTrait;
+use App\Infrastructure\Doctrine\Repository\Trait\SaveRepositoryTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -21,7 +21,7 @@ use Symfony\Component\Uid\Uuid;
 
 class SourceDoctrineRepository extends ServiceEntityRepository implements SourceRepository
 {
-    use SaveRemoveRepositoryTrait;
+    use SaveRepositoryTrait;
     use OrderByRepositoryTrait;
     use FindByIdTrait;
     use FindByIdAndUserIdTrait;
