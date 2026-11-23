@@ -187,7 +187,7 @@ make yarn-lint     # frontend
 
 ### Database migrations
 
-Generate with `bin/console doctrine:migrations:diff`, then format the file with the project skill `fix-migrations` so it matches the hand-formatted references in `migrations/2026/`. Apply with `make migrate`.
+Generate with `bin/console doctrine:migrations:diff`, then format the file with the global skill `/fix-migrations` (see [docs/migrations-style.md](docs/migrations-style.md)). Apply with `make migrate`.
 
 ## Testing
 
@@ -271,7 +271,7 @@ The layer rules are enforced by a script that runs on the host:
 bash .claude/skills/ddd-structure-fix/scripts/check.sh   # exit code 1 on violations
 ```
 
-It is also available as the Claude Code skill `/ddd-structure-fix`; the last result is in [docs/ddd-structure-fix-result.md](docs/ddd-structure-fix-result.md). Another project skill in `.claude/skills/`: `fix-migrations` (format Doctrine migrations). The production Dockerfile is checked with the global skill `/fix-dockerfile` (see [docs/dockerfile-check.md](docs/dockerfile-check.md)).
+It is also available as the Claude Code skill `/ddd-structure-fix`; the last result is in [docs/ddd-structure-fix-result.md](docs/ddd-structure-fix-result.md). Migrations are formatted with the global skill `/fix-migrations` (see [docs/migrations-style.md](docs/migrations-style.md)). The production Dockerfile is checked with the global skill `/fix-dockerfile` (see [docs/dockerfile-check.md](docs/dockerfile-check.md)).
 
 ## Telegram notifications
 
@@ -333,6 +333,7 @@ It pulls, rebuilds, migrates and registers the Telegram webhook. Options and the
 | [docs/telegram-webhook.md](docs/telegram-webhook.md) | Telegram webhook and bot commands |
 | [docs/crontab.md](docs/crontab.md) | scheduled grabbing on the server |
 | [docs/deploy.md](docs/deploy.md) | production deploy |
+| [docs/migrations-style.md](docs/migrations-style.md) | formatting Doctrine migrations with `/fix-migrations` |
 | [docs/dockerfile-check.md](docs/dockerfile-check.md) | checking the production Dockerfile with `/fix-dockerfile` |
 | [docs/ddd-structure-fix-result.md](docs/ddd-structure-fix-result.md) | result of the last DDD layer check |
 
