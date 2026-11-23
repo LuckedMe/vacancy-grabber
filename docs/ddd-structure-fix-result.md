@@ -1,6 +1,6 @@
 # DDD structure check result
 
-Date: 2026-11-23 · Branch: main · Commit: 90c50fa, uncommitted changes
+Date: 2026-11-23 · Branch: main · Commit: 826ec78
 Command: `bash .claude/skills/ddd-structure-fix/scripts/check.sh` · Exit code: 0
 
 ## Summary
@@ -35,6 +35,6 @@ None.
 2. Resolved since the last run: no file under `src/Application` imports `App\Infrastructure` any more (checked with `grep -rn 'App\\Infrastructure' src/Application`, no hits).
    - `SendTelegramNotificationHandler` depends on the Application port `App\Application\Telegram\TelegramSender`, implemented by `Infrastructure/Telegram/TelegramNotifier`.
    - `GrabSourceHandler` and `GetDashboardCollectionHandler` depend on the Application port `App\Application\Shared\Bus\MessageBus`, implemented by `Infrastructure/Messenger/MessageBusHandler`.
-3. Rule A3 (Application must not depend on Infrastructure) now enforces this, so it can not come back unnoticed. It was verified against a scratch copy with a deliberate import: it reported the line and exited `1`.
+3. Rule A3 (Application must not depend on Infrastructure) now enforces this, so it can not come back unnoticed.
 4. The Presentation controllers (about 40 files) still import the concrete `MessageBusHandler`. This is allowed, since Presentation may use every layer, so it is not a violation.
 5. The script greps imports only. It cannot see fully-qualified class names used inline without `use`, runtime service lookups, or logic that belongs in another layer.
