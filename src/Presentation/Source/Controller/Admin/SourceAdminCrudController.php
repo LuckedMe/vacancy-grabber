@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Presentation\Source\Controller\Admin;
 
+use App\Application\Shared\Bus\MessageBus;
 use App\Application\Source\DTO\GrabSourceResultDTO;
 use App\Application\Source\Message\Command\GrabSourceCommand;
 use App\Domain\Source\Entity\Source;
-use App\Infrastructure\Messenger\MessageBusHandler;
 use App\Presentation\Shared\Admin\AbstractAdminCrudController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +18,7 @@ use function assert;
 class SourceAdminCrudController extends AbstractAdminCrudController
 {
     public function __construct(
-        private readonly MessageBusHandler $messageBusHandler,
+        private readonly MessageBus $messageBus,
     ) {
     }
 
@@ -45,7 +45,7 @@ class SourceAdminCrudController extends AbstractAdminCrudController
 
         try {
             /** @var GrabSourceResultDTO $result */
-            $result = $this->messageBusHandler->handleCommand(
+            $result = $this->messageBus->handleCommand(
                 new GrabSourceCommand(
                     userId: $object->getUser()->getId(),
                     sourceId: $object->getId()

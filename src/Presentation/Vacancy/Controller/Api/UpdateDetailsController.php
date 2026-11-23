@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Presentation\Vacancy\Controller\Api;
 
+use App\Application\Shared\Bus\MessageBus;
 use App\Application\Vacancy\DTO\VacancyDetailsDTO;
 use App\Application\Vacancy\Message\Command\UpdateVacancyDetailsCommand;
-use App\Infrastructure\Messenger\MessageBusHandler;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\Shared\ApiDocTag;
 use App\Presentation\Vacancy\ControllerRequest\Api\UpdateDetailsRequest;
@@ -51,9 +51,9 @@ final class UpdateDetailsController extends AbstractController
         #[CurrentUser] SecurityUser $user,
         Uuid $id,
         UpdateDetailsRequest $request,
-        MessageBusHandler $messageBusHandler,
+        MessageBus $messageBus,
     ): JsonResponse {
-        $dto = $messageBusHandler->handleCommand(new UpdateVacancyDetailsCommand(
+        $dto = $messageBus->handleCommand(new UpdateVacancyDetailsCommand(
             userId: $user->getId(),
             vacancyId: $id,
             properties: $request->properties,

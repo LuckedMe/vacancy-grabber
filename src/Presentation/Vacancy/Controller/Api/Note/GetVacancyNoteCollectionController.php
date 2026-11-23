@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Presentation\Vacancy\Controller\Api\Note;
 
+use App\Application\Shared\Bus\MessageBus;
 use App\Application\Vacancy\DTO\VacancyNoteCollectionDTO;
 use App\Application\Vacancy\Message\Query\GetVacancyNoteCollectionQuery;
-use App\Infrastructure\Messenger\MessageBusHandler;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\Shared\ApiDocTag;
 use App\Presentation\Vacancy\ControllerRequest\Api\GetNoteCollectionRequest;
@@ -72,10 +72,10 @@ class GetVacancyNoteCollectionController extends AbstractController
         Uuid $id,
         GetNoteCollectionRequest $request,
         VacancyNoteCriteriaFactory $factory,
-        MessageBusHandler $messageBusHandler,
+        MessageBus $messageBus,
     ): JsonResponse {
         return $this->json(
-            $messageBusHandler->handleQuery(
+            $messageBus->handleQuery(
                 new GetVacancyNoteCollectionQuery(
                     $factory->fromCollectionRequest($user, $id, $request)
                 )

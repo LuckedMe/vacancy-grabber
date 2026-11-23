@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Presentation\Vacancy\Controller\Api;
 
+use App\Application\Shared\Bus\MessageBus;
 use App\Application\Vacancy\DTO\VacancyDetailsDTO;
 use App\Application\Vacancy\Message\Command\PatchVacancyCommand;
 use App\Domain\Vacancy\Entity\VacancyStatus;
-use App\Infrastructure\Messenger\MessageBusHandler;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\Shared\ApiDocTag;
 use App\Presentation\Shared\Util;
@@ -53,9 +53,9 @@ final class PatchController extends AbstractController
         #[CurrentUser] SecurityUser $user,
         Uuid $id,
         PatchRequest $request,
-        MessageBusHandler $messageBusHandler,
+        MessageBus $messageBus,
     ): JsonResponse {
-        $dto = $messageBusHandler->handleCommand(new PatchVacancyCommand(
+        $dto = $messageBus->handleCommand(new PatchVacancyCommand(
             userId: $user->getId(),
             vacancyId: $id,
             properties: $request->properties,

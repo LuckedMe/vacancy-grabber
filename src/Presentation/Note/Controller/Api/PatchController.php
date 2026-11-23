@@ -6,7 +6,7 @@ namespace App\Presentation\Note\Controller\Api;
 
 use App\Application\Note\DTO\NoteDetailsDTO;
 use App\Application\Note\Message\Command\PatchNoteCommand;
-use App\Infrastructure\Messenger\MessageBusHandler;
+use App\Application\Shared\Bus\MessageBus;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\Note\ControllerRequest\Api\PatchRequest;
 use App\Presentation\Shared\ApiDocTag;
@@ -51,9 +51,9 @@ final class PatchController extends AbstractController
         #[CurrentUser] SecurityUser $user,
         Uuid $id,
         PatchRequest $request,
-        MessageBusHandler $messageBusHandler,
+        MessageBus $messageBus,
     ): JsonResponse {
-        $dto = $messageBusHandler->handleCommand(new PatchNoteCommand(
+        $dto = $messageBus->handleCommand(new PatchNoteCommand(
             userId: $user->getId(),
             noteId: $id,
             properties: $request->properties,

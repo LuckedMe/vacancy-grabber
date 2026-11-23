@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Presentation\Source\Controller\Api;
 
+use App\Application\Shared\Bus\MessageBus;
 use App\Application\Source\DTO\SourceSummaryDTO;
 use App\Application\Source\Message\Query\GetSourceSummaryQuery;
-use App\Infrastructure\Messenger\MessageBusHandler;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\Shared\ApiDocTag;
 use Nelmio\ApiDocBundle\Attribute\Model;
@@ -48,10 +48,10 @@ class GetSummaryController extends AbstractController
     #[OA\Tag(name: ApiDocTag::SOURCE)]
     public function __invoke(
         #[CurrentUser] SecurityUser $user,
-        MessageBusHandler $messageBusHandler,
+        MessageBus $messageBus,
     ): JsonResponse {
         return $this->json([
-            'items' => $messageBusHandler->handleQuery(
+            'items' => $messageBus->handleQuery(
                 new GetSourceSummaryQuery(
                     userId: $user->getId()
                 )),

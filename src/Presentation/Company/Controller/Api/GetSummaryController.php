@@ -6,7 +6,7 @@ namespace App\Presentation\Company\Controller\Api;
 
 use App\Application\Company\DTO\CompanySummaryDTO;
 use App\Application\Company\Message\Query\GetCompanySummaryQuery;
-use App\Infrastructure\Messenger\MessageBusHandler;
+use App\Application\Shared\Bus\MessageBus;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\Company\ControllerRequest\Api\GetSummaryRequest;
 use App\Presentation\Company\Factory\CompanyCriteriaFactory;
@@ -54,10 +54,10 @@ class GetSummaryController extends AbstractController
         #[CurrentUser] SecurityUser $user,
         GetSummaryRequest $request,
         CompanyCriteriaFactory $factory,
-        MessageBusHandler $messageBusHandler,
+        MessageBus $messageBus,
     ): JsonResponse {
         return $this->json([
-            'items' => $messageBusHandler->handleQuery(
+            'items' => $messageBus->handleQuery(
                 new GetCompanySummaryQuery(
                     $factory->fromSummaryRequest($user, $request)
                 )

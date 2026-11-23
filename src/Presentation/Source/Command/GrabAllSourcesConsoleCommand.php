@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Presentation\Source\Command;
 
+use App\Application\Shared\Bus\MessageBus;
 use App\Application\Source\DTO\GrabSourceResultDTO;
 use App\Application\Source\Message\Command\GrabSourceCommand;
 use App\Application\Telegram\Message\Command\SendTelegramNotificationAsyncCommand;
 use App\Domain\Source\Repository\SourceRepository;
 use App\Domain\User\Repository\UserRepository;
-use App\Infrastructure\Messenger\MessageBusHandler;
 use App\Infrastructure\Telegram\TelegramNotifier;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -32,7 +32,7 @@ final class GrabAllSourcesConsoleCommand extends Command
     public function __construct(
         private readonly UserRepository $userRepository,
         private readonly SourceRepository $sourceRepository,
-        private readonly MessageBusHandler $messageBusHandler,
+        private readonly MessageBus $messageBus,
         private readonly TelegramNotifier $telegramNotifier,
         private readonly TranslatorInterface $translator,
         #[Autowire('%env(DEFAULT_URI)%')]
@@ -56,7 +56,7 @@ final class GrabAllSourcesConsoleCommand extends Command
 
             try {
                 /** @var GrabSourceResultDTO $result */
-                $result = $this->messageBusHandler->handleCommand(
+                $result = $this->messageBus->handleCommand(
                     new GrabSourceCommand(userId: $owner->getId(), sourceId: $source->getId())
                 );
 
@@ -131,7 +131,7 @@ final class GrabAllSourcesConsoleCommand extends Command
             );
 
             try {
-                $this->messageBusHandler->handleCommand(new SendTelegramNotificationAsyncCommand($chatId, $message));
+                $this->messageBus->handleCommand(new SendTelegramNotificationAsyncCommand($chatId, $message));
                 $io->writeln(sprintf('Telegram notification queued for %s', $user));
             } catch (Throwable $e) {
                 $io->writeln(sprintf('<error>Telegram notification for %s was not queued: %s</error>', $user, $e->getMessage()));

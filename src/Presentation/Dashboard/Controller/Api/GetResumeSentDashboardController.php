@@ -6,7 +6,7 @@ namespace App\Presentation\Dashboard\Controller\Api;
 
 use App\Application\Dashboard\DTO\ResumeSentDashboardInfoCollectionDTO;
 use App\Application\Dashboard\Message\Query\GetResumeSentDashboardQuery;
-use App\Infrastructure\Messenger\MessageBusHandler;
+use App\Application\Shared\Bus\MessageBus;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\Shared\ApiDocTag;
 use Nelmio\ApiDocBundle\Attribute\Model;
@@ -44,10 +44,10 @@ class GetResumeSentDashboardController extends AbstractController
     #[OA\Tag(name: ApiDocTag::DASHBOARD)]
     public function __invoke(
         #[CurrentUser] SecurityUser $user,
-        MessageBusHandler $messageBusHandler,
+        MessageBus $messageBus,
     ): JsonResponse {
         return $this->json(
-            $messageBusHandler->handleQuery(new GetResumeSentDashboardQuery(userId: $user->getId())),
+            $messageBus->handleQuery(new GetResumeSentDashboardQuery(userId: $user->getId())),
             context: ['groups' => ['dashboard']]
         );
     }

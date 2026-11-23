@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Presentation\Source\Controller\Api;
 
+use App\Application\Shared\Bus\MessageBus;
 use App\Application\Source\DTO\SourceDetailsDTO;
 use App\Application\Source\Message\Query\GetSourceDetailsQuery;
-use App\Infrastructure\Messenger\MessageBusHandler;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\Shared\ApiDocTag;
 use Nelmio\ApiDocBundle\Attribute\Model;
@@ -48,9 +48,9 @@ final class GetDetailsController extends AbstractController
     public function __invoke(
         #[CurrentUser] SecurityUser $user,
         Uuid $id,
-        MessageBusHandler $messageBusHandler,
+        MessageBus $messageBus,
     ): JsonResponse {
-        $dto = $messageBusHandler->handleQuery(new GetSourceDetailsQuery($user->getId(), $id));
+        $dto = $messageBus->handleQuery(new GetSourceDetailsQuery($user->getId(), $id));
 
         return $this->json(data: $dto, context: ['groups' => ['source_details']]);
     }

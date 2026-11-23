@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Presentation\Vacancy\Controller\Api;
 
+use App\Application\Shared\Bus\MessageBus;
 use App\Application\Vacancy\DTO\VacancyDetailsDTO;
 use App\Application\Vacancy\Message\Command\CreateVacancyCommand;
 use App\Domain\Vacancy\Entity\VacancyStatus;
-use App\Infrastructure\Messenger\MessageBusHandler;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\Shared\ApiDocTag;
 use App\Presentation\Shared\Util;
@@ -47,9 +47,9 @@ final class CreateController extends AbstractController
     public function __invoke(
         #[CurrentUser] SecurityUser $user,
         CreateRequest $request,
-        MessageBusHandler $messageBusHandler,
+        MessageBus $messageBus,
     ): JsonResponse {
-        $dto = $messageBusHandler->handleCommand(new CreateVacancyCommand(
+        $dto = $messageBus->handleCommand(new CreateVacancyCommand(
             userId: $user->getId(),
             title: $request->title,
             description: $request->description,

@@ -6,7 +6,7 @@ namespace App\Presentation\Company\Controller\Api;
 
 use App\Application\Company\DTO\CompanyCollectionDTO;
 use App\Application\Company\Message\Query\GetCompanyCollectionQuery;
-use App\Infrastructure\Messenger\MessageBusHandler;
+use App\Application\Shared\Bus\MessageBus;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\Company\ControllerRequest\Api\GetCollectionRequest;
 use App\Presentation\Company\Factory\CompanyCriteriaFactory;
@@ -73,10 +73,10 @@ class GetCollectionController extends AbstractController
         #[CurrentUser] SecurityUser $user,
         GetCollectionRequest $request,
         CompanyCriteriaFactory $factory,
-        MessageBusHandler $messageBusHandler,
+        MessageBus $messageBus,
     ): JsonResponse {
         return $this->json(
-            $messageBusHandler->handleQuery(
+            $messageBus->handleQuery(
                 new GetCompanyCollectionQuery(
                     $factory->fromCollectionRequest($user, $request)
                 )),

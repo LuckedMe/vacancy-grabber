@@ -6,7 +6,7 @@ namespace App\Presentation\Note\Controller\Api;
 
 use App\Application\Note\DTO\NoteCollectionDTO;
 use App\Application\Note\Message\Query\GetNoteCollectionQuery;
-use App\Infrastructure\Messenger\MessageBusHandler;
+use App\Application\Shared\Bus\MessageBus;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\Note\ControllerRequest\Api\GetCollectionRequest;
 use App\Presentation\Note\Factory\NoteCriteriaFactory;
@@ -70,10 +70,10 @@ class GetCollectionController extends AbstractController
         #[CurrentUser] SecurityUser $user,
         GetCollectionRequest $request,
         NoteCriteriaFactory $factory,
-        MessageBusHandler $messageBusHandler,
+        MessageBus $messageBus,
     ): JsonResponse {
         return $this->json(
-            $messageBusHandler->handleQuery(
+            $messageBus->handleQuery(
                 new GetNoteCollectionQuery(
                     $factory->fromCollectionRequest($user, $request)
                 )

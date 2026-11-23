@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Presentation\Source\Controller\Api;
 
+use App\Application\Shared\Bus\MessageBus;
 use App\Application\Source\DTO\GrabSourceResultDTO;
 use App\Application\Source\Message\Command\GrabSourceCommand;
-use App\Infrastructure\Messenger\MessageBusHandler;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\Shared\ApiDocTag;
 use OpenApi\Attributes as OA;
@@ -48,10 +48,10 @@ final class GrabController extends AbstractController
     public function __invoke(
         #[CurrentUser] SecurityUser $user,
         Uuid $id,
-        MessageBusHandler $messageBusHandler,
+        MessageBus $messageBus,
     ): JsonResponse {
         /** @var GrabSourceResultDTO $result */
-        $result = $messageBusHandler->handleCommand(new GrabSourceCommand(userId: $user->getId(), sourceId: $id));
+        $result = $messageBus->handleCommand(new GrabSourceCommand(userId: $user->getId(), sourceId: $id));
 
         return $this->json([
             'counter_vacancy_created' => $result->vacanciesCreated,

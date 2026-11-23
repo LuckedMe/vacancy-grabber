@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Presentation\Shared\Security\Authenticator;
 
+use App\Application\Shared\Bus\MessageBus;
 use App\Application\Shared\DTO\ErrorDTO;
-use App\Infrastructure\Messenger\MessageBusHandler;
 use App\Infrastructure\Security\UserProvider\RegularUserProvider;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\ExpiredTokenException;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\InvalidPayloadException;
@@ -39,7 +39,7 @@ class MainAuthenticator extends AbstractAuthenticator implements AuthenticationE
         private readonly UrlGeneratorInterface $urlGenerator,
         private readonly RegularUserProvider $userProvider,
         private readonly SerializerInterface $serializer,
-        private readonly MessageBusHandler $messageBusHandler,
+        private readonly MessageBus $messageBus,
     ) {
     }
 

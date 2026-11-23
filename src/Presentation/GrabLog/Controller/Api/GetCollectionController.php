@@ -6,7 +6,7 @@ namespace App\Presentation\GrabLog\Controller\Api;
 
 use App\Application\GrabLog\DTO\GrabLogCollectionDTO;
 use App\Application\GrabLog\Message\Query\GetGrabLogCollectionQuery;
-use App\Infrastructure\Messenger\MessageBusHandler;
+use App\Application\Shared\Bus\MessageBus;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\GrabLog\ControllerRequest\Api\GetCollectionRequest;
 use App\Presentation\GrabLog\Factory\GrabLogCriteriaFactory;
@@ -68,10 +68,10 @@ class GetCollectionController extends AbstractController
         #[CurrentUser] SecurityUser $user,
         GetCollectionRequest $request,
         GrabLogCriteriaFactory $factory,
-        MessageBusHandler $messageBusHandler,
+        MessageBus $messageBus,
     ): JsonResponse {
         return $this->json(
-            $messageBusHandler->handleQuery(
+            $messageBus->handleQuery(
                 new GetGrabLogCollectionQuery(
                     $factory->fromCollectionRequest($user, $request)
                 )

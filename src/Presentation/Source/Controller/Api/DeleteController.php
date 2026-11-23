@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Presentation\Source\Controller\Api;
 
+use App\Application\Shared\Bus\MessageBus;
 use App\Application\Source\Message\Command\DeleteSourceCommand;
-use App\Infrastructure\Messenger\MessageBusHandler;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\Shared\ApiDocTag;
 use OpenApi\Attributes as OA;
@@ -37,9 +37,9 @@ final class DeleteController extends AbstractController
     public function __invoke(
         #[CurrentUser] SecurityUser $user,
         Uuid $id,
-        MessageBusHandler $messageBusHandler,
+        MessageBus $messageBus,
     ): JsonResponse {
-        $messageBusHandler->handleCommand(new DeleteSourceCommand(userId: $user->getId(), sourceId: $id));
+        $messageBus->handleCommand(new DeleteSourceCommand(userId: $user->getId(), sourceId: $id));
 
         return $this->json(null, Response::HTTP_NO_CONTENT);
     }

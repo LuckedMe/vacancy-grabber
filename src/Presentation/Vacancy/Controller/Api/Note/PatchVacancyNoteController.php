@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Presentation\Vacancy\Controller\Api\Note;
 
+use App\Application\Shared\Bus\MessageBus;
 use App\Application\Vacancy\DTO\VacancyDetailsDTO;
 use App\Application\Vacancy\Message\Command\PatchVacancyNoteCommand;
-use App\Infrastructure\Messenger\MessageBusHandler;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\Shared\ApiDocTag;
 use App\Presentation\Shared\Util;
@@ -53,9 +53,9 @@ final class PatchVacancyNoteController extends AbstractController
         Uuid $id,
         Uuid $noteId,
         PatchVacancyNoteRequest $request,
-        MessageBusHandler $messageBusHandler,
+        MessageBus $messageBus,
     ): JsonResponse {
-        $dto = $messageBusHandler->handleCommand(new PatchVacancyNoteCommand(
+        $dto = $messageBus->handleCommand(new PatchVacancyNoteCommand(
             userId: $user->getId(),
             vacancyId: $id,
             noteId: $noteId,

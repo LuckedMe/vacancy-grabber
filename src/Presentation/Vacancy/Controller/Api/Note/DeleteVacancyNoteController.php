@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Presentation\Vacancy\Controller\Api\Note;
 
+use App\Application\Shared\Bus\MessageBus;
 use App\Application\Vacancy\Message\Command\DeleteVacancyNoteCommand;
-use App\Infrastructure\Messenger\MessageBusHandler;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\Shared\ApiDocTag;
 use OpenApi\Attributes as OA;
@@ -38,9 +38,9 @@ final class DeleteVacancyNoteController extends AbstractController
         #[CurrentUser] SecurityUser $user,
         Uuid $id,
         Uuid $noteId,
-        MessageBusHandler $messageBusHandler,
+        MessageBus $messageBus,
     ): JsonResponse {
-        $messageBusHandler->handleCommand(new DeleteVacancyNoteCommand(
+        $messageBus->handleCommand(new DeleteVacancyNoteCommand(
             userId: $user->getId(),
             vacancyId: $id,
             noteId: $noteId,

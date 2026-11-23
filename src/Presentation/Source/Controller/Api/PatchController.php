@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Presentation\Source\Controller\Api;
 
+use App\Application\Shared\Bus\MessageBus;
 use App\Application\Source\DTO\SourceDetailsDTO;
 use App\Application\Source\Message\Command\PatchSourceCommand;
-use App\Infrastructure\Messenger\MessageBusHandler;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\Shared\ApiDocTag;
 use App\Presentation\Shared\Util;
@@ -52,9 +52,9 @@ final class PatchController extends AbstractController
         #[CurrentUser] SecurityUser $user,
         Uuid $id,
         PatchRequest $request,
-        MessageBusHandler $messageBusHandler,
+        MessageBus $messageBus,
     ): JsonResponse {
-        $dto = $messageBusHandler->handleCommand(new PatchSourceCommand(
+        $dto = $messageBus->handleCommand(new PatchSourceCommand(
             userId: $user->getId(),
             sourceId: $id,
             properties: $request->properties,

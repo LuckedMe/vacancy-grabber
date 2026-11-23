@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Presentation\Vacancy\Controller\Api\Note;
 
+use App\Application\Shared\Bus\MessageBus;
 use App\Application\Vacancy\DTO\VacancyNoteDTO;
 use App\Application\Vacancy\Message\Query\GetVacancyNoteDetailsQuery;
-use App\Infrastructure\Messenger\MessageBusHandler;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\Shared\ApiDocTag;
 use Nelmio\ApiDocBundle\Attribute\Model;
@@ -49,9 +49,9 @@ final class GetVacancyNoteDetailsController extends AbstractController
         #[CurrentUser] SecurityUser $user,
         Uuid $id,
         Uuid $noteId,
-        MessageBusHandler $messageBusHandler,
+        MessageBus $messageBus,
     ): JsonResponse {
-        $dto = $messageBusHandler->handleQuery(new GetVacancyNoteDetailsQuery(
+        $dto = $messageBus->handleQuery(new GetVacancyNoteDetailsQuery(
             userId: $user->getId(),
             vacancyId: $id,
             noteId: $noteId,

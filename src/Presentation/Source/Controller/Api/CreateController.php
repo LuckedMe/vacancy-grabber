@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Presentation\Source\Controller\Api;
 
+use App\Application\Shared\Bus\MessageBus;
 use App\Application\Source\DTO\SourceDetailsDTO;
 use App\Application\Source\Message\Command\CreateSourceCommand;
-use App\Infrastructure\Messenger\MessageBusHandler;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\Shared\ApiDocTag;
 use App\Presentation\Source\ControllerRequest\Api\CreateRequest;
@@ -44,9 +44,9 @@ final class CreateController extends AbstractController
     public function __invoke(
         #[CurrentUser] SecurityUser $user,
         CreateRequest $request,
-        MessageBusHandler $messageBusHandler,
+        MessageBus $messageBus,
     ): JsonResponse {
-        $dto = $messageBusHandler->handleCommand(
+        $dto = $messageBus->handleCommand(
             new CreateSourceCommand(
                 userId: $user->getId(),
                 name: $request->name,

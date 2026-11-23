@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Presentation\User\Telegram;
 
+use App\Application\Shared\Bus\MessageBus;
 use App\Application\Source\Message\Command\GrabSourceAsyncCommand;
 use App\Domain\Source\Repository\SourceRepository;
 use App\Domain\User\Repository\UserRepository;
-use App\Infrastructure\Messenger\MessageBusHandler;
 use Luzrain\TelegramBotApi\BotApi;
 use Luzrain\TelegramBotApi\Event;
 use Luzrain\TelegramBotApi\EventCallbackReturn;
@@ -31,7 +31,7 @@ final class GrabCommandController extends TelegramCommand
     public function __construct(
         private readonly UserRepository $userRepository,
         private readonly SourceRepository $sourceRepository,
-        private readonly MessageBusHandler $messageBusHandler,
+        private readonly MessageBus $messageBus,
         private readonly BotApi $botApi,
     ) {
     }
@@ -72,7 +72,7 @@ final class GrabCommandController extends TelegramCommand
 
             try {
                 // async: the result is not returned, the grab runs in a worker
-                $this->messageBusHandler->handleCommand(
+                $this->messageBus->handleCommand(
                     new GrabSourceAsyncCommand(userId: $user->getId(), sourceId: $source->getId())
                 );
 

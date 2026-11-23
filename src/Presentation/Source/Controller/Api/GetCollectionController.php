@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Presentation\Source\Controller\Api;
 
+use App\Application\Shared\Bus\MessageBus;
 use App\Application\Source\DTO\SourceCollectionDTO;
 use App\Application\Source\Message\Query\GetSourceCollectionQuery;
-use App\Infrastructure\Messenger\MessageBusHandler;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\Shared\ApiDocTag;
 use App\Presentation\Source\ControllerRequest\Api\GetCollectionRequest;
@@ -73,10 +73,10 @@ class GetCollectionController extends AbstractController
         #[CurrentUser] SecurityUser $user,
         GetCollectionRequest $request,
         SourceCriteriaFactory $factory,
-        MessageBusHandler $messageBusHandler,
+        MessageBus $messageBus,
     ): JsonResponse {
         return $this->json(
-            $messageBusHandler->handleQuery(
+            $messageBus->handleQuery(
                 new GetSourceCollectionQuery(
                     $factory->fromCollectionRequest($user, $request)
                 )

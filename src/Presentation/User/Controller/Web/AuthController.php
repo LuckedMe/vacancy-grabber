@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\User\Controller\Web;
 
-use App\Infrastructure\Messenger\MessageBusHandler;
+use App\Application\Shared\Bus\MessageBus;
 use App\Infrastructure\Security\SecurityUser;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -49,7 +49,7 @@ class AuthController extends AbstractController
     )]
     public function forgotPassword(
         #[CurrentUser] ?SecurityUser $user,
-        MessageBusHandler $messageBusHandler,
+        MessageBus $messageBus,
     ): Response {
         if ($user !== null) {
             return $this->redirectToRoute('web.homepage');
