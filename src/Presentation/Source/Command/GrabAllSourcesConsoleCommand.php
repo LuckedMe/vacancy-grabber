@@ -6,6 +6,7 @@ namespace App\Presentation\Source\Command;
 
 use App\Application\Source\DTO\GrabSourceResultDTO;
 use App\Application\Source\Message\Command\GrabSourceCommand;
+use App\Application\Telegram\Message\Command\SendTelegramNotificationAsyncCommand;
 use App\Domain\Source\Repository\SourceRepository;
 use App\Domain\User\Repository\UserRepository;
 use App\Infrastructure\Messenger\MessageBusHandler;
@@ -130,10 +131,10 @@ final class GrabAllSourcesConsoleCommand extends Command
             );
 
             try {
-                $this->telegramNotifier->send($chatId, $message);
-                $io->writeln(sprintf('Telegram notification sent to %s', $user));
+                $this->messageBusHandler->handleCommand(new SendTelegramNotificationAsyncCommand($chatId, $message));
+                $io->writeln(sprintf('Telegram notification queued for %s', $user));
             } catch (Throwable $e) {
-                $io->writeln(sprintf('<error>Telegram notification to %s failed: %s</error>', $user, $e->getMessage()));
+                $io->writeln(sprintf('<error>Telegram notification for %s was not queued: %s</error>', $user, $e->getMessage()));
             }
         }
     }

@@ -10,6 +10,7 @@ use App\Application\Shared\Bus\CommandHandlerInterface;
 use App\Application\Source\DTO\GrabSourceResultDTO;
 use App\Application\Source\Message\Command\GrabSourceAsyncCommand;
 use App\Application\Source\Message\Command\GrabSourceCommand;
+use App\Application\Telegram\Message\Command\SendTelegramNotificationAsyncCommand;
 use App\Domain\Shared\Exception\EntityNotFoundException;
 use App\Domain\Source\Entity\Source;
 use App\Domain\Source\Grabber\GrabberProvider;
@@ -18,7 +19,7 @@ use App\Domain\Source\Service\VacancyImporter;
 use App\Domain\Source\Service\VacancySynchronizer;
 use App\Domain\User\Entity\User;
 use App\Domain\User\Repository\UserRepository;
-use App\Infrastructure\Telegram\TelegramNotifier;
+use App\Infrastructure\Messenger\MessageBusHandler;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -36,7 +37,7 @@ final readonly class GrabSourceHandler implements CommandHandlerInterface
         private GrabberProvider $grabberProvider,
         private VacancyImporter $vacancyImporter,
         private VacancySynchronizer $vacancySynchronizer,
-        private TelegramNotifier $telegramNotifier,
+        private MessageBusHandler $messageBusHandler,
         #[Autowire('%env(DEFAULT_URI)%')]
         private string $baseUrl,
     ) {
@@ -82,7 +83,7 @@ final readonly class GrabSourceHandler implements CommandHandlerInterface
     {
         $chatId = $owner->getTelegramChatId();
 
-        if ($chatId === null || !$this->telegramNotifier->isEnabled()) {
+        if ($chatId === null) {
             return;
         }
 
@@ -98,7 +99,11 @@ final readonly class GrabSourceHandler implements CommandHandlerInterface
                 ? $this->translator->trans(id: 'SOURCE.GRAB_REPORT.DONE', parameters: $params, domain: 'messages')
                 : $this->translator->trans(id: 'SOURCE.GRAB_REPORT.NO_UPDATES', parameters: $params, domain: 'messages');
 
-            $this->telegramNotifier->send($chatId, $message);
+            // sent by the worker after the current (transactional) bus has finished and the grab is saved
+            $this->messageBusHandler->handleCommand(
+                new SendTelegramNotificationAsyncCommand($chatId, $message),
+                dispatchAfterCurrentBus: true,
+            );
         } catch (Throwable) {
             // a failed notification must not fail (and retry) the grab that has already been saved
         }

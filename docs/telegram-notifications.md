@@ -78,3 +78,20 @@ user is skipped even if a chat ID is set, so enable it for each user who should 
 share a username: fix the duplicates first). The admin form shows a validation error for a taken username. The
 comparison is on the value as entered and is case-insensitive in MySQL, so `@Name` and `name` are different values
 for the database even though `/start` treats them as the same user.
+
+## Async sending
+
+Reports are not sent inside the grab itself. They are queued as
+`App\Application\Telegram\Message\Command\SendTelegramNotificationAsyncCommand(string $chatId, string $message)`
+(standard priority, `queue_standard_priority`) and sent by `SendTelegramNotificationHandler`. To send any text:
+
+```php
+$this->messageBusHandler->handleCommand(new SendTelegramNotificationAsyncCommand($chatId, $message));
+// inside another command handler: pass dispatchAfterCurrentBus: true, so it is sent only after the transaction commits
+```
+
+- The handler does nothing when `TELEGRAM_API_TOKEN` is empty.
+- A Telegram error is not swallowed: Messenger retries the message (5 times, 60 s delay, doubling) and then moves it
+  to the `failed` transport (`bin/console messenger:failed:show`).
+- In production the `worker` service (`docker-compose.prod.yaml`) must be running. With `sync://` (`.env.local`,
+  tests) the message is handled immediately.

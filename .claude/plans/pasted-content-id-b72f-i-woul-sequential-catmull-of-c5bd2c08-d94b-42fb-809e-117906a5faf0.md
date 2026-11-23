@@ -1,40 +1,39 @@
-# Plan: move compose env vars from `.docker/.env.dist` to root `.env`
+# Plan: general async Messenger message for sending a Telegram notification
 
 ## Context
-`.docker/.env.dist` is never loaded by anything (no `env_file`, `--env-file`, makefile target or copy script), so `docker-compose.yaml` always falls back to its defaults. Docker Compose auto-loads the root `.env`, so moving the variables there makes them effective. The root `.env` already has commented placeholders (lines 1-5, "todo: put in this filee") using the `COMPOSE_` prefix.
+`TelegramNotifier::send(string $chatId, string $text)` (`src/Infrastructure/Telegram/TelegramNotifier.php:30`) is called synchronously from `GrabSourceHandler` and `GrabAllSourcesConsoleCommand`, so a slow or failing Telegram API blocks the caller (and the cron command's loop). We want one general-purpose async message with params `chatId` and `message` that any code can dispatch, so the HTTP call is done by the worker with retries.
 
-## Mapping
-| Source (`.docker/.env.dist`) | Target (`.env`) | Value |
-|---|---|---|
-| COMPOSE_PROJECT_NAME | COMPOSE_PROJECT_NAME | vacancy-grabber |
-| PHP_VERSION | COMPOSE_PHP_VERSION | 8.4 |
-| USER_ID | COMPOSE_USER_ID | 1000 |
-| GROUP_ID | COMPOSE_GROUP_ID | 1000 |
+## Design (follows existing conventions)
+- Module: new `Telegram` module under `Application`, since the message is general and not tied to Source or User.
+- Message: `src/Application/Telegram/Message/Command/SendTelegramNotificationAsyncCommand.php`
+  - `final readonly`, implements `StandardPriorityAsyncMessageInterface` (`App\Application\Shared\Bus`), so the existing routing in `config/packages/messenger.yaml` sends it to `queue_standard_priority`. No config change and no worker change; the prod worker already consumes that queue.
+  - Public promoted props: `string $chatId`, `string $message`. Docblock `/** @see SendTelegramNotificationHandler */`, as in `GrabSourceAsyncCommand`.
+- Handler: `src/Application/Telegram/MessageHandler/Command/SendTelegramNotificationHandler.php`
+  - `final readonly`, implements `CommandHandlerInterface`. Services.yaml `_instanceof` tags it for `command.bus` automatically.
+  - `__invoke(SendTelegramNotificationAsyncCommand $command): void`:
+    - returns without sending when `!$telegramNotifier->isEnabled()`
+    - otherwise calls `$this->telegramNotifier->send($command->chatId, $command->message)`
+    - does not catch `TelegramException`, so Messenger's retry strategy (5 retries, 60 s delay, x2) and the `failed` transport apply.
+  - Injects the concrete `TelegramNotifier`, like `GrabSourceHandler` does today. This is an Application → Infrastructure import that the DDD skill's wording does not allow. Not fixed here; noted so it can be handled with a Domain port later.
+- Dispatch: `$messageBusHandler->handleCommand(new SendTelegramNotificationAsyncCommand($chatId, $message));` via `src/Infrastructure/Messenger/MessageBusHandler.php` (callers use this wrapper, not `MessageBusInterface`).
 
-## Changes
-1. `.env` (lines 1-5): replace the todo and commented lines with a short comment block plus the four active variables above. Do not touch the existing uncommitted diffs elsewhere.
-2. `docker-compose.yaml:6-8`: keep the build-arg names that the Dockerfile expects, and change only the source variables:
-   - `PHP_VERSION: ${COMPOSE_PHP_VERSION:-8.4}`
-   - `USER_ID: ${COMPOSE_USER_ID:-1000}`
-   - `GROUP_ID: ${COMPOSE_GROUP_ID:-1000}`
-   `.docker/php-fpm/Dockerfile` and the root `Dockerfile` stay unchanged (build args keep their names).
-3. `.docker/.env.dist`: remove the four moved variables. The file would be empty, so delete it. Also remove the now-pointless `/.docker/.env` line from `.gitignore:4`.
-4. `.claude/skills/main-dockerfile-fix/scripts/check.sh:45-53` (and `SKILL.md:23`): update the parser from `PHP_VERSION:-x.y` to `COMPOSE_PHP_VERSION:-x.y`, otherwise the PHP version drift check breaks.
-5. Docs: add `docs/docker-env.md` covering:
-   - the variable mapping table
-   - why they live in the root `.env` (Compose auto-loads it, `.docker/.env.dist` was never loaded)
-   - how to override locally (`.env.local` is not read by Compose, so edit `.env` or export the variable in the shell)
-   - that `docker compose build --no-cache php-fpm` (or `make` rebuild) is needed after changing `COMPOSE_PHP_VERSION`, `COMPOSE_USER_ID` or `COMPOSE_GROUP_ID`
-   - that `COMPOSE_PROJECT_NAME` renames containers, networks and volumes (default was the directory name `vacancy-grabber.local`), so run `docker compose down` first. Volumes under the old name, such as the MySQL data, will not be reused, so back up or rename them before switching
-   - that `.env` is also parsed by Symfony, webpack (`webpack.config.js:16`) and `COPY .env` in the root `Dockerfile:64`, and that the extra `COMPOSE_*` keys are harmless there
-   - that prod (`docker-compose.prod.yaml`, `--env-file .env.prod.local`) is unaffected
+## Call sites to switch to the async message
+1. `src/Application/Source/MessageHandler/Command/GrabSourceHandler.php` (`notifyOwner()`, lines ~85-101): replace the `isEnabled()` check plus `send()` with a dispatch. Inject `MessageBusHandler` instead of `TelegramNotifier`. The existing `try/catch (Throwable)` can stay for the dispatch.
+2. `src/Presentation/Source/Command/GrabAllSourcesConsoleCommand.php` (lines ~105, 133): replace `send()` with a dispatch. Keep the `isEnabled()` check to skip building reports when Telegram is off.
+
+`LinkTelegramUsers*` and `TelegramBotChatResolver` only use `getUpdates()` and stay unchanged.
+
+## Behaviour changes to be aware of
+- With `sync://` (`.env.local`, `.env.test`) the message runs inline, so tests and local dev behave as before.
+- With `doctrine://` (prod) delivery moves to the worker. A Telegram failure no longer shows in the cron command or `/grab` flow. It is retried and finally lands in the `failed` transport.
+- `GrabSourceHandler` is itself handled inside `command.bus` with the `doctrine_transaction` middleware, so dispatching an async message there should use `handleCommand($msg, dispatchAfterCurrentBus: true)` to send only after the transaction commits.
+
+## Docs
+Add a short "Async sending" section to `docs/telegram-notifications.md`: the message class, how to dispatch it, the retry and failed-queue behaviour, and that the prod `worker` service must be running (`docker-compose.prod.yaml:27-39`).
 
 ## Verification
-- `docker compose config` shows project name `vacancy-grabber` and build args `PHP_VERSION=8.4`, `USER_ID=1000`, `GROUP_ID=1000`.
-- Temporarily run `COMPOSE_PHP_VERSION=8.3 docker compose config` to confirm the override is picked up.
-- `docker compose -f docker-compose.prod.yaml --env-file .env.prod.local config` still resolves.
-- Run `.claude/skills/main-dockerfile-fix/scripts/check.sh` and confirm it still finds the PHP version.
-- `grep -rn "\bPHP_VERSION\|USER_ID\|GROUP_ID" docker-compose.yaml .env` shows only the intended names.
-
-## Open note
-The container and volume names change with the new project name; this is covered in the docs.
+- Unit test `tests/Suite/Unit/Application/Telegram/SendTelegramNotificationHandlerTest.php` (Codeception `Unit`, `final class`, `testXxx`). `TelegramNotifier` is `final readonly`, so build it with a `MockHttpClient` and a token string; assert the request body has `chat_id` and `text`, that nothing is sent with an empty token, and that `TelegramException` propagates.
+- `bin/console debug:messenger` lists the new handler on `command.bus`.
+- `bin/console messenger:consume queue_standard_priority -vv --limit=1` after dispatching from a console command, with `MESSENGER_TRANSPORT_DSN=doctrine://...`; check Telegram receives the text.
+- `bash .claude/skills/ddd-structure-fix/scripts/check.sh` shows no new violations.
+- Run the Codeception unit and API suites.
