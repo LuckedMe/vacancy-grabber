@@ -20,7 +20,6 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
-use function array_key_exists;
 use function array_keys;
 use function array_map;
 use function rtrim;
@@ -65,13 +64,15 @@ final class GrabAllSourcesConsoleCommand extends Command
                     && $owner->isTelegramNotificationsEnabled()
                 ) {
                     // create user notification storage
-                    if (!array_key_exists($userId, $notify)) {
-                        $notify[$userId] = ['created' => $result->vacanciesCreated, 'updated' => $result->vacanciesUpdated];
-                    } else {
-                        // update user notification storage
-                        $notify[$userId]['created'] += $result->vacanciesCreated;
-                        $notify[$userId]['updated'] += $result->vacanciesUpdated;
-                    }
+                    $notify[$userId] ??= [
+                        'source'  => (string) $source->getName(),
+                        'created' => 0,
+                        'updated' => 0,
+                    ];
+
+                    // update user notification storage
+                    $notify[$userId]['created'] += $result->vacanciesCreated;
+                    $notify[$userId]['updated'] += $result->vacanciesUpdated;
                 }
             } catch (Throwable $e) {
                 $failed++;
@@ -120,6 +121,7 @@ final class GrabAllSourcesConsoleCommand extends Command
             $message = $this->translator->trans(
                 id: 'SOURCE.GRAB_REPORT.DONE',
                 parameters: [
+                    '%source%'  => $stat['source'],
                     '%created%' => $stat['created'],
                     '%updated%' => $stat['updated'],
                     '%link%'    => $link,
