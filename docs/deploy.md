@@ -51,8 +51,8 @@ What it does, in order:
    is missing (it lists the names; add them and run again).
 4. **Backs up the database** with `BACKUP_SCRIPT`, only when the release contains files in `migrations/`
    (`--no-backup` skips it).
-5. `git pull --ff-only`, then `docker compose up -d --build --remove-orphans`.
-6. **Migrations**: `doctrine:migrations:migrate` and `messenger:setup-transports` (the same as `make prod-migrate`).
+5. `git pull --ff-only`, then `make prod-up` (`docker compose up -d --build --remove-orphans`).
+6. **Migrations**: `make prod-migrate` (`doctrine:migrations:migrate` and `messenger:setup-transports`).
 7. **Telegram webhook**: `telegram:webhook:update` and `telegram:button:update` when `TELEGRAM_API_TOKEN` and
    `TELEGRAM_WEBHOOK_URL` are set; a failure there is only a warning.
 8. **Check**: `docker compose ps`, an HTTP request to the site (a warning when it is not 200/301/302) and
@@ -72,7 +72,10 @@ Environment: `DEPLOY_HOST` (default `dad@100.91.57.78`), `DEPLOY_DIR` (default
 
 The script never edits `.env.prod.local`: new variables are added by hand, see the release notes below. It does
 not roll back by itself; on a failure read the message, the rollback point is in the output (see "Rollback").
-The first run on the server needs the file executable (`chmod +x bin/deploy.sh`, it is committed with the mode).
+The steps that have a Makefile target (`prod-up`, `prod-migrate`) run through `make`; when `make` or the target is
+missing the script runs the same `docker compose` command. The script uses no shell aliases, every command is written
+in full. `--remote` starts it with `bash bin/deploy.sh`, so the file mode does not matter there; to run it directly on
+the server (`bin/deploy.sh`) the file must be executable (it is committed with the mode, otherwise `chmod +x bin/deploy.sh`).
 
 ## Standard deploy (manual steps)
 

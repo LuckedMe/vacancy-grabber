@@ -25,10 +25,14 @@
 #   BACKUP_SCRIPT   database backup script            (default: /home/dad/workspace/backups/backup-vacancy-grabber.sh)
 #   APP_URL         site checked at the end            (default: https://vacancy-grabber.lucked.me/)
 #
+# Steps that have a Makefile target (prod-up, prod-migrate) run through `make`; without make or without the target
+# the same docker compose command is run directly. Shell aliases are never used: every command is written in full.
+#
 # The script stops at the first failing step (set -e). It never touches .env.prod.local: when
 # .env.prod.dist has variables that are missing there it stops BEFORE pulling and lists them.
 
 set -Eeuo pipefail
+shopt -u expand_aliases   # never expand the user's shell aliases
 
 DEPLOY_HOST="${DEPLOY_HOST:-dad@100.91.57.78}"
 DEPLOY_DIR="${DEPLOY_DIR:-/home/dad/workspace/www/vacancy-grabber}"
@@ -64,7 +68,7 @@ main() {
     if [[ ${REMOTE} -eq 1 ]]; then
         echo ">> ssh ${DEPLOY_HOST}: ${DEPLOY_DIR}/bin/deploy.sh ${ARGS[*]:-}"
         # -t: colours and a prompt-free, line-by-line output
-        exec ssh -t "${DEPLOY_HOST}" "cd '${DEPLOY_DIR}' && bin/deploy.sh ${ARGS[*]:-}"
+        exec ssh -t "${DEPLOY_HOST}" "cd '${DEPLOY_DIR}' && bash bin/deploy.sh ${ARGS[*]:-}"
     fi
 
     APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -81,6 +85,15 @@ main() {
     # run a changing command (only echoed with --dry-run)
     run()   { printf '   $ %s\n' "$*"; [[ ${DRY_RUN} -eq 1 ]] || "$@"; }
     # value of a variable from .env.prod.local (not sourced: values may contain spaces, quotes and $)
+    # run a Makefile target when make and the target exist, otherwise the fallback command (the rest of the arguments)
+    mk() {
+        local target="$1"; shift
+        if command -v make >/dev/null && make -n "${target}" >/dev/null 2>&1; then
+            run make "${target}"
+        else
+            run "$@"
+        fi
+    }
     env_get() { grep -E "^$1=" .env.prod.local | tail -1 | cut -d= -f2- | sed -E "s/^['\"]//; s/['\"]$//" || true; }
 
     [[ ${DRY_RUN} -eq 1 ]] && warn "DRY RUN: nothing is changed"
@@ -166,12 +179,20 @@ main() {
 
     # --- 5. images and containers -----------------------------------------------------------------------------
     step "Build the images and restart the stack"
-    run "${COMPOSE[@]}" up -d --build --remove-orphans
+    mk prod-up "${COMPOSE[@]}" up -d --build --remove-orphans
 
     # --- 6. migrations ----------------------------------------------------------------------------------------
     step "Migrations"
-    run "${PHP[@]}" doctrine:migrations:migrate --no-interaction --allow-no-migration
-    run "${PHP[@]}" messenger:setup-transports --no-interaction
+    # prod-migrate = doctrine:migrations:migrate + messenger:setup-transports
+    migrate_directly() {
+        run "${PHP[@]}" doctrine:migrations:migrate --no-interaction --allow-no-migration
+        run "${PHP[@]}" messenger:setup-transports --no-interaction
+    }
+    if command -v make >/dev/null && make -n prod-migrate >/dev/null 2>&1; then
+        run make prod-migrate
+    else
+        migrate_directly
+    fi
 
     # --- 7. Telegram webhook ----------------------------------------------------------------------------------
     step "Telegram webhook"
