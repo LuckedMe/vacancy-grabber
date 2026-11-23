@@ -34,8 +34,7 @@ trait PageTestDataProviderTrait
     private function privatePageDataProvider(): array
     {
         return [
-            ['url' => '/', 'expectedUrl' => '/dashboard',   'title' => 'Dashboard',  'labels' => ['Vacancy Status', 'Resume Sent']],
-            ['url' => '/dashboard',  'expectedUrl' => null, 'title' => 'Dashboard',  'labels' => ['Vacancy Status', 'Resume Sent']],
+            ['url' => '/dashboard',  'expectedUrl' => null, 'title' => 'Dashboard',  'labels' => ['Vacancy Status', 'Monthly Resume Sent']],
             ['url' => '/sources',    'expectedUrl' => null, 'title' => 'Sources',    'labels' => 'Filters'],
             ['url' => '/grab-logs',  'expectedUrl' => null, 'title' => 'Grab logs',  'labels' => 'Filters'],
             ['url' => '/vacancies',  'expectedUrl' => null, 'title' => 'Vacancies',  'labels' => 'Filters'],

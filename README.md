@@ -127,6 +127,37 @@ The login and API rate limits are raised for the test env in `.env.test` (`RATE_
 bin/console cache:pool:clear cache.rate_limiter cache.app --env=test
 ```
 
+### Run a single test method
+Run these inside the php-fpm container (`make php-console`). Acceptance tests also need the `selenium` and `nginx` containers (`make test-acceptance` starts them). The pattern is `codecept run <suite> [<path/to/Class>[::<method>]]`; `<Class>:<method>` works too, and `-d pcov.enabled=1` is only needed for coverage.
+
+Run a single test method (do not forget it):
+```bash
+php -d pcov.enabled=1 -d memory_limit=-1 ./vendor/bin/codecept run acceptance PageCest::privatePageSuccess
+```
+
+Examples per suite:
+```bash
+# Unit suite
+./vendor/bin/codecept run unit                                                  # whole suite
+./vendor/bin/codecept run unit Application/Telegram/SendTelegramNotificationHandlerTest                 # one class
+./vendor/bin/codecept run unit Application/Telegram/SendTelegramNotificationHandlerTest::testSendsTheMessageToTheChat   # one method
+
+# Api suite
+./vendor/bin/codecept run api                                                   # whole suite
+./vendor/bin/codecept run api Auth                                              # one folder
+./vendor/bin/codecept run api Auth/LoginAuthCest::loginSuccess                  # one method
+
+# Web suite
+./vendor/bin/codecept run web                                                   # whole suite
+./vendor/bin/codecept run web PageControllerCest::pageTest                      # one method
+
+# Acceptance suite (selenium)
+php -d pcov.enabled=1 -d memory_limit=-1 ./vendor/bin/codecept run acceptance                           # whole suite
+php -d pcov.enabled=1 -d memory_limit=-1 ./vendor/bin/codecept run acceptance PageCest                  # one class
+php -d pcov.enabled=1 -d memory_limit=-1 ./vendor/bin/codecept run acceptance PageCest::privatePageSuccess   # one method
+```
+From the host, `make test-unit`, `make test-api`, `make test-web` and `make test-acceptance ARGS="PageCest"` do the same for whole suites or a filter.
+
 ## Architecture
 The code in `src/` is split into four layers: **Domain** (entities, repository ports, no framework) <- **Application** (commands, queries, handlers; uses ports only) <- **Infrastructure** (Doctrine, Telegram, Messenger adapters) <- **Presentation** (controllers, console commands, Sonata admin). Commands, queries and events go through the `MessageBus` port; handlers implement `CommandHandlerInterface` / `QueryHandlerInterface`.
 
