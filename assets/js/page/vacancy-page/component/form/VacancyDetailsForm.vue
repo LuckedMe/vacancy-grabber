@@ -94,7 +94,8 @@
                             >
                                 {{ item.title }}
                             </a>
-                            <span v-if="index !== noteTemplates.length - 1"> | </span>
+                            <span v-if="index !== noteTemplates.length - 1 && (index+1) % 2 !== 0"> | </span>
+                            <br v-if="(index+1) % 2 === 0">
                         </template>
                         <v-textarea
                             v-model="formData.note"
@@ -123,7 +124,7 @@
     import FormGlobalError from '../../../../component/general/FormGlobalError.vue';
     import VacancyDetailsFactory from '../../../../model-factory/vacancy/VacancyDetailsFactory';
     import VacancyDetails from '../../../../model/vacancy/VacancyDetails';
-    import { formatDateUrl} from '../../../../utils/DateUtils';
+    import {formatDateUrl} from '../../../../utils/DateUtils';
     import {itemsIsResumeStatusOptions} from '../types/itemsIsResumeStatusOptions';
     //import {useSourcePageStore} from '../../../source-page/store';
     import {scrollToFormFieldError} from '../../../../utils/ScrollUtils';
@@ -173,6 +174,8 @@
     const noteTemplates = computed(() => [
         {key: 'DOU', title: 'Отправил заявку на DOU'},
         {key: 'Djinni', title: 'Отправил заявку на Djinni'},
+        {key: 'no-feedback', title: 'No Feedback'},
+        {key: 'inactive-vacancy', title: 'Вакансия не активна'},
     ]);
 
     onMounted(async () => {
