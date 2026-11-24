@@ -65,11 +65,17 @@ class DjinniSourceGrabber extends AbstractSourceGrabber
 
     public function parseCompany(Crawler $node): ?GrabbedCompany
     {
-        $name = $node->filter('h2.job-item__position')->nextAll()->first()->filter('span')->getNode(0)?->nodeValue;
+        $positionNode = $node->filter('h2.job-item__position');
+
+        // Step up to the main wrapper, then filter down to the company span
+        $company = $positionNode
+            ->closest('.col')
+            ->filter('span.text-secondary')
+            ->getNode(0)?->nodeValue;
 
         return new GrabbedCompany(
             url: null,
-            name: $this->cleanText($name),
+            name: $this->cleanText($company),
         );
     }
 
@@ -80,9 +86,14 @@ class DjinniSourceGrabber extends AbstractSourceGrabber
         $title       = $this->cleanText($node->filter('h2.job-item__position')->getNode(0)?->nodeValue);
         $text        = $node->filter("div[id=job-description-{$externalId}]")->filter('.js-truncated-text')->getNode(0)?->nodeValue;
         $description = $this->cleanText($text);
-        $text        = $node->filter('a.job_item__header-link')->filter('div.fs-5')->getNode(0)?->nodeValue;
-        $salary      = $this->cleanText($text);
         $company     = $this->parseCompany($node);
+
+        // grab salary
+        $positionNode = $node->filter('h2.job-item__position');
+        $salary       = $positionNode
+            ->ancestors()->first() // Steps up to <div class="d-flex align-items-baseline...">
+            ->filter('span[data-bs-toggle="tooltip"]')
+            ->getNode(0)?->nodeValue;
 
         return new GrabbedVacancy(
             externalId: $externalId,

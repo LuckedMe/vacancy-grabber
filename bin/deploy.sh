@@ -84,7 +84,6 @@ main() {
     fail()  { printf '\033[1;31mxx %s\033[0m\n' "$*" >&2; exit 1; }
     # run a changing command (only echoed with --dry-run)
     run()   { printf '   $ %s\n' "$*"; [[ ${DRY_RUN} -eq 1 ]] || "$@"; }
-    # value of a variable from .env.prod.local (not sourced: values may contain spaces, quotes and $)
     # run a Makefile target when make and the target exist, otherwise the fallback command (the rest of the arguments)
     mk() {
         local target="$1"; shift
@@ -94,6 +93,7 @@ main() {
             run "$@"
         fi
     }
+    # value of a variable from .env.prod.local (not sourced: values may contain spaces, quotes and $)
     env_get() { grep -E "^$1=" .env.prod.local | tail -1 | cut -d= -f2- | sed -E "s/^['\"]//; s/['\"]$//" || true; }
 
     [[ ${DRY_RUN} -eq 1 ]] && warn "DRY RUN: nothing is changed"
