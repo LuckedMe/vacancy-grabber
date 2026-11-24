@@ -90,7 +90,7 @@
                         <template v-for="(item, index) in noteTemplates" :key="item.key">
                             <a
                                 href="javascript:void(0)"
-                                @click.prevent="onNoteAddTemplate(item.title)"
+                                @click.prevent="onNoteAddTemplate(item.key, item.title)"
                             >
                                 {{ item.title }}
                             </a>
@@ -221,7 +221,11 @@
         formData.value.viewed = true;
     };
 
-    const onNoteAddTemplate = (value: string) => {
+    const onNoteAddTemplate = (key: string, value: string) => {
+
+        if (key === 'no-feedback' || key === 'inactive-vacancy') {
+            formData.value.status = 'done';
+        }
 
         if (formData.value.resumeSentAt === null) {
             formData.value.resumeSentAt = formatDateUrl(dayjs());
